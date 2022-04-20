@@ -5,8 +5,8 @@ using JLD2, Random
 include("ParticleSwarm.jl")
 
 export Particle,
-        load_data,
-        generate_particle,
-        generate_particles
-
+       load_data,
+       generate_particle,
+       generate_particles,
+       initial_inserting
 end
