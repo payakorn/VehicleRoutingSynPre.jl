@@ -1,5 +1,6 @@
 mutable struct Particle
     route::Array
+    starttime::Array
     num_node::Int64
     num_vehi::Int64
     num_serv::Int64
@@ -29,9 +30,15 @@ function load_data(name::String)
 end
 
 
-function generate_particle(num_node::Int64, num_vehi::Int64, num_serv::Int64, mind::Vector, maxd::Array, a::Matrix, r::Matrix, d::Matrix, p::Array, e::Array, l::Array, PRE::Array, SYN::Array)
+"""
+    generate_group_of_node(num_node::Int64, num_vehi::Int64, num_serv::Int64, mind::Vector, maxd::Array, a::Matrix, r::Matrix, d::Matrix, p::Array, e::Array, l::Array, PRE::Array, SYN::Array)
+
+    devide node to compatible vehicle randomly
+
+"""
+function generate_group_of_node(num_node::Int64, num_vehi::Int64, a::Matrix, r::Matrix)
     node_vehicle = r*a'
-    group_node = [Int64[0] for i in 1:num_vehi]
+    group_node = [Int64[] for i in 1:num_vehi]
     # group_node = Dict(i => Int64[0] for i in 1:num_vehi)
     for i in 2:num_node
         if sum(r[i, :]) == 1
@@ -43,29 +50,65 @@ function generate_particle(num_node::Int64, num_vehi::Int64, num_serv::Int64, mi
             end
         end
     end
-    for k in 1:num_vehi
-        push!(group_node[k], 0)
-    end
-    # return group_node
-    return Particle(group_node, num_node, num_vehi, num_serv, mind, maxd, d, p, e, l, PRE, SYN)
+
+    return group_node
 end
 
 
-function initial_inserting(particle::Particle)
-    for j in candidate
+function find_starttime(particle::Particle)
+    st = []
+    for k in 1:particle.num_vehi
+        if particle.distance_matrix[1, particle.route[k][2]] + particle.service[particle.route[k][1]] < particle.e[particle.route[k][2]]
+            append!(st, Int64[particle.e[particle.route[k][2]]])
+        elseif particle.distance_matrix[1, particle.route[k][2]] > particle.l[particle.route[k][2]]
+            throw(particle.distance_matrix[1, particle.route[k][2]] > particle.l[particle.route[k][2]])
+        else
+            append!(st, Int64[particle.e[particle.route[k][2]]])
+        end
+
+
+        for j in 2:length(particle.route[k])
+            nothing
+        end
+
+    end
+    return st
+end
+
+
+function generate_particle(num_node::Int64, num_vehi::Int64, num_serv::Int64, mind::Vector, maxd::Array, a::Matrix, r::Matrix, d::Matrix, p::Array, e::Array, l::Array, PRE::Array, SYN::Array)
+
+    # cluter nodes to vehicle
+    group_node = generate_group_of_node(num_node, num_vehi, a, r)
+
+    # juat add
+    starttime = []
+
+    return Particle(group_node, starttime, num_node, num_vehi, num_serv, mind, maxd, d, p, e, l, PRE, SYN)
+end
+
+
+function initial_inserting(group_node::Array, num_node::Int64, num_vehi::Int64, num_serv::Int64)
+    for vehi in 1:num_vehi
         nothing
     end
 end
 
 
-function generate_particles(name::String)
+function generate_particles(name::String; SYN=nothing, PRE=nothing)
     num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l = load_data(name)
-    SYN = Int64[]
-    PRE = Int64[]
-    for i in 2:num_node
-        if mind[i] == 0 && maxd[i] == 0
-            push!(SYN, i)
+    if isnothing(SYN)
+        SYN = Int64[]
+        for i in 2:num_node
+            if mind[i] == 0 && maxd[i] == 0
+                push!(SYN, i)
+            end
         end
     end
+
+    if isnothing(PRE)
+        PRE = Int64[]
+    end
+
     generate_particle(num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN)
 end
