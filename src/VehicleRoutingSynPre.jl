@@ -8,7 +8,9 @@ export Particle,
        load_data,
        generate_particle,
        generate_particles,
-       generate_group_of_node,
+       find_group_of_node,
        find_starttime,
-       initial_inserting
+       initial_inserting,
+       find_service_request,
+       find_SYN
 end
