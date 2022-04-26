@@ -1,6 +1,6 @@
 mutable struct Particle
     route::Array
-    starttime::Dict{Int64, Array{Int64}}
+    starttime::Dict{Int64, Array{Float64}}
     slot::Dict{Int64, Vector{Int64}}
     slot_vehi::Dict{Int64, Vector{Int64}}
     serv_a::Tuple
@@ -60,51 +60,60 @@ function find_group_of_node(num_node::Int64, num_vehi::Int64, a::Matrix, r::Matr
 end
 
 
-function find_starttime(route::Array, slot::Dict{Int64, Vector{Int64}}, num_node::Int64, num_vehi::Int64, num_serv::Int64, mind::Vector, maxd::Array, a::Matrix, r::Matrix, d::Matrix, p::Array, e::Array, l::Array, PRE::Array, SYN::Array)
-    st = Dict(i => zeros(Float64, num_vehi, num_serv) for i in 1:num_node)
+function find_vehicle_by_service(route, node, service, num_vehi)
     for vehi in 1:num_vehi
-
-        if length(route[vehi]) > 1
-
-            # first node
-            if d[1, route[vehi][1]] > e[route[vehi][1]]
-                st[route[vehi][1]][vehi, slot[route[vehi][1]]] .= d[1, route[vehi][1]]
-            else 
-                st[route[vehi][1]][vehi, slot[route[vehi][1]]] .= e[route[vehi][1]] 
+        for i in route[vehi]
+            if issubset((node, service), i)
+                return vehi
             end
-            
-            # middle node (bug when last service not processed by vehi)
-            for i in 2:length(route[vehi])-1
-                comptime = maximum(st[route[vehi][i-1]][vehi, :]) + p[vehi, slot[route[vehi][i-1]][end], route[vehi][i-1]] + d[route[vehi][i-1], route[vehi][i]]
-                if comptime > e[route[vehi][i]]
-                    st[route[vehi][i]][vehi, slot[route[vehi][i]]] .= comptime
-                else 
-                    st[route[vehi][i]][vehi, slot[route[vehi][i]]] .= e[route[vehi][i]] 
-                end
-            end
-
-            # last node
         end
     end
-    return st
+    return nothing
 end
 
 
-function find_starttime2(route::Array, slot::Dict{Int64, Vector{Int64}}, num_node::Int64, num_vehi::Int64, num_serv::Int64, mind::Vector, maxd::Array, a::Matrix, r::Matrix, d::Matrix, p::Array, e::Array, l::Array, PRE::Array, SYN::Array)
-    # st = [Float64[0] for i in 1:num_vehi]
-    # for k in 1:num_vehi
-    #     for j in 2:length(route[k])
-    #         comptime = st[k][j-1] + d[route[k][j-1], route[k][j]] + p[k, 1, route[k][j]]
-    #         if comptime < e[route[k][j]]
-    #             push!(st[k], e[route[k][j]])
-    #         else
-    #             push!(st[k], comptime)
-    #         end
-    #     end
-    # end
-    # return st
+function find_starttime(route::Array, slot::Dict{Int64, Vector{Int64}}, num_node::Int64, num_vehi::Int64, num_serv::Int64, mind::Vector, maxd::Array, a::Matrix, r::Matrix, d::Matrix, p::Array, e::Array, l::Array, PRE::Array, SYN::Array)
+    st = Dict(i => zeros(Float64, num_vehi, num_serv) for i in 0:num_node)
 
-    st = Dict(i => Float64[] for i in 2:num_node)
+    for vehi in 1:num_vehi
+        for i in 1:length(route[vehi])
+            if i == 1
+                left = 1
+                right = route[vehi][i][1]
+
+                if d[left, right] > e[route[vehi][i][1]]
+                    st[right][vehi, route[vehi][i][2]] = d[left, right]
+                else
+                    st[right][vehi, route[vehi][i][2]] = e[route[vehi][i][1]]
+                end
+
+                if right != 1
+                    for sl in 2:length(slot[right])
+                        v = find_vehicle_by_service(route, right, slot[right][sl-1], num_vehi)
+                        st[right][v, slot[right][sl]] = maximum(st[right][slot[right][sl-1]])
+                    end
+                end
+            else
+                left = route[vehi][i-1][1]
+                right = route[vehi][i][1]
+
+                if st[left][vehi, route[vehi][i-1][2]] + p[vehi, route[vehi][i-1][2], left] + d[left, right] > e[route[vehi][i][1]]
+                    st[right][vehi, route[vehi][i][2]] = st[left][vehi, route[vehi][i-1][2]] + p[vehi, route[vehi][i-1][2], left] + d[left, right]
+                else
+                    st[right][vehi, route[vehi][i][2]] = e[route[vehi][i][1]]
+                end
+
+                if right != 1
+                    for sl in 2:length(slot[right])
+                        v = find_vehicle_by_service(route, right, slot[right][sl], num_vehi)
+                        st[right][v, slot[right][sl]] = maximum((maximum(st[right][:, slot[right][sl-1]]) + p[v, slot[right][sl-1], right], st[right][v, slot[right][sl]]))
+                    end
+                end
+            end
+            println("vehicle: $vehi, depart: $left, arrive: $right, start $(st[right][vehi, route[vehi][i][2]])")
+        end
+    end
+    return st
 end
 
 
@@ -139,10 +148,12 @@ function generate_empty_particle(serv_a::Tuple, serv_r::Dict, num_node::Int64, n
     group_node = find_group_of_node(num_node, num_vehi, a, r)
 
     # create empty route
-    route = [Int64[1] for _ in 1:num_vehi]
+    # route = [[Int64[1, 1]] for _ in 1:num_vehi]
+    route = [[[1, 1]], [[9, 5], [1, 1]], [[2, 4], [9, 6], [1, 1]]] # for test
 
     # create empty slot
     slot = create_empty_slot(num_node)
+    slot[9] = [5, 6]
     slot_vehi = create_empty_slot(num_node)
 
     # just add
@@ -260,6 +271,28 @@ function feasibility(particle::Particle)
 end
 
 
-function insert_initial_SYN(particle.::Particle)
+function insert_initial_SYN(particle::Particle)
     nothing
+end
+
+
+function example(route, slot)
+    route = [
+        [(11, 3), (4, 2), (6, 3), (10, 1), (8, 3), (1, 1)],
+        [(9, 6), (1, 1)],
+        [(9, 5), (11, 6), (7, 5), (2, 4), (3, 5), (10, 4), (5, 4), (1, 1)]
+    ]
+    
+    slot[2] = [4]
+    slot[3] = [5]
+    slot[4] = [2]
+    slot[5] = [4]
+    slot[6] = [3]
+    slot[7] = [5]
+    slot[8] = [3]
+    slot[9] = [5]
+    slot[10] = [1, 4]
+    slot[11] = [3, 6]
+
+    return route, slot
 end

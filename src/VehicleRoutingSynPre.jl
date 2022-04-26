@@ -17,5 +17,8 @@ export Particle,
        find_vehicle_service,
        feasibility,
        compatibility,
-       find_compat_vehicle_node
+       find_compat_vehicle_node,
+       create_empty_slot,
+       find_vehicle_by_service,
+       example
 end
