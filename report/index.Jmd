@@ -1,0 +1,56 @@
+---
+title: Tutorial for VehicleRoutingSynPre
+author: Payakorn Saksuriya
+# date: 2022-04-27
+---
+
+Import package
+```julia
+using VehicleRoutingSynPre
+```
+
+---
+
+# Benchmark
+
+Benchmark name is in the form, for exmaple, "ins10-1.jld2" is the instance number 1 with 10 nodes (not include depot).
+
+To load the instance data use
+
+```julia
+name = "ins10-1"
+num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l = load_data(name);
+```
+
+where
+- num_node: total number of nodes (including depot)
+- num_vehi: total number of vehicles
+- num_serv: total number of services
+- mind: minumum different of starting time between two services of each node
+- maxd: maximum different of starting time between two services of each node
+- a: compatibility matrix a[i,j] = 1 if vehicle i can process service j
+- r: requiment matrix r[i,j] = 1 if node i requires service j
+- d: distance matrix
+- p: processing time matrix, p[i, j, k] = processing time of service j of vehicle i on node k
+- e: earilest start time of each node
+- l: latest start time of each node
+
+---
+
+Generate random particle (solution)
+
+```julia
+particle = generate_particles("ins10-1");
+```
+
+The particle is `struct` of `Particle` with fields
+
+```julia
+dump(Particle)
+```
+
+Test create dataframe 
+```julia
+using DataFrames
+df = DataFrame(A=1:3, B=5:7, fixed=1)
+```
