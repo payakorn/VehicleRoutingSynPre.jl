@@ -60,7 +60,7 @@ function find_group_of_node(num_node::Int64, num_vehi::Int64, a::Matrix, r::Matr
 end
 
 
-function find_vehicle_by_service(route, node, service, num_vehi)
+function find_vehicle_by_service(route::Array, node::Int64, service::Int64, num_vehi::Int64)
     for vehi in 1:num_vehi
         for i in route[vehi]
             if issubset((node, service), i)
@@ -148,12 +148,12 @@ function generate_empty_particle(serv_a::Tuple, serv_r::Dict, num_node::Int64, n
     group_node = find_group_of_node(num_node, num_vehi, a, r)
 
     # create empty route
-    # route = [[Int64[1, 1]] for _ in 1:num_vehi]
-    route = [[[1, 1]], [[9, 5], [1, 1]], [[2, 4], [9, 6], [1, 1]]] # for test
+    route = [[Int64[1, 1]] for _ in 1:num_vehi]
+    # route = [[[1, 1]], [[9, 5], [1, 1]], [[2, 4], [9, 6], [1, 1]]] # for test
 
     # create empty slot
     slot = create_empty_slot(num_node)
-    slot[9] = [5, 6]
+    # slot[9] = [5, 6]
     slot_vehi = create_empty_slot(num_node)
 
     # just add
@@ -165,13 +165,59 @@ function generate_empty_particle(serv_a::Tuple, serv_r::Dict, num_node::Int64, n
 end
 
 
-function initial_inserting(group_node::Array, num_node::Int64, num_vehi::Int64, num_serv::Int64, mind::Vector, maxd::Array, a::Matrix, r::Matrix, d::Matrix, p::Array, e::Array, l::Array, PRE::Array, SYN::Array)
-    condidate = Int64[]
-    remaining = Int64[]
-    for vehi in 1:num_vehi
-        union!(candidate, group_node[vehi])
-        test_par = deepcopy(par)
+function initial_insert_service(serv_r::Dict{Int64, Vector{Int64}}, num_node::Int64, num_vehi::Int64, num_serv::Int64, SYN::Vector{Tuple})
+    slot = deepcopy(serv_r)
+    for serv in slot
+        slot[serv[1]] = [rand(serv[2])]
     end
+
+    # SYN
+    for syn in SYN
+        slot[syn[1]] = collect(syn[2:end])
+    end
+    return slot
+end
+
+
+function check_assigned_node(route::Array, node::Int64, service::Int64, num_vehi::Int64)
+    for vehi in 1:num_vehi
+        if [node, service] in route[vehi]
+            return true
+        end
+    end
+    return false
+end
+
+
+function random_insert_vehicle_to_service(route::Array, slot::Dict{Int64, Vector{Int64}}, num_node::Int64, num_vehi::Int64, a::Matrix, e::Vector, SYN::Vector, PRE::Vector)
+    for syn in SYN
+        for i in 2:length(syn)-1
+            if !check_assigned_node(route, syn[1], syn[i], num_vehi) && !check_assigned_node(route, syn[1], syn[i+1], num_vehi) && issubset([syn[i], syn[i+1]], slot[syn[1]])
+                vehi1 = rand(findall(x->x==1, a[:, syn[i]]))
+                vehi2 = rand(setdiff(findall(x->x==1, a[:, syn[i+1]]), vehi1))
+                insert!(route[vehi1], 1, [syn[1], syn[i]])
+                insert!(route[vehi2], 1, [syn[1], syn[i+1]])
+            end
+        end
+    end
+    
+    for node in setdiff(sortperm(e)[3:end], [sl[1] for sl in SYN])
+        println("$node, $(slot[node])")
+        for sl in slot[node]
+            if !check_assigned_node(route, node, sl, num_vehi)
+                vehi = rand(findall(x->x==1, a[:, sl]))
+                insert!(route[vehi], length(route[vehi]), [node, sl])
+            end
+        end
+    end
+    return route
+end
+
+
+function random_insert_vehicle_to_service(particle::Particle)
+    particle.route = random_insert_vehicle_to_service(particle.route, particle.slot, particle.num_node, particle.num_vehi, particle.a, particle.e, particle.SYN, particle.PRE)
+    particle.starttime = find_starttime(particle)
+    return particle
 end
 
 
@@ -234,31 +280,50 @@ function generate_particles(name::String)
 end
 
 
+function find_remain_service(slot::Dict, serv_r::Dict)
+    for (i, sl) in slot
+        setdiff!(serv_r[i], slot[i])
+    end
+    return serv_r
+end
+
+
+function find_remain_service(particle::Particle)
+    return find_remain_service(particle.slot, particle.serv_r)
+end
+
+
 function insert_service_to_node_slot(particle::Particle, node::Int64, slot::Int64)
     nothing
 end
 
 
 function compatibility(particle::Particle)
-    return compatibility(particle.route, particle.slot, particle.serv_a, particle.serv_r)
+    return compatibility(particle.route, particle.slot, particle.a, particle.r, particle.serv_a, particle.serv_r)
 end
 
 
-function compatibility(route::Array, slot::Dict, serv_a::Tuple, serv_r::Dict)
+function compatibility(route::Array, slot::Dict, a::Matrix, r::Matrix, serv_a::Tuple, serv_r::Dict)
 
     # check services
     for sl in slot
         if !issubset(sl[2], serv_r[sl[1]])
+            println("incompat $(sl[2]) not in $(serv_r[sl[1]])")
             return false
         end
     end
 
     # check node
-    if all(issubset.(route, serv_a))
-        return true
-    else
-        return false
+    comp_matrix = a*r' .> 0
+    for vehi in 1:size(a, 1)
+        for node in route[vehi]
+            if !in(node[1], serv_a[vehi])
+                println("false $(node[1])")
+                return false
+            end
+        end
     end
+    return true
 end
 
 
@@ -273,6 +338,53 @@ end
 
 function insert_initial_SYN(particle::Particle)
     nothing
+end
+
+
+function total_distance(route::Array, d::Matrix)
+    dis = 0.0
+    route1 = deepcopy(route)
+    for vehi in route1
+        insert!(vehi, 1, [1, 1])
+        for node in 1:length(vehi)-1
+            dis += d[vehi[node][1], vehi[node+1][1]]
+        end
+    end
+    return dis
+end
+
+
+function total_distance(particle::Particle)
+    return total_distance(particle.route, particle.d)
+end
+
+
+function tardiness(route::Array, starttime::Dict, p::Array, l::Vector)
+    tardy = 0.0
+    max_tardy = 0.0
+    for (i, vehi) in enumerate(route)
+        for node_service in vehi
+            st = starttime[node_service[1]][i, node_service[2]] + p[i, node_service[2], node_service[1]] - l[node_service[1]]
+            if st > 0.0
+                tardy += st
+                if st > max_tardy
+                    max_tardy = deepcopy(st)
+                end
+            end
+        end
+    end 
+    return tardy, max_tardy
+end
+
+
+function tardiness(particle::Particle)
+    return tardiness(particle.route, particle.starttime, particle.p, particle.l)
+end
+
+
+function objective_value(particle::Particle; lambda=[1/3, 1/3, 1/3])
+    tardy, max_tardy = tardiness(particle)
+    return lambda[1]*total_distance(particle) + lambda[2]*tardy + lambda[3]*max_tardy
 end
 
 
