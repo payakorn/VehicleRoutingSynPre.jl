@@ -662,7 +662,8 @@ div.title {text-align: center;}
 
 
 <pre class='hljl'>
-<span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>VehicleRoutingSynPre</span>
+<span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>VehicleRoutingSynPre</span><span class='hljl-t'>
+</span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>PrettyTables</span>
 </pre>
 
 
@@ -715,9 +716,15 @@ div.title {text-align: center;}
 
 
 <pre class="output">
-vehicle: 1, depart: 1, arrive: 1, start 0.0
-vehicle: 2, depart: 1, arrive: 1, start 0.0
-vehicle: 3, depart: 1, arrive: 1, start 0.0
+11, &#91;3&#93;
+7, &#91;5&#93;
+4, &#91;2&#93;
+6, &#91;3&#93;
+3, &#91;5&#93;
+10, &#91;1&#93;
+2, &#91;4&#93;
+5, &#91;4&#93;
+8, &#91;3&#93;
 </pre>
 
 
@@ -731,46 +738,395 @@ vehicle: 3, depart: 1, arrive: 1, start 0.0
 
 <pre class="output">
 Particle &lt;: Any
-  route::Array
+  route::Vector&#123;Vector&#123;Vector&#123;Int64&#125;&#125;&#125;
   starttime::Dict&#123;Int64, Array&#123;Float64&#125;&#125;
   slot::Dict&#123;Int64, Vector&#123;Int64&#125;&#125;
-  slot_vehi::Dict&#123;Int64, Vector&#123;Int64&#125;&#125;
   serv_a::Tuple
-  serv_r::Dict
+  serv_r::Dict&#123;Int64, Vector&#123;Int64&#125;&#125;
   num_node::Int64
   num_vehi::Int64
   num_serv::Int64
-  mind::Vector
-  maxd::Vector
-  a::Array
-  r::Array
-  d::Matrix
-  p::Array
-  e::Vector
-  l::Vector
-  PRE::Vector
-  SYN::Vector
+  mind::Vector&#123;Float64&#125;
+  maxd::Vector&#123;Float64&#125;
+  a::Array&#123;Int64&#125;
+  r::Array&#123;Int64&#125;
+  d::Matrix&#123;Float64&#125;
+  p::Array&#123;Float64&#125;
+  e::Vector&#123;Int64&#125;
+  l::Vector&#123;Int64&#125;
+  PRE::Vector&#123;Tuple&#125;
+  SYN::Vector&#123;Tuple&#125;
 </pre>
 
-
-<p>Test create dataframe </p>
 
 
 <pre class='hljl'>
-<span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>DataFrames</span><span class='hljl-t'>
-</span><span class='hljl-n'>df</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>DataFrame</span><span class='hljl-p'>(</span><span class='hljl-n'>A</span><span class='hljl-oB'>=</span><span class='hljl-ni'>1</span><span class='hljl-oB'>:</span><span class='hljl-ni'>3</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>B</span><span class='hljl-oB'>=</span><span class='hljl-ni'>5</span><span class='hljl-oB'>:</span><span class='hljl-ni'>7</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>fixed</span><span class='hljl-oB'>=</span><span class='hljl-ni'>1</span><span class='hljl-p'>)</span>
+<span class='hljl-n'>particle</span><span class='hljl-oB'>.</span><span class='hljl-n'>route</span>
+</pre>
+
+
+<pre class="output">
+3-element Vector&#123;Vector&#123;Vector&#123;Int64&#125;&#125;&#125;:
+ &#91;&#91;11, 3&#93;, &#91;4, 2&#93;, &#91;6, 3&#93;, &#91;10, 1&#93;, &#91;8, 3&#93;, &#91;1, 1&#93;&#93;
+ &#91;&#91;9, 5&#93;, &#91;7, 5&#93;, &#91;1, 1&#93;&#93;
+ &#91;&#91;9, 6&#93;, &#91;3, 5&#93;, &#91;2, 4&#93;, &#91;5, 4&#93;, &#91;1, 1&#93;&#93;
 </pre>
 
 
 
-<div class="data-frame"><p>3 rows × 3 columns</p><table class="data-frame"><thead><tr><th></th><th>A</th><th>B</th><th>fixed</th></tr><tr><th></th><th title="Int64">Int64</th><th title="Int64">Int64</th><th title="Int64">Int64</th></tr></thead><tbody><tr><th>1</th><td>1</td><td>5</td><td>1</td></tr><tr><th>2</th><td>2</td><td>6</td><td>1</td></tr><tr><th>3</th><td>3</td><td>7</td><td>1</td></tr></tbody></table></div>
+<pre class='hljl'>
+<span class='hljl-n'>particle</span><span class='hljl-oB'>.</span><span class='hljl-n'>slot</span>
+</pre>
+
+
+<pre class="output">
+Dict&#123;Int64, Vector&#123;Int64&#125;&#125; with 10 entries:
+  5  &#61;&gt; &#91;4&#93;
+  4  &#61;&gt; &#91;2&#93;
+  6  &#61;&gt; &#91;3&#93;
+  7  &#61;&gt; &#91;5&#93;
+  2  &#61;&gt; &#91;4&#93;
+  10 &#61;&gt; &#91;1&#93;
+  11 &#61;&gt; &#91;3&#93;
+  9  &#61;&gt; &#91;5, 6&#93;
+  8  &#61;&gt; &#91;3&#93;
+  3  &#61;&gt; &#91;5&#93;
+</pre>
+
+
+
+<pre class='hljl'>
+<span class='hljl-n'>particle</span><span class='hljl-oB'>.</span><span class='hljl-n'>starttime</span>
+</pre>
+
+
+<pre class="output">
+Dict&#123;Int64, Array&#123;Float64&#125;&#125; with 12 entries:
+  5  &#61;&gt; &#91;0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0&#93;
+  7  &#61;&gt; &#91;0.0 0.0 … 0.0 0.0; 0.0 0.0 … 184.0 0.0; 0.0 0.0 … 0.0 0.0&#93;
+  8  &#61;&gt; &#91;0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0&#93;
+  1  &#61;&gt; &#91;477.527 0.0 … 0.0 0.0; 266.47 0.0 … 0.0 0.0; 411.28 0.0 … 0.0 0.0&#93;
+  0  &#61;&gt; &#91;0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0&#93;
+  4  &#61;&gt; &#91;0.0 247.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0&#93;
+  6  &#61;&gt; &#91;0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0&#93;
+  2  &#61;&gt; &#91;0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0&#93;
+  10 &#61;&gt; &#91;350.043 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0&#93;
+  11 &#61;&gt; &#91;0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0&#93;
+  9  &#61;&gt; &#91;0.0 0.0 … 0.0 0.0; 0.0 0.0 … 46.0 0.0; 0.0 0.0 … 0.0 46.0&#93;
+  3  &#61;&gt; &#91;0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0; 0.0 0.0 … 268.0 0.0&#93;
+</pre>
+
+
+<p>Print distance matrix</p>
+
+
+<pre class='hljl'>
+<span class='hljl-nf'>pretty_table</span><span class='hljl-p'>(</span><span class='hljl-n'>particle</span><span class='hljl-oB'>.</span><span class='hljl-n'>d</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>tf</span><span class='hljl-oB'>=</span><span class='hljl-n'>tf_html_matrix</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>show_row_number</span><span class='hljl-oB'>=</span><span class='hljl-kc'>true</span><span class='hljl-p'>)</span>
+</pre>
+
+
+
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<style>
+  table {
+      position: relative;
+  }
+
+  table::before,
+  table::after {
+      border: 1px solid #000;
+      content: "";
+      height: 100%;
+      position: absolute;
+      top: 0;
+      width: 6px;
+  }
+
+  table::before {
+      border-right: 0px;
+      left: -6px;
+  }
+
+  table::after {
+      border-left: 0px;
+      right: -6px;
+  }
+
+  td {
+      padding: 5px;
+      text-align: center;
+  }
+
+</style>
+<body>
+<table>
+  <thead>
+    <tr class = "header headerLastRow">
+      <th class = "rowNumber">Row</th>
+      <th style = "text-align: right;">Col. 1</th>
+      <th style = "text-align: right;">Col. 2</th>
+      <th style = "text-align: right;">Col. 3</th>
+      <th style = "text-align: right;">Col. 4</th>
+      <th style = "text-align: right;">Col. 5</th>
+      <th style = "text-align: right;">Col. 6</th>
+      <th style = "text-align: right;">Col. 7</th>
+      <th style = "text-align: right;">Col. 8</th>
+      <th style = "text-align: right;">Col. 9</th>
+      <th style = "text-align: right;">Col. 10</th>
+      <th style = "text-align: right;">Col. 11</th>
+      <th style = "text-align: right;">Col. 12</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class = "rowNumber">1</td>
+      <td style = "text-align: right;">0.0</td>
+      <td style = "text-align: right;">38.4708</td>
+      <td style = "text-align: right;">34.8855</td>
+      <td style = "text-align: right;">55.9464</td>
+      <td style = "text-align: right;">7.28011</td>
+      <td style = "text-align: right;">23.3452</td>
+      <td style = "text-align: right;">71.4703</td>
+      <td style = "text-align: right;">32.5269</td>
+      <td style = "text-align: right;">13.0384</td>
+      <td style = "text-align: right;">26.4008</td>
+      <td style = "text-align: right;">88.8876</td>
+      <td style = "text-align: right;">0.0</td>
+    </tr>
+    <tr>
+      <td class = "rowNumber">2</td>
+      <td style = "text-align: right;">38.4708</td>
+      <td style = "text-align: right;">0.0</td>
+      <td style = "text-align: right;">23.0868</td>
+      <td style = "text-align: right;">21.4009</td>
+      <td style = "text-align: right;">32.0156</td>
+      <td style = "text-align: right;">31.8277</td>
+      <td style = "text-align: right;">34.0</td>
+      <td style = "text-align: right;">32.6497</td>
+      <td style = "text-align: right;">45.2769</td>
+      <td style = "text-align: right;">57.4543</td>
+      <td style = "text-align: right;">56.8595</td>
+      <td style = "text-align: right;">38.4708</td>
+    </tr>
+    <tr>
+      <td class = "rowNumber">3</td>
+      <td style = "text-align: right;">34.8855</td>
+      <td style = "text-align: right;">23.0868</td>
+      <td style = "text-align: right;">0.0</td>
+      <td style = "text-align: right;">43.8292</td>
+      <td style = "text-align: right;">27.7849</td>
+      <td style = "text-align: right;">15.0333</td>
+      <td style = "text-align: right;">53.0377</td>
+      <td style = "text-align: right;">10.6301</td>
+      <td style = "text-align: right;">46.6154</td>
+      <td style = "text-align: right;">42.7551</td>
+      <td style = "text-align: right;">54.9181</td>
+      <td style = "text-align: right;">34.8855</td>
+    </tr>
+    <tr>
+      <td class = "rowNumber">4</td>
+      <td style = "text-align: right;">55.9464</td>
+      <td style = "text-align: right;">21.4009</td>
+      <td style = "text-align: right;">43.8292</td>
+      <td style = "text-align: right;">0.0</td>
+      <td style = "text-align: right;">50.6063</td>
+      <td style = "text-align: right;">53.1507</td>
+      <td style = "text-align: right;">17.0294</td>
+      <td style = "text-align: right;">53.8516</td>
+      <td style = "text-align: right;">59.2284</td>
+      <td style = "text-align: right;">77.801</td>
+      <td style = "text-align: right;">59.6406</td>
+      <td style = "text-align: right;">55.9464</td>
+    </tr>
+    <tr>
+      <td class = "rowNumber">5</td>
+      <td style = "text-align: right;">7.28011</td>
+      <td style = "text-align: right;">32.0156</td>
+      <td style = "text-align: right;">27.7849</td>
+      <td style = "text-align: right;">50.6063</td>
+      <td style = "text-align: right;">0.0</td>
+      <td style = "text-align: right;">17.4929</td>
+      <td style = "text-align: right;">65.5515</td>
+      <td style = "text-align: right;">26.4008</td>
+      <td style = "text-align: right;">19.105</td>
+      <td style = "text-align: right;">28.4253</td>
+      <td style = "text-align: right;">81.6088</td>
+      <td style = "text-align: right;">7.28011</td>
+    </tr>
+    <tr>
+      <td class = "rowNumber">6</td>
+      <td style = "text-align: right;">23.3452</td>
+      <td style = "text-align: right;">31.8277</td>
+      <td style = "text-align: right;">15.0333</td>
+      <td style = "text-align: right;">53.1507</td>
+      <td style = "text-align: right;">17.4929</td>
+      <td style = "text-align: right;">0.0</td>
+      <td style = "text-align: right;">65.0</td>
+      <td style = "text-align: right;">9.21954</td>
+      <td style = "text-align: right;">36.2353</td>
+      <td style = "text-align: right;">27.8926</td>
+      <td style = "text-align: right;">69.5845</td>
+      <td style = "text-align: right;">23.3452</td>
+    </tr>
+    <tr>
+      <td class = "rowNumber">7</td>
+      <td style = "text-align: right;">71.4703</td>
+      <td style = "text-align: right;">34.0</td>
+      <td style = "text-align: right;">53.0377</td>
+      <td style = "text-align: right;">17.0294</td>
+      <td style = "text-align: right;">65.5515</td>
+      <td style = "text-align: right;">65.0</td>
+      <td style = "text-align: right;">0.0</td>
+      <td style = "text-align: right;">63.6396</td>
+      <td style = "text-align: right;">75.8024</td>
+      <td style = "text-align: right;">91.4166</td>
+      <td style = "text-align: right;">50.9215</td>
+      <td style = "text-align: right;">71.4703</td>
+    </tr>
+    <tr>
+      <td class = "rowNumber">8</td>
+      <td style = "text-align: right;">32.5269</td>
+      <td style = "text-align: right;">32.6497</td>
+      <td style = "text-align: right;">10.6301</td>
+      <td style = "text-align: right;">53.8516</td>
+      <td style = "text-align: right;">26.4008</td>
+      <td style = "text-align: right;">9.21954</td>
+      <td style = "text-align: right;">63.6396</td>
+      <td style = "text-align: right;">0.0</td>
+      <td style = "text-align: right;">45.3431</td>
+      <td style = "text-align: right;">34.0147</td>
+      <td style = "text-align: right;">62.0725</td>
+      <td style = "text-align: right;">32.5269</td>
+    </tr>
+    <tr>
+      <td class = "rowNumber">9</td>
+      <td style = "text-align: right;">13.0384</td>
+      <td style = "text-align: right;">45.2769</td>
+      <td style = "text-align: right;">46.6154</td>
+      <td style = "text-align: right;">59.2284</td>
+      <td style = "text-align: right;">19.105</td>
+      <td style = "text-align: right;">36.2353</td>
+      <td style = "text-align: right;">75.8024</td>
+      <td style = "text-align: right;">45.3431</td>
+      <td style = "text-align: right;">0.0</td>
+      <td style = "text-align: right;">35.2278</td>
+      <td style = "text-align: right;">99.1615</td>
+      <td style = "text-align: right;">13.0384</td>
+    </tr>
+    <tr>
+      <td class = "rowNumber">10</td>
+      <td style = "text-align: right;">26.4008</td>
+      <td style = "text-align: right;">57.4543</td>
+      <td style = "text-align: right;">42.7551</td>
+      <td style = "text-align: right;">77.801</td>
+      <td style = "text-align: right;">28.4253</td>
+      <td style = "text-align: right;">27.8926</td>
+      <td style = "text-align: right;">91.4166</td>
+      <td style = "text-align: right;">34.0147</td>
+      <td style = "text-align: right;">35.2278</td>
+      <td style = "text-align: right;">0.0</td>
+      <td style = "text-align: right;">96.0208</td>
+      <td style = "text-align: right;">26.4008</td>
+    </tr>
+    <tr>
+      <td class = "rowNumber">11</td>
+      <td style = "text-align: right;">88.8876</td>
+      <td style = "text-align: right;">56.8595</td>
+      <td style = "text-align: right;">54.9181</td>
+      <td style = "text-align: right;">59.6406</td>
+      <td style = "text-align: right;">81.6088</td>
+      <td style = "text-align: right;">69.5845</td>
+      <td style = "text-align: right;">50.9215</td>
+      <td style = "text-align: right;">62.0725</td>
+      <td style = "text-align: right;">99.1615</td>
+      <td style = "text-align: right;">96.0208</td>
+      <td style = "text-align: right;">0.0</td>
+      <td style = "text-align: right;">88.8876</td>
+    </tr>
+    <tr>
+      <td class = "rowNumber">12</td>
+      <td style = "text-align: right;">0.0</td>
+      <td style = "text-align: right;">38.4708</td>
+      <td style = "text-align: right;">34.8855</td>
+      <td style = "text-align: right;">55.9464</td>
+      <td style = "text-align: right;">7.28011</td>
+      <td style = "text-align: right;">23.3452</td>
+      <td style = "text-align: right;">71.4703</td>
+      <td style = "text-align: right;">32.5269</td>
+      <td style = "text-align: right;">13.0384</td>
+      <td style = "text-align: right;">26.4008</td>
+      <td style = "text-align: right;">88.8876</td>
+      <td style = "text-align: right;">0.0</td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>
+
+
+
+<pre class='hljl'>
+<span class='hljl-n'>particle</span><span class='hljl-oB'>.</span><span class='hljl-n'>p</span>
+</pre>
+
+
+<pre class="output">
+3×6×11 Array&#123;Float64, 3&#125;:
+&#91;:, :, 1&#93; &#61;
+ 0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0
+
+&#91;:, :, 2&#93; &#61;
+ 11.0  11.0  11.0  11.0  11.0  11.0
+ 11.0  11.0  11.0  11.0  11.0  11.0
+ 11.0  11.0  11.0  11.0  11.0  11.0
+
+&#91;:, :, 3&#93; &#61;
+ 11.0  11.0  11.0  11.0  11.0  11.0
+ 11.0  11.0  11.0  11.0  11.0  11.0
+ 11.0  11.0  11.0  11.0  11.0  11.0
+
+;;; … 
+
+&#91;:, :, 9&#93; &#61;
+ 11.0  11.0  11.0  11.0  11.0  11.0
+ 11.0  11.0  11.0  11.0  11.0  11.0
+ 11.0  11.0  11.0  11.0  11.0  11.0
+
+&#91;:, :, 10&#93; &#61;
+ 11.0  11.0  11.0  11.0  11.0  11.0
+ 11.0  11.0  11.0  11.0  11.0  11.0
+ 11.0  11.0  11.0  11.0  11.0  11.0
+
+&#91;:, :, 11&#93; &#61;
+ 11.0  11.0  11.0  11.0  11.0  11.0
+ 11.0  11.0  11.0  11.0  11.0  11.0
+ 11.0  11.0  11.0  11.0  11.0  11.0
+</pre>
+
+
+<p>Total distance</p>
+
+
+<pre class='hljl'>
+<span class='hljl-nf'>total_distance</span><span class='hljl-p'>(</span><span class='hljl-n'>particle</span><span class='hljl-p'>)</span>
+</pre>
+
+
+<pre class="output">
+578.460583
+</pre>
+
 
 
         <HR/>
         <div class="footer">
           <p>
             Published from <a href="index.Jmd">index.Jmd</a>
-            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.10 on 2022-04-28.
+            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.10 on 2022-04-29.
           </p>
         </div>
       </div>
