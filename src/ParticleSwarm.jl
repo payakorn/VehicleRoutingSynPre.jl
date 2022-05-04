@@ -1,23 +1,22 @@
 mutable struct Particle
-    route::Array
+    route::Vector{Vector{Vector{Int64}}}
     starttime::Dict{Int64, Array{Float64}}
     slot::Dict{Int64, Vector{Int64}}
-    slot_vehi::Dict{Int64, Vector{Int64}}
     serv_a::Tuple
-    serv_r::Dict
+    serv_r::Dict{Int64, Vector{Int64}}
     num_node::Int64
     num_vehi::Int64
     num_serv::Int64
-    mind::Vector
-    maxd::Vector
-    a::Array
-    r::Array
-    d::Matrix
-    p::Array
-    e::Vector
-    l::Vector
-    PRE::Vector
-    SYN::Vector
+    mind::Vector{Float64}
+    maxd::Vector{Float64}
+    a::Array{Int64}
+    r::Array{Int64}
+    d::Matrix{Float64}
+    p::Array{Float64}
+    e::Vector{Int64}
+    l::Vector{Int64}
+    PRE::Vector{Tuple}
+    SYN::Vector{Tuple}
 end
 
 
@@ -87,12 +86,12 @@ function find_starttime(route::Array, slot::Dict{Int64, Vector{Int64}}, num_node
                     st[right][vehi, route[vehi][i][2]] = e[route[vehi][i][1]]
                 end
 
-                if right != 1
-                    for sl in 2:length(slot[right])
-                        v = find_vehicle_by_service(route, right, slot[right][sl-1], num_vehi)
-                        st[right][v, slot[right][sl]] = maximum(st[right][slot[right][sl-1]])
-                    end
-                end
+                # if right != 1
+                #     for sl in 2:length(slot[right])
+                #         v = find_vehicle_by_service(route, right, slot[right][sl-1], num_vehi)
+                #         st[right][v, slot[right][sl]] = maximum(st[right][slot[right][sl-1]])
+                #     end
+                # end
             else
                 left = route[vehi][i-1][1]
                 right = route[vehi][i][1]
@@ -103,14 +102,32 @@ function find_starttime(route::Array, slot::Dict{Int64, Vector{Int64}}, num_node
                     st[right][vehi, route[vehi][i][2]] = e[route[vehi][i][1]]
                 end
 
-                if right != 1
-                    for sl in 2:length(slot[right])
-                        v = find_vehicle_by_service(route, right, slot[right][sl], num_vehi)
+            end
+
+            if right != 1
+                for sl in 2:length(slot[right])
+                    v = find_vehicle_by_service(route, right, slot[right][sl], num_vehi)
+                    if any([(right, slot[right][sl-1], slot[right][sl]) == i || (right, slot[right][sl], slot[right][sl-1]) == i for i in SYN]) # synchronization
+                        if maximum(st[right][:, slot[right][sl-1]]) > st[right][v, slot[right][sl]]
+                            st[right][v, slot[right][sl]] = maximum(st[right][:, slot[right][sl-1]])
+                        else
+                            st[right][v, slot[right][sl]] = st[right][v, slot[right][sl]]
+                            vv = find_vehicle_by_service(route, right, slot[right][sl-1], num_vehi)
+                            st[right][vv, slot[right][sl-1]] = st[right][v, slot[right][sl]]
+                        end
+                    elseif any([(right, slot[right][sl-1], slot[right][sl]) == i for i in PRE]) # precedence
+                        # @show right
+                        # @show v
+                        st[right][v, slot[right][sl]] = maximum((maximum(st[right][:, slot[right][sl-1]]) + p[v, slot[right][sl-1], right], st[right][v, slot[right][sl]]))
+                        if st[right][v, slot[right][sl]] - st[right][v, slot[right][sl-1]] < mind[right]
+                            st[right][v, slot[right][sl]] += (mind[right] - (st[right][v, slot[right][sl]] - st[right][v, slot[right][sl-1]]))
+                        end
+                    else
                         st[right][v, slot[right][sl]] = maximum((maximum(st[right][:, slot[right][sl-1]]) + p[v, slot[right][sl-1], right], st[right][v, slot[right][sl]]))
                     end
                 end
             end
-            println("vehicle: $vehi, depart: $left, arrive: $right, start $(st[right][vehi, route[vehi][i][2]])")
+            # println("vehicle: $vehi, depart: $left, arrive: $right, start $(st[right][vehi, route[vehi][i][2]])")
         end
     end
     return st
@@ -154,14 +171,13 @@ function generate_empty_particle(serv_a::Tuple, serv_r::Dict, num_node::Int64, n
     # create empty slot
     slot = create_empty_slot(num_node)
     # slot[9] = [5, 6]
-    slot_vehi = create_empty_slot(num_node)
 
     # just add
     # starttime = find_starttime(route, num_node, slot, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, SYN, PRE)
     starttime = find_starttime(route, slot, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN)
     # service = create_empty_slot(num_node)
 
-    return Particle(route, starttime, slot, slot_vehi, serv_a, serv_r, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN)
+    return Particle(route, starttime, slot, serv_a, serv_r, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN)
 end
 
 
@@ -189,7 +205,7 @@ function check_assigned_node(route::Array, node::Int64, service::Int64, num_vehi
 end
 
 
-function random_insert_vehicle_to_service(route::Array, slot::Dict{Int64, Vector{Int64}}, num_node::Int64, num_vehi::Int64, a::Matrix, e::Vector, SYN::Vector, PRE::Vector)
+function insert_vehicle_to_service(route::Array, slot::Dict{Int64, Vector{Int64}}, num_node::Int64, num_vehi::Int64, a::Matrix, e::Vector, SYN::Vector, PRE::Vector)
     for syn in SYN
         for i in 2:length(syn)-1
             if !check_assigned_node(route, syn[1], syn[i], num_vehi) && !check_assigned_node(route, syn[1], syn[i+1], num_vehi) && issubset([syn[i], syn[i+1]], slot[syn[1]])
@@ -202,7 +218,7 @@ function random_insert_vehicle_to_service(route::Array, slot::Dict{Int64, Vector
     end
     
     for node in setdiff(sortperm(e)[3:end], [sl[1] for sl in SYN])
-        println("$node, $(slot[node])")
+        # println("$node, $(slot[node])")
         for sl in slot[node]
             if !check_assigned_node(route, node, sl, num_vehi)
                 vehi = rand(findall(x->x==1, a[:, sl]))
@@ -214,8 +230,8 @@ function random_insert_vehicle_to_service(route::Array, slot::Dict{Int64, Vector
 end
 
 
-function random_insert_vehicle_to_service(particle::Particle)
-    particle.route = random_insert_vehicle_to_service(particle.route, particle.slot, particle.num_node, particle.num_vehi, particle.a, particle.e, particle.SYN, particle.PRE)
+function insert_vehicle_to_service(particle::Particle)
+    particle.route = insert_vehicle_to_service(particle.route, particle.slot, particle.num_node, particle.num_vehi, particle.a, particle.e, particle.SYN, particle.PRE)
     particle.starttime = find_starttime(particle)
     return particle
 end
@@ -277,12 +293,18 @@ function generate_particles(name::String)
 
 
     par = generate_empty_particle(serv_a, serv_r, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN)
+    par.slot = initial_insert_service(serv_r, num_node, num_vehi, num_serv, SYN)
+    par = insert_vehicle_to_service(par)
+    par = insert_PRE(par)
 end
 
 
 function find_remain_service(slot::Dict, serv_r::Dict)
     for (i, sl) in slot
-        setdiff!(serv_r[i], slot[i])
+        try setdiff!(serv_r[i], slot[i]) catch e; continue end
+        if isempty(serv_r[i])
+            delete!(serv_r, i)
+        end
     end
     return serv_r
 end
@@ -290,6 +312,50 @@ end
 
 function find_remain_service(particle::Particle)
     return find_remain_service(particle.slot, particle.serv_r)
+end
+
+
+function find_location_by_node_service(route::Array, node::Int64, service::Int64)
+    for (num_v, vehi) in enumerate(route)
+        for (num_loca, n) in enumerate(vehi)
+            if [node, service] == [n[1], n[2]]
+                return (num_v, num_loca)
+            end
+        end
+    end
+end
+
+
+function insert_PRE(route::Array, slot::Dict{Int64, Vector{Int64}}, num_vehi::Int64, serv_r::Dict{Int64, Vector{Int64}}, PRE::Vector{Tuple})
+    serv_r = find_remain_service(slot, serv_r)
+    for (node, remain_service) in serv_r
+        for serv in remain_service
+            # check Precedence
+            for pre_service in findall(issubset.((node, serv), PRE))
+                location = findfirst(x->x==serv, PRE[pre_service])
+                if location == 2
+                    insert!(slot[node], findfirst(x->x==PRE[pre_service][3], slot[node]), PRE[pre_service][2])
+                    (v, loca) = find_location_by_node_service(route, node, slot[node][findfirst(x->x==PRE[pre_service][3], slot[node])])
+                    insert!(route[v], loca, [node, PRE[pre_service][2]])
+                else
+                    insert!(slot[node], findfirst(x->x==PRE[pre_service][2], slot[node])+1, PRE[pre_service][3])
+                    (v, loca) = find_location_by_node_service(route, node, slot[node][findfirst(x->x==PRE[pre_service][2], slot[node])])
+                    insert!(route[v], loca+1, [node, PRE[pre_service][3]])
+                end
+            end
+        end
+    end
+    return route, slot, serv_r
+end
+
+
+function insert_PRE(particle::Particle)
+    route, slot, serv_r = insert_PRE(particle.route, particle.slot, particle.num_vehi, particle.serv_r, particle.PRE)
+    particle.route = route
+    particle.slot = slot
+    particle.serv_r = serv_r
+    particle.starttime = find_starttime(particle)
+    return particle
 end
 
 
@@ -388,13 +454,14 @@ function objective_value(particle::Particle; lambda=[1/3, 1/3, 1/3])
 end
 
 
-function example(route, slot)
+function example()
     route = [
-        [(11, 3), (4, 2), (6, 3), (10, 1), (8, 3), (1, 1)],
-        [(9, 6), (1, 1)],
-        [(9, 5), (11, 6), (7, 5), (2, 4), (3, 5), (10, 4), (5, 4), (1, 1)]
+        [[11, 3], [4, 2], [6, 3], [10, 1], [8, 3], [1, 1]],
+        [[9, 6], [1, 1]],
+        [[9, 5], [11, 6], [7, 5], [2, 4], [3, 5], [10, 4], [5, 4], [1, 1]]
     ]
     
+    slot = Dict(i => Int64[] for i in 2:11)
     slot[2] = [4]
     slot[3] = [5]
     slot[4] = [2]
@@ -407,4 +474,24 @@ function example(route, slot)
     slot[11] = [3, 6]
 
     return route, slot
+end
+
+
+function generate_example()
+    route, slot = example()
+    par = generate_particles("ins10-1")
+    par.route = route
+    par.slot = slot
+    par.starttime = find_starttime(par)
+    return par
+end
+
+
+function complete(route, slot)
+    nothing
+end
+
+
+function complete(particle::Particle)
+    nothing
 end

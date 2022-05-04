@@ -21,10 +21,14 @@ export Particle,
        create_empty_slot,
        find_vehicle_by_service,
        example,
-       random_insert_vehicle_to_service,
+       insert_vehicle_to_service,
        check_assigned_node,
        find_remain_service,
        total_distance,
        tardiness,
-       objective_value
+       objective_value,
+       insert_PRE,
+       complete,
+       find_location_by_node_service,
+       generate_example
 end

@@ -1,6 +1,8 @@
 ---
-title: Tutorial for VehicleRoutingSynPre
+title: VehicleRoutingSynPre
 author: Payakorn Saksuriya
+weave_options: 
+    line_wodth : 150
 # date: 2022-04-27
 ---
 
@@ -24,17 +26,17 @@ num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l = load_data(name);
 ```
 
 where
-- num_node: total number of nodes (including depot)
-- num_vehi: total number of vehicles
-- num_serv: total number of services
-- mind: minumum different of starting time between two services of each node
-- maxd: maximum different of starting time between two services of each node
-- a: compatibility matrix a[i,j] = 1 if vehicle i can process service j
-- r: requiment matrix r[i,j] = 1 if node i requires service j
-- d: distance matrix
-- p: processing time matrix, p[i, j, k] = processing time of service j of vehicle i on node k
-- e: earilest start time of each node
-- l: latest start time of each node
+- `num_node`: total number of nodes (including depot)
+- `num_vehi`: total number of vehicles
+- `num_serv`: total number of services
+- `mind`:     minumum different of starting time between two services of each node
+- `maxd`:     maximum different of starting time between two services of each node
+- `a`:        compatibility matrix a[i,j] = 1 if vehicle i can process service j
+- `r`:        requiment matrix r[i,j] = 1 if node i requires service j
+- `d`:        distance matrix
+- `p`:        processing time matrix, p[i, j, k] = processing time of service j of vehicle i on node k
+- `e`:        earilest start time of each node
+- `l`:        latest start time of each node
 
 ---
 
@@ -49,31 +51,66 @@ The particle is `struct` of `Particle` with fields
 ```julia
 dump(Particle)
 ```
+---
 
-```julia
+```julia; line_width=150
 particle.route
 ```
 
+where route start and end from depot node `1`
+
+For example, 
+
+in row 1 first element [`j particle.route[1][1][1]`, `j particle.route[1][1][2]`] represents route of vehicle 1 from node 1 to node `j particle.route[1][1][1]` and process service `j particle.route[1][1][2]`
+
+
+in row 1 second element [`j particle.route[1][2][1]`, `j particle.route[1][2][2]`] represents route of vehicle 1 from node `j particle.route[1][1][1]` to node `j particle.route[1][2][1]` and process service `j particle.route[1][2][2]`
+
+---
+
+
+slot is the service sequence of each node
 ```julia
 particle.slot
 ```
 
+---
 
+The starting time at each node 
 ```julia; results="markup", line_width=150
-particle.starttime
+for i in 2:11
+    println("Start time of node $i")
+    pretty_table(particle.starttime[i])
+end
 ```
 
-Print distance matrix
+---
+
+Distance matrix
 ```julia; results="markup", line_width=150
 pretty_table(particle.d, tf=tf_html_matrix, show_row_number=true)
 ```
+
+---
 
 Processing time of each node
 ```julia; results="markup", line_width=150
 particle.p
 ```
 
-Total distance
+Total distance:
 ```julia
 total_distance(particle)
+```
+
+Tardiness
+
+```julia
+tardy, max_tardy = tardiness(particle)
+```
+
+
+Objective function value:
+```julia
+objective_value(particle)
 ```
