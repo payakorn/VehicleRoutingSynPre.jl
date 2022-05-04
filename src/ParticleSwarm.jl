@@ -76,7 +76,7 @@ function find_starttime(route::Array, slot::Dict{Int64, Vector{Int64}}, num_node
 
     for vehi in 1:num_vehi
         for i in 1:length(route[vehi])
-            if i == 1
+            if i == 1 # start at node 1 (origin)
                 left = 1
                 right = route[vehi][i][1]
 
@@ -102,6 +102,8 @@ function find_starttime(route::Array, slot::Dict{Int64, Vector{Int64}}, num_node
                     st[right][vehi, route[vehi][i][2]] = e[route[vehi][i][1]]
                 end
 
+                println("vehi: $vehi st[$right][$vehi, route[$vehi][$i][2]] = $(st[right][vehi, route[vehi][i][2]])" )
+
             end
 
             if right != 1
@@ -118,12 +120,14 @@ function find_starttime(route::Array, slot::Dict{Int64, Vector{Int64}}, num_node
                     elseif any([(right, slot[right][sl-1], slot[right][sl]) == i for i in PRE]) # precedence
                         # @show right
                         # @show v
-                        st[right][v, slot[right][sl]] = maximum((maximum(st[right][:, slot[right][sl-1]]) + p[v, slot[right][sl-1], right], st[right][v, slot[right][sl]]))
-                        if st[right][v, slot[right][sl]] - st[right][v, slot[right][sl-1]] < mind[right]
-                            st[right][v, slot[right][sl]] += (mind[right] - (st[right][v, slot[right][sl]] - st[right][v, slot[right][sl-1]]))
+                        before_vehi = argmax(st[right][:, slot[right][sl-1]])
+                        starttime_before_vehi = st[right][:, slot[right][sl-1]][before_vehi]
+                        st[right][v, slot[right][sl]] = maximum((starttime_before_vehi, st[right][v, slot[right][sl]]))
+                        if st[right][v, slot[right][sl]] - st[right][before_vehi, slot[right][sl-1]] < mind[right]
+                            st[right][v, slot[right][sl]] += (mind[right] - (st[right][v, slot[right][sl]] - st[right][before_vehi, slot[right][sl-1]]))
                         end
                     else
-                        st[right][v, slot[right][sl]] = maximum((maximum(st[right][:, slot[right][sl-1]]) + p[v, slot[right][sl-1], right], st[right][v, slot[right][sl]]))
+                        st[right][v, slot[right][sl]] = maximum((maximum(st[right][:, slot[right][sl-1]]), st[right][v, slot[right][sl]]))
                     end
                 end
             end
@@ -469,7 +473,7 @@ function example()
     slot[6] = [3]
     slot[7] = [5]
     slot[8] = [3]
-    slot[9] = [5]
+    slot[9] = [5, 6]
     slot[10] = [1, 4]
     slot[11] = [3, 6]
 

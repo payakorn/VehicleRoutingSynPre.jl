@@ -53,6 +53,11 @@ dump(Particle)
 ```
 ---
 
+```julia
+particle.route, particle.slot = example();
+particle.starttime = find_starttime(particle)
+```
+
 ```julia; line_width=150
 particle.route
 ```
@@ -78,7 +83,7 @@ particle.slot
 
 The starting time at each node 
 ```julia; results="markup", line_width=150
-for i in 2:11
+for i in 1:11
     println("Start time of node $i")
     pretty_table(particle.starttime[i])
 end
