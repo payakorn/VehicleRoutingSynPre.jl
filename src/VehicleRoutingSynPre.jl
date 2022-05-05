@@ -30,5 +30,6 @@ export Particle,
        insert_PRE,
        complete,
        find_location_by_node_service,
-       generate_example
+       generate_example,
+       example2
 end

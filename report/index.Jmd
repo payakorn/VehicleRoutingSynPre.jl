@@ -43,7 +43,7 @@ where
 Generate random particle (solution)
 
 ```julia
-particle = generate_particles("ins10-1");
+particle = generate_particles("ins10-2");
 ```
 
 The particle is `struct` of `Particle` with fields
@@ -54,7 +54,7 @@ dump(Particle)
 ---
 
 ```julia
-particle.route, particle.slot = example();
+particle.route, particle.slot = example2();
 particle.starttime = find_starttime(particle)
 ```
 

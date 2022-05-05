@@ -112,22 +112,36 @@ function find_starttime(route::Array, slot::Dict{Int64, Vector{Int64}}, num_node
                     if any([(right, slot[right][sl-1], slot[right][sl]) == i || (right, slot[right][sl], slot[right][sl-1]) == i for i in SYN]) # synchronization
                         if maximum(st[right][:, slot[right][sl-1]]) > st[right][v, slot[right][sl]]
                             st[right][v, slot[right][sl]] = maximum(st[right][:, slot[right][sl-1]])
-                        else
-                            st[right][v, slot[right][sl]] = st[right][v, slot[right][sl]]
-                            vv = find_vehicle_by_service(route, right, slot[right][sl-1], num_vehi)
+                        elseif maximum(st[right][:, slot[right][sl-1]]) < st[right][v, slot[right][sl]]
+                            diff_starttime = st[right][v, slot[right][sl]] - maximum(st[right][:, slot[right][sl-1]])
+                            # st[right][v, slot[right][sl]] = st[right][v, slot[right][sl]]
+                            # vv = find_vehicle_by_service(route, right, slot[right][sl-1], num_vehi)
+                            vv, loca = find_location_by_node_service(route, right, slot[right][sl-1])
                             st[right][vv, slot[right][sl-1]] = st[right][v, slot[right][sl]]
+                            for k in loca+1:length(route[vv])
+                                st[route[vv][k][1]][vv, route[vv][k][2]] += diff_starttime
+                            end
                         end
                     elseif any([(right, slot[right][sl-1], slot[right][sl]) == i for i in PRE]) # precedence
                         # @show right
                         # @show v
-                        before_vehi = argmax(st[right][:, slot[right][sl-1]])
-                        starttime_before_vehi = st[right][:, slot[right][sl-1]][before_vehi]
-                        st[right][v, slot[right][sl]] = maximum((starttime_before_vehi, st[right][v, slot[right][sl]]))
-                        if st[right][v, slot[right][sl]] - st[right][before_vehi, slot[right][sl-1]] < mind[right]
-                            st[right][v, slot[right][sl]] += (mind[right] - (st[right][v, slot[right][sl]] - st[right][before_vehi, slot[right][sl-1]]))
+                        # before_vehi = argmax(st[right][:, slot[right][sl-1]])
+                        starttime_before_vehi = st[right][:, slot[right][sl-1]][vehi]
+                        # st[right][v, slot[right][sl]] = maximum((starttime_before_vehi, st[right][v, slot[right][sl]]))
+                        if st[right][v, slot[right][sl]] - st[right][vehi, slot[right][sl-1]] < mind[right]
+                            if vehi != v # if they come from different vehicles
+                                st[right][v, slot[right][sl]] += (mind[right] - (st[right][v, slot[right][sl]] - st[right][vehi, slot[right][sl-1]]))
+                                # if st[right][v, slot[right][sl-1]] + p[v, slot[right][sl-1], right] > st[right][v, slot[right][sl]]
+                                #     st[right][v, slot[right][sl]] = st[right][v, slot[right][sl-1]] + p[v, slot[right][sl-1], right]
+                                # end
+                            else
+                                if st[right][v, slot[right][sl]] - (st[right][vehi, slot[right][sl-1]] + p[vehi, slot[right][sl-1], right]) < mind[right]
+                                    st[right][v, slot[right][sl]] += st[right][v, slot[right][sl]] - (st[right][vehi, slot[right][sl-1]] + p[vehi, slot[right][sl-1], right])
+                                end
+                            end
                         end
                     else
-                        st[right][v, slot[right][sl]] = maximum((maximum(st[right][:, slot[right][sl-1]]), st[right][v, slot[right][sl]]))
+                        st[right][v, slot[right][sl]] = maximum(maximum(st[right][:, slot[right][sl-1]]) + p[v, slot[right][sl-1], right], st[right][v, slot[right][sl]])
                     end
                 end
             end
@@ -434,7 +448,7 @@ function tardiness(route::Array, starttime::Dict, p::Array, l::Vector)
     max_tardy = 0.0
     for (i, vehi) in enumerate(route)
         for node_service in vehi
-            st = starttime[node_service[1]][i, node_service[2]] + p[i, node_service[2], node_service[1]] - l[node_service[1]]
+            st = starttime[node_service[1]][i, node_service[2]] - l[node_service[1]]
             if st > 0.0
                 tardy += st
                 if st > max_tardy
@@ -476,6 +490,29 @@ function example()
     slot[9] = [5, 6]
     slot[10] = [1, 4]
     slot[11] = [3, 6]
+
+    return route, slot
+end
+
+
+function example2()
+    route = [
+        [[10, 1], [3, 1], [4, 3], [8, 1], [11, 3], [5, 2], [7, 1], [1, 1]],
+        [[2, 5], [9, 4], [11, 5], [1, 1]],
+        [[10, 6], [9, 5], [6, 4], [1, 1]]
+    ]
+    
+    slot = Dict(i => Int64[] for i in 2:11)
+    slot[2] = [5]
+    slot[3] = [1]
+    slot[4] = [3]
+    slot[5] = [2]
+    slot[6] = [4]
+    slot[7] = [1]
+    slot[8] = [1]
+    slot[9] = [4, 5]
+    slot[10] = [1, 6]
+    slot[11] = [3, 5]
 
     return route, slot
 end
