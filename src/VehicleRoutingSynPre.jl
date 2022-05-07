@@ -31,5 +31,7 @@ export Particle,
        complete,
        find_location_by_node_service,
        generate_example,
-       example2
+       example2,
+       swap,
+       List
 end

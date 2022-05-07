@@ -344,7 +344,7 @@ function find_location_by_node_service(route::Array, node::Int64, service::Int64
 end
 
 
-function insert_PRE(route::Array, slot::Dict{Int64, Vector{Int64}}, num_vehi::Int64, serv_r::Dict{Int64, Vector{Int64}}, PRE::Vector{Tuple})
+function insert_PRE(route::Array, slot::Dict{Int64, Vector{Int64}}, num_vehi::Int64, a::Matrix, serv_r::Dict{Int64, Vector{Int64}}, PRE::Vector{Tuple})
     serv_r = find_remain_service(slot, serv_r)
     for (node, remain_service) in serv_r
         for serv in remain_service
@@ -354,11 +354,23 @@ function insert_PRE(route::Array, slot::Dict{Int64, Vector{Int64}}, num_vehi::In
                 if location == 2
                     insert!(slot[node], findfirst(x->x==PRE[pre_service][3], slot[node]), PRE[pre_service][2])
                     (v, loca) = find_location_by_node_service(route, node, slot[node][findfirst(x->x==PRE[pre_service][3], slot[node])])
-                    insert!(route[v], loca, [node, PRE[pre_service][2]])
+                    if a[v, serv] == 1
+                        insert!(route[v], loca, [node, PRE[pre_service][2]])
+                    else
+                        vv = rand(findall(x->x==1, a[:, serv]))
+                        loca = rand(1:length(route[vv]))
+                        insert!(route[vv], loca, [node, PRE[pre_service][2]])
+                    end
                 else
                     insert!(slot[node], findfirst(x->x==PRE[pre_service][2], slot[node])+1, PRE[pre_service][3])
                     (v, loca) = find_location_by_node_service(route, node, slot[node][findfirst(x->x==PRE[pre_service][2], slot[node])])
-                    insert!(route[v], loca+1, [node, PRE[pre_service][3]])
+                    if a[v, serv] == 1
+                        insert!(route[v], loca+1, [node, PRE[pre_service][3]])
+                    else
+                        vv = rand(findall(x->x==1, a[:, serv]))
+                        loca = rand(1:length(route[vv]))
+                        insert!(route[vv], loca, [node, PRE[pre_service][3]])
+                    end
                 end
             end
         end
@@ -368,7 +380,7 @@ end
 
 
 function insert_PRE(particle::Particle)
-    route, slot, serv_r = insert_PRE(particle.route, particle.slot, particle.num_vehi, particle.serv_r, particle.PRE)
+    route, slot, serv_r = insert_PRE(particle.route, particle.slot, particle.num_vehi, particle.a, particle.serv_r, particle.PRE)
     particle.route = route
     particle.slot = slot
     particle.serv_r = serv_r
@@ -535,4 +547,42 @@ end
 
 function complete(particle::Particle)
     nothing
+end
+
+
+function List(num_node::Int64, num_vehi::Int64, num_serv::Int64, r::Matrix, SYN::Vector{Tuple}, PRE::Vector{Tuple})
+    r[1, :] = zeros(1, num_serv)
+    index = getindex.(findall(x->x==1, r[1:11, :]), [1 2])
+    set_of_all_index = (Tuple(index[i, :]) for i in 1:size(index, 1))
+    set = Iterators.filter(x -> x[1] != x[2], Iterators.product(set_of_all_index, set_of_all_index))
+end
+
+
+function swap(route::Array, slot::Dict{Int64, Vector{Int64}}, a::Matrix, r::Matrix, serv_a::Tuple, serv_r::Dict, SYN::Vector{Tuple}, PRE::Vector{Tuple}, list)
+    for ls in list
+        num_v1, num_loca1 = find_location_by_node_service(route, ls[1][1], ls[1][2])
+        num_v2, num_loca2 = find_location_by_node_service(route, ls[2][1], ls[2][2])
+        test_route = deepcopy(route)
+        test_route[num_v1][num_loca1], test_route[num_v2][num_loca2] = test_route[num_v2][num_loca2], test_route[num_v1][num_loca1]
+        if compatibility(test_route, slot, a, r, serv_a, serv_r)
+            println("swap between: $(ls[1]) and $(ls[2]) => feasible")
+        else
+            println("swap between: $(ls[1]) and $(ls[2]) => infeasible")
+        end
+    end
+end
+
+
+function swap(route::Array, slot::Dict{Int64, Vector{Int64}}, num_node::Int64, num_vehi::Int64, num_serv::Int64, a::Matrix, r::Matrix, serv_a::Tuple, serv_r::Dict, SYN::Vector{Tuple}, PRE::Vector{Tuple})
+    list = List(num_node, num_vehi, num_serv, r, SYN, PRE)
+    swap(route, slot, a, r, serv_a, serv_r, SYN, PRE, list)
+end
+
+
+function swap(particle::Particle; list=nothing)
+    if isnothing(list)
+        swap(particle.route, particle.slot, particle.num_node, particle.num_vehi, particle.num_serv, particle.a, particle.r, particle.serv_a, particle.serv_r, particle.SYN, particle.PRE)
+    else
+        swap(particle.route, particle.slot, particle.a, particle.r, particle.serv_a, particle.serv_r, particle.SYN, particle.PRE, list)
+    end
 end
