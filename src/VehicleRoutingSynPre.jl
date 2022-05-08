@@ -1,6 +1,6 @@
 module VehicleRoutingSynPre
 
-using JLD2, Random
+using JLD2, Random, Glob
 # Write your package code here.
 include("ParticleSwarm.jl")
 
@@ -33,5 +33,7 @@ export Particle,
        generate_example,
        example2,
        swap,
-       List
+       List,
+       save_particle,
+       location_simulation
 end

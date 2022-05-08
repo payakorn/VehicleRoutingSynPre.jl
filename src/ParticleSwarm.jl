@@ -101,9 +101,7 @@ function find_starttime(route::Array, slot::Dict{Int64, Vector{Int64}}, num_node
                 else
                     st[right][vehi, route[vehi][i][2]] = e[route[vehi][i][1]]
                 end
-
-                println("vehi: $vehi st[$right][$vehi, route[$vehi][$i][2]] = $(st[right][vehi, route[vehi][i][2]])" )
-
+                # println("vehi: $vehi st[$right][$vehi, route[$vehi][$i][2]] = $(st[right][vehi, route[vehi][i][2]])" )
             end
 
             if right != 1
@@ -395,16 +393,16 @@ end
 
 
 function compatibility(particle::Particle)
-    return compatibility(particle.route, particle.slot, particle.a, particle.r, particle.serv_a, particle.serv_r)
+    return compatibility(particle.route, particle.slot, particle.a, particle.r, particle.serv_a, particle.serv_r, particle.PRE, particle.SYN)
 end
 
 
-function compatibility(route::Array, slot::Dict, a::Matrix, r::Matrix, serv_a::Tuple, serv_r::Dict)
+function compatibility(route::Array, slot::Dict, a::Matrix, r::Matrix, serv_a::Tuple, serv_r::Dict, PRE::Vector{Tuple}, SYN::Vector{Tuple})
 
     # check services
     for sl in slot
-        if !issubset(sl[2], serv_r[sl[1]])
-            println("incompat $(sl[2]) not in $(serv_r[sl[1]])")
+        if !issubset(sl[2], findall(x->x==1, r[sl[1], :]))
+            # println("incompat $(sl[2]) not in $(serv_r[sl[1]])")
             return false
         end
     end
@@ -414,7 +412,7 @@ function compatibility(route::Array, slot::Dict, a::Matrix, r::Matrix, serv_a::T
     for vehi in 1:size(a, 1)
         for node in route[vehi]
             if !in(node[1], serv_a[vehi])
-                println("false $(node[1])")
+                # println("false $(node[1])")
                 return false
             end
         end
@@ -475,6 +473,12 @@ end
 
 function tardiness(particle::Particle)
     return tardiness(particle.route, particle.starttime, particle.p, particle.l)
+end
+
+
+function objective_value(route, starttime, p, l, d; lambda=[1/3, 1/3, 1/3])
+    tardy, max_tardy = tardiness(route, starttime, p, l)
+    return lambda[1]*total_distance(route, d) + lambda[2]*tardy + lambda[3]*max_tardy
 end
 
 
@@ -558,31 +562,53 @@ function List(num_node::Int64, num_vehi::Int64, num_serv::Int64, r::Matrix, SYN:
 end
 
 
-function swap(route::Array, slot::Dict{Int64, Vector{Int64}}, a::Matrix, r::Matrix, serv_a::Tuple, serv_r::Dict, SYN::Vector{Tuple}, PRE::Vector{Tuple}, list)
+function swap(route::Array, slot::Dict{Int64, Vector{Int64}}, num_node::Int64, num_vehi::Int64, num_serv::Int64, mind::Vector, maxd::Array, a::Matrix, r::Matrix, serv_a::Tuple, serv_r::Dict, d::Matrix, p::Array, e::Array, l::Array, PRE::Array, SYN::Array, list)
+    input_route = deepcopy(route)
     for ls in list
-        num_v1, num_loca1 = find_location_by_node_service(route, ls[1][1], ls[1][2])
-        num_v2, num_loca2 = find_location_by_node_service(route, ls[2][1], ls[2][2])
-        test_route = deepcopy(route)
+        num_v1, num_loca1 = find_location_by_node_service(input_route, ls[1][1], ls[1][2])
+        num_v2, num_loca2 = find_location_by_node_service(input_route, ls[2][1], ls[2][2])
+        test_route = deepcopy(input_route)
         test_route[num_v1][num_loca1], test_route[num_v2][num_loca2] = test_route[num_v2][num_loca2], test_route[num_v1][num_loca1]
-        if compatibility(test_route, slot, a, r, serv_a, serv_r)
-            println("swap between: $(ls[1]) and $(ls[2]) => feasible")
-        else
-            println("swap between: $(ls[1]) and $(ls[2]) => infeasible")
+        test_st = find_starttime(test_route, slot, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN)
+        st = find_starttime(route, slot, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN)
+        if compatibility(test_route, slot, a, r, serv_a, serv_r, PRE, SYN) && objective_value(test_route, test_st, p, l, d) < objective_value(route, st, p, l, d)
+            # println("swap between: $(ls[1]) and $(ls[2]) => feasible")
+            input_route = deepcopy(test_route)
         end
     end
+    return input_route
 end
 
 
-function swap(route::Array, slot::Dict{Int64, Vector{Int64}}, num_node::Int64, num_vehi::Int64, num_serv::Int64, a::Matrix, r::Matrix, serv_a::Tuple, serv_r::Dict, SYN::Vector{Tuple}, PRE::Vector{Tuple})
+function swap(route::Array, slot::Dict{Int64, Vector{Int64}}, num_node::Int64, num_vehi::Int64, num_serv::Int64, mind::Vector, maxd::Array, a::Matrix, r::Matrix, serv_a::Tuple, serv_r::Dict, d::Matrix, p::Array, e::Array, l::Array, PRE::Array, SYN::Array)
     list = List(num_node, num_vehi, num_serv, r, SYN, PRE)
-    swap(route, slot, a, r, serv_a, serv_r, SYN, PRE, list)
+    return swap(route, slot, num_node, num_vehi, num_serv, mind, maxd, a, r, serv_a, serv_r, d, p, e, l, PRE, SYN, list)
 end
 
 
-function swap(particle::Particle; list=nothing)
+function swap(par::Particle; list=nothing)
     if isnothing(list)
-        swap(particle.route, particle.slot, particle.num_node, particle.num_vehi, particle.num_serv, particle.a, particle.r, particle.serv_a, particle.serv_r, particle.SYN, particle.PRE)
+        route = swap(par.route, par.slot, par.num_node, par.num_vehi, par.num_serv, par.mind, par.maxd, par.a, par.r, par.serv_a, par.serv_r, par.d, par.p, par.e, par.l, par.PRE, par.SYN)
     else
-        swap(particle.route, particle.slot, particle.a, particle.r, particle.serv_a, particle.serv_r, particle.SYN, particle.PRE, list)
+        route = swap(par.route, par.slot, par.num_node, par.num_vehi, par.num_serv, par.mind, par.maxd, par.a, par.r, par.serv_a, par.serv_r, par.d, par.p, par.e, par.l, par.PRE, par.SYN, list)
     end
+    par.route = route
+    par.starttime = find_starttime(par)
+    return par
+end
+
+
+function location_simulation(instance_name::String; initial=false)
+    if initial
+        return mkpath("data/simulations/$instance_name/initial")
+    else
+        return mkpath("data/simulations/$instance_name")
+    end
+end
+
+
+function save_particle(particle::Particle, instance_name::String; initial=false)
+    location = "$(location_simulation(instance_name, initial=initial))"
+    num = length(glob("$instance_name*.jld2", location))
+    save_object("$(location_simulation(instance_name, initial=initial))/$instance_name-$(num+1).jld2", particle)
 end
