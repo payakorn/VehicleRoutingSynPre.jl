@@ -3,8 +3,10 @@ module VehicleRoutingSynPre
 using JLD2, Random, Glob, Printf
 # Write your package code here.
 include("ParticleSwarm.jl")
+include("Solution.jl")
 
 export Particle,
+       IndexSolution,
        load_data,
        generate_empty_particle,
        generate_particles,
@@ -48,5 +50,7 @@ export Particle,
        check_all_syn_pre,
        check_all_insert_node,
        in_SYN,
+       print_sol,
+       load_problem,
        PSO
 end
