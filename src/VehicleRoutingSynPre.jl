@@ -1,6 +1,6 @@
 module VehicleRoutingSynPre
 
-using JLD2, Random, Glob
+using JLD2, Random, Glob, Printf
 # Write your package code here.
 include("ParticleSwarm.jl")
 
@@ -10,6 +10,7 @@ export Particle,
        generate_particles,
        find_group_of_node,
        find_starttime,
+       find_starttime2,
        initial_insert_service,
        find_service_request,
        find_SYN,
@@ -33,7 +34,19 @@ export Particle,
        generate_example,
        example2,
        swap,
+       move,
        List,
        save_particle,
-       location_simulation
+       location_simulation,
+       check_PRE,
+       check_SYN,
+       local_search,
+       loop_test,
+       choose_vehicle_from_service,
+       path_relinking,
+       local_search_ver2,
+       check_all_syn_pre,
+       check_all_insert_node,
+       in_SYN,
+       PSO
 end

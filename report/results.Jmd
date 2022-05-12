@@ -1,0 +1,38 @@
+---
+title: Report
+weave_options: 
+    line_width : 150
+# date: 2022-04-27
+---
+
+Import package
+```julia
+using VehicleRoutingSynPre
+using PrettyTables
+using Glob
+using Printf
+using DataFrames
+```
+
+All files
+```julia
+instances = []
+numnode = [10, 25]
+numins = 1:10
+num_files = Int8[]
+for numn in numnode
+    for inst in numins
+        push!(instances, "ins$numn-$inst")
+    end
+end
+for ins in instances
+    location = joinpath(@__DIR__, "..", "data", "simulations", ins)
+    push!(num_files, length(glob("*", location)))
+    # obj = objective_value.([])
+    # println("ins $(@sprintf("%5s", split(ins, "ins")[end])): #files: $(length(glob("*", location)))")
+end
+```
+
+```julia
+df = DataFrame(ins=instances, NumFiles=num_files)
+```
