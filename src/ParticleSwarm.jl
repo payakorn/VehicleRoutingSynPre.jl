@@ -98,26 +98,32 @@ end
 
 function find_node_starttime(input_route::Array, slot::Dict{Int64, Vector{Int64}}, node::Int64, service::Int64, num_node::Int64, num_vehi::Int64, num_serv::Int64, mind::Vector, maxd::Array, a::Matrix, r::Matrix, d::Matrix, p::Array, e::Array, l::Array, PRE::Array, SYN::Array, st::Dict)
     vehi, loca = find_location_by_node_service(input_route, node, service)
+
+    # check if the depot [1, 1]
     if loca != 1
         left_node = input_route[vehi][loca-1][1]
         left_serv = input_route[vehi][loca-1][2]
         st_left = find_node_starttime(input_route, slot, left_node, left_serv, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st)[left_node][vehi, left_serv] + p[vehi, service, left_node] + d[left_node, node]
-        if st_left < e[node]
-            st[node][vehi, service] = e[node]
-        else
-            st[node][vehi, service] = st_left
-        end
+    else
+        st_left = d[1, node] + p[vehi, service, 1]
+    end
 
-        if in_SYN(node, SYN)
-            syn = SYN[findfirst(x->x[1]==node, SYN)]
-            other_serv = setdiff(syn, [node, service])[1]
-            ovehi, oloca = find_location_by_node_service(input_route, node, other_serv)
-            if st[node][ovehi, other_serv] < st[node][vehi, service]
-                st[node][ovehi, other_serv] = st[node][vehi, service]
-                st = update_starttime(input_route, slot, node, service, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st)
-            else
-                st[node][vehi, service] = st[node][ovehi, other_serv]
-            end
+    # calculate completion time
+    if st_left < e[node]
+        st[node][vehi, service] = e[node]
+    else
+        st[node][vehi, service] = st_left
+    end
+
+    if in_SYN(node, SYN)
+        @show syn = SYN[findfirst(x->x[1]==node, SYN)]
+        other_serv = setdiff(syn, [node, service])[1]
+        ovehi, oloca = find_location_by_node_service(input_route, node, other_serv)
+        if st[node][ovehi, other_serv] < st[node][vehi, service]
+            st[node][ovehi, other_serv] = st[node][vehi, service]
+            st = update_starttime(input_route, slot, node, service, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st)
+        else
+            st[node][vehi, service] = st[node][ovehi, other_serv]
         end
     end
     return st
@@ -140,6 +146,11 @@ end
 
 function find_starttime2(par::Particle, node::Int64, vehi::Int64)
     return find_starttime2(par.route, par.slot, node, vehi, par.num_node, par.num_vehi, par.num_serv, par.mind, par.maxd, par.a, par.r, par.d, par.p, par.e, par.l, par.PRE, par.SYN)
+end
+
+
+function initial_starttime(num_node::Int64, num_vehi::Int64, num_serv::Int64)
+    Dict(i => zeros(Float64, num_vehi, num_serv) for i in 0:num_node)
 end
 
 

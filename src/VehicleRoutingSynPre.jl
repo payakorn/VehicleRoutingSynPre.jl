@@ -54,5 +54,6 @@ export Particle,
        load_problem,
        union_route,
        find_node_starttime,
+       initial_starttime,
        PSO
 end
