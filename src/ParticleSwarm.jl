@@ -76,33 +76,47 @@ function in_SYN(node::Int64, SYN::Vector)
 end
 
 
-function find_starttime2(route::Array, slot::Dict{Int64, Vector{Int64}}, num_node::Int64, num_vehi::Int64, num_serv::Int64, mind::Vector, maxd::Array, a::Matrix, r::Matrix, d::Matrix, p::Array, e::Array, l::Array, PRE::Array, SYN::Array)
-    min_len = minimum(length.(route))
-    st = Dict(i => zeros(Float64, num_vehi, num_serv) for i in 0:num_node)
+function union_route(v::Vector)
+    u = v[1]
+    for i in 2:length(v)
+        union!(u, v[i])
+    end
+    return u
+end
 
-    for column in 1:min_len
-        if column == 1
-            for vehi in 1:num_vehi
-                n1 = 1
-                n2 = route[vehi][1][1]
-                s2 = route[vehi][1][2]
-                if d[n1, n2] < e[n2]
-                    st[n2][vehi, s2] = e[n2]
-                else
-                    st[n2][vehi, s2] = d[n1, n2]
-                end
-            end
+
+function update_starttime(input_route::Array, slot::Dict{Int64, Vector{Int64}}, node::Int64, service::Int64, num_node::Int64, num_vehi::Int64, num_serv::Int64, mind::Vector, maxd::Array, a::Matrix, r::Matrix, d::Matrix, p::Array, e::Array, l::Array, PRE::Array, SYN::Array, st::Dict)
+    vehi, loca = find_location_by_node_service(input_route, node, service)
+    for lo in loca+1:length(input_route[vehi])
+        cnode = input_route[vehi][lo][1]
+        cserv = input_route[vehi][lo][2]
+        st = find_node_starttime(input_route, slot, cnode, cserv, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st)
+    end
+    return st
+end
+
+
+function find_node_starttime(input_route::Array, slot::Dict{Int64, Vector{Int64}}, node::Int64, service::Int64, num_node::Int64, num_vehi::Int64, num_serv::Int64, mind::Vector, maxd::Array, a::Matrix, r::Matrix, d::Matrix, p::Array, e::Array, l::Array, PRE::Array, SYN::Array, st::Dict)
+    vehi, loca = find_location_by_node_service(input_route, node, service)
+    if loca != 1
+        left_node = input_route[vehi][loca-1][1]
+        left_serv = input_route[vehi][loca-1][2]
+        st_left = find_node_starttime(input_route, slot, left_node, left_serv, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st)[left_node][vehi, left_serv] + p[vehi, service, left_node] + d[left_node, node]
+        if st_left < e[node]
+            st[node][vehi, service] = e[node]
         else
-            for vehi in 1:num_vehi
-                n1 = route[vehi][column-1][1]
-                n2 = route[vehi][column][1]
-                s1 = route[vehi][column-1][2]
-                s2 = route[vehi][column][2]
-                if d[n1, n2] < e[n2]
-                    st[n2][vehi, s2] = e[n2]
-                else
-                    st[n2][vehi, s2] = d[n1, n2]
-                end
+            st[node][vehi, service] = st_left
+        end
+
+        if in_SYN(node, SYN)
+            syn = SYN[findfirst(x->x[1]==node, SYN)]
+            other_serv = setdiff(syn, [node, service])[1]
+            ovehi, oloca = find_location_by_node_service(input_route, node, other_serv)
+            if st[node][ovehi, other_serv] < st[node][vehi, service]
+                st[node][ovehi, other_serv] = st[node][vehi, service]
+                st = update_starttime(input_route, slot, node, service, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st)
+            else
+                st[node][vehi, service] = st[node][ovehi, other_serv]
             end
         end
     end
@@ -110,8 +124,22 @@ function find_starttime2(route::Array, slot::Dict{Int64, Vector{Int64}}, num_nod
 end
 
 
-function find_starttime2(par::Particle)
-    return find_starttime2(par.route, par.slot, par.num_node, par.num_vehi, par.num_serv, par.mind, par.maxd, par.a, par.r, par.d, par.p, par.e, par.l, par.PRE, par.SYN)
+function find_node_starttime(par::Particle, node::Int64, service::Int64, st::Dict)
+    find_node_starttime(par.route, par.slot, node, service, par.num_node, par.num_vehi, par.num_serv, par.mind, par.maxd, par.a, par.r, par.d, par.p, par.e, par.l, par.PRE, par.SYN, st)
+end
+
+
+function find_starttime2(input_route::Array, slot::Dict{Int64, Vector{Int64}}, node::Int64, vehi::Int64, num_node::Int64, num_vehi::Int64, num_serv::Int64, mind::Vector, maxd::Array, a::Matrix, r::Matrix, d::Matrix, p::Array, e::Array, l::Array, PRE::Array, SYN::Array)
+    notcalculate = Vector{Int64}[]
+    route = input_route[vehi]
+    # for inode in route[node:end]
+    #     @show inode
+    # end
+end
+
+
+function find_starttime2(par::Particle, node::Int64, vehi::Int64)
+    return find_starttime2(par.route, par.slot, node, vehi, par.num_node, par.num_vehi, par.num_serv, par.mind, par.maxd, par.a, par.r, par.d, par.p, par.e, par.l, par.PRE, par.SYN)
 end
 
 
@@ -365,8 +393,6 @@ function generate_particles(name::String)
     serv_a = find_compat_vehicle_node(a, r)
     SYN = find_SYN(serv_r, mind, maxd)
     PRE = find_PRE(serv_r, mind, maxd)
-
-
 
     par = generate_empty_particle(serv_a, serv_r, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN)
     par.slot = initial_insert_service(serv_r, num_node, num_vehi, num_serv, SYN) # also insert synchronization

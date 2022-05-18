@@ -687,33 +687,11 @@ div.title {text-align: center;}
 </span><span class='hljl-k'>for</span><span class='hljl-t'> </span><span class='hljl-n'>ins</span><span class='hljl-t'> </span><span class='hljl-kp'>in</span><span class='hljl-t'> </span><span class='hljl-n'>instances</span><span class='hljl-t'>
     </span><span class='hljl-n'>location</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>joinpath</span><span class='hljl-p'>(</span><span class='hljl-nd'>@__DIR__</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;..&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;data&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;simulations&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>ins</span><span class='hljl-p'>)</span><span class='hljl-t'>
     </span><span class='hljl-nf'>push!</span><span class='hljl-p'>(</span><span class='hljl-n'>num_files</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-nf'>length</span><span class='hljl-p'>(</span><span class='hljl-nf'>glob</span><span class='hljl-p'>(</span><span class='hljl-s'>&quot;*&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>location</span><span class='hljl-p'>)))</span><span class='hljl-t'>
-    </span><span class='hljl-nf'>println</span><span class='hljl-p'>(</span><span class='hljl-s'>&quot;ins </span><span class='hljl-si'>$</span><span class='hljl-p'>(</span><span class='hljl-nd'>@sprintf</span><span class='hljl-p'>(</span><span class='hljl-s'>&quot;%5s&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-nf'>split</span><span class='hljl-p'>(</span><span class='hljl-n'>ins</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;ins&quot;</span><span class='hljl-p'>)[</span><span class='hljl-k'>end</span><span class='hljl-p'>]))</span><span class='hljl-s'>: #files: </span><span class='hljl-si'>$</span><span class='hljl-p'>(</span><span class='hljl-nf'>length</span><span class='hljl-p'>(</span><span class='hljl-nf'>glob</span><span class='hljl-p'>(</span><span class='hljl-s'>&quot;*&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>location</span><span class='hljl-p'>)))</span><span class='hljl-s'>&quot;</span><span class='hljl-p'>)</span><span class='hljl-t'>
+    </span><span class='hljl-cs'># obj = objective_value.([])</span><span class='hljl-t'>
+    </span><span class='hljl-cs'># println(&quot;ins $(@sprintf(&quot;%5s&quot;, split(ins, &quot;ins&quot;)[end])): #files: $(length(glob(&quot;*&quot;, location)))&quot;)</span><span class='hljl-t'>
 </span><span class='hljl-k'>end</span>
 </pre>
 
-
-<pre class="output">
-ins  10-1: #files: 0
-ins  10-2: #files: 0
-ins  10-3: #files: 0
-ins  10-4: #files: 0
-ins  10-5: #files: 0
-ins  10-6: #files: 0
-ins  10-7: #files: 0
-ins  10-8: #files: 2
-ins  10-9: #files: 0
-ins 10-10: #files: 0
-ins  25-1: #files: 0
-ins  25-2: #files: 0
-ins  25-3: #files: 0
-ins  25-4: #files: 0
-ins  25-5: #files: 0
-ins  25-6: #files: 0
-ins  25-7: #files: 0
-ins  25-8: #files: 0
-ins  25-9: #files: 0
-ins 25-10: #files: 0
-</pre>
 
 
 
@@ -723,14 +701,14 @@ ins 25-10: #files: 0
 
 
 
-<div class="data-frame"><p>20 rows × 2 columns</p><table class="data-frame"><thead><tr><th></th><th>ins</th><th>NumFiles</th></tr><tr><th></th><th title="Any">Any</th><th title="Int8">Int8</th></tr></thead><tbody><tr><th>1</th><td>ins10-1</td><td>0</td></tr><tr><th>2</th><td>ins10-2</td><td>0</td></tr><tr><th>3</th><td>ins10-3</td><td>0</td></tr><tr><th>4</th><td>ins10-4</td><td>0</td></tr><tr><th>5</th><td>ins10-5</td><td>0</td></tr><tr><th>6</th><td>ins10-6</td><td>0</td></tr><tr><th>7</th><td>ins10-7</td><td>0</td></tr><tr><th>8</th><td>ins10-8</td><td>2</td></tr><tr><th>9</th><td>ins10-9</td><td>0</td></tr><tr><th>10</th><td>ins10-10</td><td>0</td></tr><tr><th>11</th><td>ins25-1</td><td>0</td></tr><tr><th>12</th><td>ins25-2</td><td>0</td></tr><tr><th>13</th><td>ins25-3</td><td>0</td></tr><tr><th>14</th><td>ins25-4</td><td>0</td></tr><tr><th>15</th><td>ins25-5</td><td>0</td></tr><tr><th>16</th><td>ins25-6</td><td>0</td></tr><tr><th>17</th><td>ins25-7</td><td>0</td></tr><tr><th>18</th><td>ins25-8</td><td>0</td></tr><tr><th>19</th><td>ins25-9</td><td>0</td></tr><tr><th>20</th><td>ins25-10</td><td>0</td></tr></tbody></table></div>
+<div class="data-frame"><p>20 rows × 2 columns</p><table class="data-frame"><thead><tr><th></th><th>ins</th><th>NumFiles</th></tr><tr><th></th><th title="Any">Any</th><th title="Int8">Int8</th></tr></thead><tbody><tr><th>1</th><td>ins10-1</td><td>1</td></tr><tr><th>2</th><td>ins10-2</td><td>3</td></tr><tr><th>3</th><td>ins10-3</td><td>1</td></tr><tr><th>4</th><td>ins10-4</td><td>7</td></tr><tr><th>5</th><td>ins10-5</td><td>0</td></tr><tr><th>6</th><td>ins10-6</td><td>0</td></tr><tr><th>7</th><td>ins10-7</td><td>0</td></tr><tr><th>8</th><td>ins10-8</td><td>2</td></tr><tr><th>9</th><td>ins10-9</td><td>5</td></tr><tr><th>10</th><td>ins10-10</td><td>2</td></tr><tr><th>11</th><td>ins25-1</td><td>0</td></tr><tr><th>12</th><td>ins25-2</td><td>0</td></tr><tr><th>13</th><td>ins25-3</td><td>0</td></tr><tr><th>14</th><td>ins25-4</td><td>0</td></tr><tr><th>15</th><td>ins25-5</td><td>0</td></tr><tr><th>16</th><td>ins25-6</td><td>0</td></tr><tr><th>17</th><td>ins25-7</td><td>0</td></tr><tr><th>18</th><td>ins25-8</td><td>0</td></tr><tr><th>19</th><td>ins25-9</td><td>0</td></tr><tr><th>20</th><td>ins25-10</td><td>0</td></tr></tbody></table></div>
 
 
         <HR/>
         <div class="footer">
           <p>
             Published from <a href="results.Jmd">results.Jmd</a>
-            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.10 on 2022-05-11.
+            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.10 on 2022-05-12.
           </p>
         </div>
       </div>

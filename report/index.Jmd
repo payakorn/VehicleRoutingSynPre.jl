@@ -21,7 +21,7 @@ Benchmark name is in the form, for exmaple, "ins10-1.jld2" is the instance numbe
 To load the instance data use
 
 ```julia
-name = "ins10-1"
+name = "ins25-1"
 num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l = load_data(name);
 ```
 
@@ -43,7 +43,7 @@ where
 Generate random particle (solution)
 
 ```julia
-particle = generate_particles("ins10-2");
+particle = generate_particles(name);
 ```
 
 The particle is `struct` of `Particle` with fields

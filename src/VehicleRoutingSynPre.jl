@@ -52,5 +52,7 @@ export Particle,
        in_SYN,
        print_sol,
        load_problem,
+       union_route,
+       find_node_starttime,
        PSO
 end
