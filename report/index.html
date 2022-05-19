@@ -675,7 +675,7 @@ div.title {text-align: center;}
 
 
 <pre class='hljl'>
-<span class='hljl-n'>name</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;ins25-1&quot;</span><span class='hljl-t'>
+<span class='hljl-n'>name</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;ins10-1&quot;</span><span class='hljl-t'>
 </span><span class='hljl-n'>num_node</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>num_vehi</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>num_serv</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>mind</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>maxd</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>a</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>r</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>d</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>p</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>e</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>l</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>load_data</span><span class='hljl-p'>(</span><span class='hljl-n'>name</span><span class='hljl-p'>);</span>
 </pre>
 
@@ -756,8 +756,21 @@ Particle &lt;: Any
 </pre>
 
 
-<pre class="julia-error">
-ERROR: BoundsError: attempt to access 3-element Vector&#123;Vector&#123;Vector&#123;Int64&#125;&#125;&#125; at index &#91;4&#93;
+<pre class="output">
+Dict&#123;Int64, Matrix&#123;Float64&#125;&#125; with 12 entries:
+  5  &#61;&gt; &#91;0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0&#93;
+  7  &#61;&gt; &#91;0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0; 0.0 0.0 … 224.083 0.0&#93;
+  8  &#61;&gt; &#91;0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0&#93;
+  1  &#61;&gt; &#91;480.527 0.0 … 0.0 0.0; 73.0384 0.0 … 0.0 0.0; 480.16 0.0 … 0.0 0.0
+&#93;
+  0  &#61;&gt; &#91;0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0&#93;
+  4  &#61;&gt; &#91;0.0 247.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0&#93;
+  6  &#61;&gt; &#91;0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0&#93;
+  2  &#61;&gt; &#91;0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0&#93;
+  10 &#61;&gt; &#91;356.043 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0&#93;
+  11 &#61;&gt; &#91;0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 159.161&#93;
+  9  &#61;&gt; &#91;0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 46.0; 0.0 0.0 … 46.0 0.0&#93;
+  3  &#61;&gt; &#91;0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0; 0.0 0.0 … 291.121 0.0&#93;
 </pre>
 
 
@@ -820,59 +833,47 @@ Start time of node 1
 ┌─────────┬────────┬────────┬────────┬────────┬────────┐
 │  Col. 1 │ Col. 2 │ Col. 3 │ Col. 4 │ Col. 5 │ Col. 6 │
 ├─────────┼────────┼────────┼────────┼────────┼────────┤
-│ 387.302 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
-│ 622.043 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
-│ 2709.42 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
-│ 2505.38 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
-│ 746.172 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
+│ 480.527 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
+│ 73.0384 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
+│  480.16 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
 └─────────┴────────┴────────┴────────┴────────┴────────┘
 Start time of node 2
-┌────────┬────────┬────────┬─────────┬────────┬────────┐
-│ Col. 1 │ Col. 2 │ Col. 3 │  Col. 4 │ Col. 5 │ Col. 6 │
-├────────┼────────┼────────┼─────────┼────────┼────────┤
-│    0.0 │    0.0 │    0.0 │     0.0 │    0.0 │    0.0 │
-│    0.0 │    0.0 │    0.0 │     0.0 │    0.0 │    0.0 │
-│    0.0 │    0.0 │    0.0 │     0.0 │    0.0 │    0.0 │
-│    0.0 │    0.0 │    0.0 │     0.0 │    0.0 │    0.0 │
-│    0.0 │    0.0 │    0.0 │ 652.314 │    0.0 │    0.0 │
-└────────┴────────┴────────┴─────────┴────────┴────────┘
+┌────────┬────────┬────────┬────────┬────────┬────────┐
+│ Col. 1 │ Col. 2 │ Col. 3 │ Col. 4 │ Col. 5 │ Col. 6 │
+├────────┼────────┼────────┼────────┼────────┼────────┤
+│    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
+│    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
+│    0.0 │    0.0 │    0.0 │  345.0 │    0.0 │    0.0 │
+└────────┴────────┴────────┴────────┴────────┴────────┘
 Start time of node 3
 ┌────────┬────────┬────────┬────────┬─────────┬────────┐
 │ Col. 1 │ Col. 2 │ Col. 3 │ Col. 4 │  Col. 5 │ Col. 6 │
 ├────────┼────────┼────────┼────────┼─────────┼────────┤
 │    0.0 │    0.0 │    0.0 │    0.0 │     0.0 │    0.0 │
 │    0.0 │    0.0 │    0.0 │    0.0 │     0.0 │    0.0 │
-│    0.0 │    0.0 │    0.0 │    0.0 │ 2656.21 │    0.0 │
-│    0.0 │    0.0 │    0.0 │    0.0 │     0.0 │    0.0 │
-│    0.0 │    0.0 │    0.0 │    0.0 │     0.0 │    0.0 │
+│    0.0 │    0.0 │    0.0 │    0.0 │ 291.121 │    0.0 │
 └────────┴────────┴────────┴────────┴─────────┴────────┘
 Start time of node 4
-┌────────┬─────────┬────────┬────────┬────────┬────────┐
-│ Col. 1 │  Col. 2 │ Col. 3 │ Col. 4 │ Col. 5 │ Col. 6 │
-├────────┼─────────┼────────┼────────┼────────┼────────┤
-│    0.0 │     0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
-│    0.0 │ 289.682 │    0.0 │    0.0 │    0.0 │    0.0 │
-│    0.0 │     0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
-│    0.0 │     0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
-│    0.0 │     0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
-└────────┴─────────┴────────┴────────┴────────┴────────┘
+┌────────┬────────┬────────┬────────┬────────┬────────┐
+│ Col. 1 │ Col. 2 │ Col. 3 │ Col. 4 │ Col. 5 │ Col. 6 │
+├────────┼────────┼────────┼────────┼────────┼────────┤
+│    0.0 │  247.0 │    0.0 │    0.0 │    0.0 │    0.0 │
+│    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
+│    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
+└────────┴────────┴────────┴────────┴────────┴────────┘
 Start time of node 5
-┌────────┬────────┬────────┬─────────┬────────┬────────┐
-│ Col. 1 │ Col. 2 │ Col. 3 │  Col. 4 │ Col. 5 │ Col. 6 │
-├────────┼────────┼────────┼─────────┼────────┼────────┤
-│    0.0 │    0.0 │    0.0 │     0.0 │    0.0 │    0.0 │
-│    0.0 │    0.0 │    0.0 │     0.0 │    0.0 │    0.0 │
-│    0.0 │    0.0 │    0.0 │     0.0 │    0.0 │    0.0 │
-│    0.0 │    0.0 │    0.0 │     0.0 │    0.0 │    0.0 │
-│    0.0 │    0.0 │    0.0 │ 697.459 │    0.0 │    0.0 │
-└────────┴────────┴────────┴─────────┴────────┴────────┘
+┌────────┬────────┬────────┬────────┬────────┬────────┐
+│ Col. 1 │ Col. 2 │ Col. 3 │ Col. 4 │ Col. 5 │ Col. 6 │
+├────────┼────────┼────────┼────────┼────────┼────────┤
+│    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
+│    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
+│    0.0 │    0.0 │    0.0 │ 458.88 │    0.0 │    0.0 │
+└────────┴────────┴────────┴────────┴────────┴────────┘
 Start time of node 6
 ┌────────┬────────┬─────────┬────────┬────────┬────────┐
 │ Col. 1 │ Col. 2 │  Col. 3 │ Col. 4 │ Col. 5 │ Col. 6 │
 ├────────┼────────┼─────────┼────────┼────────┼────────┤
-│    0.0 │    0.0 │     0.0 │    0.0 │    0.0 │    0.0 │
-│    0.0 │    0.0 │ 356.832 │    0.0 │    0.0 │    0.0 │
-│    0.0 │    0.0 │     0.0 │    0.0 │    0.0 │    0.0 │
+│    0.0 │    0.0 │ 314.151 │    0.0 │    0.0 │    0.0 │
 │    0.0 │    0.0 │     0.0 │    0.0 │    0.0 │    0.0 │
 │    0.0 │    0.0 │     0.0 │    0.0 │    0.0 │    0.0 │
 └────────┴────────┴─────────┴────────┴────────┴────────┘
@@ -882,50 +883,40 @@ Start time of node 7
 ├────────┼────────┼────────┼────────┼─────────┼────────┤
 │    0.0 │    0.0 │    0.0 │    0.0 │     0.0 │    0.0 │
 │    0.0 │    0.0 │    0.0 │    0.0 │     0.0 │    0.0 │
-│    0.0 │    0.0 │    0.0 │    0.0 │     0.0 │    0.0 │
-│    0.0 │    0.0 │    0.0 │    0.0 │     0.0 │    0.0 │
-│    0.0 │    0.0 │    0.0 │    0.0 │ 534.079 │    0.0 │
+│    0.0 │    0.0 │    0.0 │    0.0 │ 224.083 │    0.0 │
 └────────┴────────┴────────┴────────┴─────────┴────────┘
 Start time of node 8
-┌────────┬────────┬─────────┬────────┬────────┬────────┐
-│ Col. 1 │ Col. 2 │  Col. 3 │ Col. 4 │ Col. 5 │ Col. 6 │
-├────────┼────────┼─────────┼────────┼────────┼────────┤
-│    0.0 │    0.0 │     0.0 │    0.0 │    0.0 │    0.0 │
-│    0.0 │    0.0 │ 572.575 │    0.0 │    0.0 │    0.0 │
-│    0.0 │    0.0 │     0.0 │    0.0 │    0.0 │    0.0 │
-│    0.0 │    0.0 │     0.0 │    0.0 │    0.0 │    0.0 │
-│    0.0 │    0.0 │     0.0 │    0.0 │    0.0 │    0.0 │
-└────────┴────────┴─────────┴────────┴────────┴────────┘
+┌────────┬────────┬────────┬────────┬────────┬────────┐
+│ Col. 1 │ Col. 2 │ Col. 3 │ Col. 4 │ Col. 5 │ Col. 6 │
+├────────┼────────┼────────┼────────┼────────┼────────┤
+│    0.0 │    0.0 │  434.0 │    0.0 │    0.0 │    0.0 │
+│    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
+│    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
+└────────┴────────┴────────┴────────┴────────┴────────┘
 Start time of node 9
 ┌────────┬────────┬────────┬────────┬────────┬────────┐
 │ Col. 1 │ Col. 2 │ Col. 3 │ Col. 4 │ Col. 5 │ Col. 6 │
 ├────────┼────────┼────────┼────────┼────────┼────────┤
 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
-│    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
-│    0.0 │    0.0 │    0.0 │    0.0 │ 2598.3 │    0.0 │
-│    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
-│    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
+│    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │   46.0 │
+│    0.0 │    0.0 │    0.0 │    0.0 │   46.0 │    0.0 │
 └────────┴────────┴────────┴────────┴────────┴────────┘
 Start time of node 10
-┌────────┬────────┬────────┬────────┬─────────┬────────┐
-│ Col. 1 │ Col. 2 │ Col. 3 │ Col. 4 │  Col. 5 │ Col. 6 │
-├────────┼────────┼────────┼────────┼─────────┼────────┤
-│    0.0 │    0.0 │    0.0 │    0.0 │     0.0 │    0.0 │
-│    0.0 │    0.0 │    0.0 │    0.0 │     0.0 │    0.0 │
-│    0.0 │    0.0 │    0.0 │    0.0 │     0.0 │    0.0 │
-│    0.0 │    0.0 │    0.0 │    0.0 │ 2290.51 │    0.0 │
-│    0.0 │    0.0 │    0.0 │    0.0 │     0.0 │    0.0 │
-└────────┴────────┴────────┴────────┴─────────┴────────┘
+┌─────────┬────────┬────────┬─────────┬────────┬────────┐
+│  Col. 1 │ Col. 2 │ Col. 3 │  Col. 4 │ Col. 5 │ Col. 6 │
+├─────────┼────────┼────────┼─────────┼────────┼────────┤
+│ 356.043 │    0.0 │    0.0 │     0.0 │    0.0 │    0.0 │
+│     0.0 │    0.0 │    0.0 │     0.0 │    0.0 │    0.0 │
+│     0.0 │    0.0 │    0.0 │ 416.454 │    0.0 │    0.0 │
+└─────────┴────────┴────────┴─────────┴────────┴────────┘
 Start time of node 11
-┌────────┬────────┬────────┬────────┬─────────┬────────┐
-│ Col. 1 │ Col. 2 │ Col. 3 │ Col. 4 │  Col. 5 │ Col. 6 │
-├────────┼────────┼────────┼────────┼─────────┼────────┤
-│    0.0 │    0.0 │    0.0 │    0.0 │     0.0 │    0.0 │
-│    0.0 │    0.0 │    0.0 │    0.0 │     0.0 │    0.0 │
-│    0.0 │    0.0 │    0.0 │    0.0 │     0.0 │    0.0 │
-│    0.0 │    0.0 │    0.0 │    0.0 │     0.0 │    0.0 │
-│    0.0 │    0.0 │    0.0 │    0.0 │ 460.539 │    0.0 │
-└────────┴────────┴────────┴────────┴─────────┴────────┘
+┌────────┬────────┬────────┬────────┬────────┬─────────┐
+│ Col. 1 │ Col. 2 │ Col. 3 │ Col. 4 │ Col. 5 │  Col. 6 │
+├────────┼────────┼────────┼────────┼────────┼─────────┤
+│    0.0 │    0.0 │  148.0 │    0.0 │    0.0 │     0.0 │
+│    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │     0.0 │
+│    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │ 159.161 │
+└────────┴────────┴────────┴────────┴────────┴─────────┘
 </pre>
 
 
@@ -990,832 +981,187 @@ Start time of node 11
       <th style = "text-align: right;">Col. 10</th>
       <th style = "text-align: right;">Col. 11</th>
       <th style = "text-align: right;">Col. 12</th>
-      <th style = "text-align: right;">Col. 13</th>
-      <th style = "text-align: right;">Col. 14</th>
-      <th style = "text-align: right;">Col. 15</th>
-      <th style = "text-align: right;">Col. 16</th>
-      <th style = "text-align: right;">Col. 17</th>
-      <th style = "text-align: right;">Col. 18</th>
-      <th style = "text-align: right;">Col. 19</th>
-      <th style = "text-align: right;">Col. 20</th>
-      <th style = "text-align: right;">Col. 21</th>
-      <th style = "text-align: right;">Col. 22</th>
-      <th style = "text-align: right;">Col. 23</th>
-      <th style = "text-align: right;">Col. 24</th>
-      <th style = "text-align: right;">Col. 25</th>
-      <th style = "text-align: right;">Col. 26</th>
-      <th style = "text-align: right;">Col. 27</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td class = "rowNumber">1</td>
       <td style = "text-align: right;">0.0</td>
-      <td style = "text-align: right;">49.0408</td>
-      <td style = "text-align: right;">39.2046</td>
-      <td style = "text-align: right;">51.0882</td>
-      <td style = "text-align: right;">34.7131</td>
-      <td style = "text-align: right;">45.8803</td>
-      <td style = "text-align: right;">68.2642</td>
-      <td style = "text-align: right;">35.4683</td>
+      <td style = "text-align: right;">38.4708</td>
+      <td style = "text-align: right;">34.8855</td>
+      <td style = "text-align: right;">55.9464</td>
       <td style = "text-align: right;">7.28011</td>
-      <td style = "text-align: right;">33.8379</td>
-      <td style = "text-align: right;">9.21954</td>
-      <td style = "text-align: right;">75.0067</td>
-      <td style = "text-align: right;">35.7351</td>
-      <td style = "text-align: right;">33.6155</td>
-      <td style = "text-align: right;">66.4831</td>
-      <td style = "text-align: right;">91.3017</td>
-      <td style = "text-align: right;">85.2115</td>
-      <td style = "text-align: right;">25.0599</td>
-      <td style = "text-align: right;">13.6015</td>
-      <td style = "text-align: right;">27.8568</td>
-      <td style = "text-align: right;">70.3491</td>
-      <td style = "text-align: right;">16.1245</td>
-      <td style = "text-align: right;">15.2643</td>
-      <td style = "text-align: right;">65.2763</td>
-      <td style = "text-align: right;">87.3212</td>
-      <td style = "text-align: right;">85.0235</td>
+      <td style = "text-align: right;">23.3452</td>
+      <td style = "text-align: right;">71.4703</td>
+      <td style = "text-align: right;">32.5269</td>
+      <td style = "text-align: right;">13.0384</td>
+      <td style = "text-align: right;">26.4008</td>
+      <td style = "text-align: right;">88.8876</td>
       <td style = "text-align: right;">0.0</td>
     </tr>
     <tr>
       <td class = "rowNumber">2</td>
-      <td style = "text-align: right;">49.0408</td>
+      <td style = "text-align: right;">38.4708</td>
       <td style = "text-align: right;">0.0</td>
-      <td style = "text-align: right;">9.89949</td>
-      <td style = "text-align: right;">30.8707</td>
-      <td style = "text-align: right;">31.1448</td>
-      <td style = "text-align: right;">25.0599</td>
-      <td style = "text-align: right;">39.0512</td>
-      <td style = "text-align: right;">15.5242</td>
-      <td style = "text-align: right;">53.535</td>
-      <td style = "text-align: right;">49.0102</td>
-      <td style = "text-align: right;">43.9318</td>
-      <td style = "text-align: right;">48.9183</td>
-      <td style = "text-align: right;">27.1662</td>
-      <td style = "text-align: right;">51.0</td>
-      <td style = "text-align: right;">18.0278</td>
-      <td style = "text-align: right;">43.9659</td>
-      <td style = "text-align: right;">53.2353</td>
-      <td style = "text-align: right;">24.8395</td>
-      <td style = "text-align: right;">45.6946</td>
-      <td style = "text-align: right;">28.4429</td>
-      <td style = "text-align: right;">40.0</td>
-      <td style = "text-align: right;">34.4819</td>
-      <td style = "text-align: right;">34.9857</td>
-      <td style = "text-align: right;">36.7967</td>
-      <td style = "text-align: right;">48.2701</td>
-      <td style = "text-align: right;">57.4282</td>
-      <td style = "text-align: right;">49.0408</td>
+      <td style = "text-align: right;">23.0868</td>
+      <td style = "text-align: right;">21.4009</td>
+      <td style = "text-align: right;">32.0156</td>
+      <td style = "text-align: right;">31.8277</td>
+      <td style = "text-align: right;">34.0</td>
+      <td style = "text-align: right;">32.6497</td>
+      <td style = "text-align: right;">45.2769</td>
+      <td style = "text-align: right;">57.4543</td>
+      <td style = "text-align: right;">56.8595</td>
+      <td style = "text-align: right;">38.4708</td>
     </tr>
     <tr>
       <td class = "rowNumber">3</td>
-      <td style = "text-align: right;">39.2046</td>
-      <td style = "text-align: right;">9.89949</td>
+      <td style = "text-align: right;">34.8855</td>
+      <td style = "text-align: right;">23.0868</td>
       <td style = "text-align: right;">0.0</td>
-      <td style = "text-align: right;">29.0</td>
-      <td style = "text-align: right;">26.0</td>
-      <td style = "text-align: right;">24.2074</td>
-      <td style = "text-align: right;">41.1461</td>
-      <td style = "text-align: right;">8.544</td>
-      <td style = "text-align: right;">43.909</td>
+      <td style = "text-align: right;">43.8292</td>
+      <td style = "text-align: right;">27.7849</td>
+      <td style = "text-align: right;">15.0333</td>
+      <td style = "text-align: right;">53.0377</td>
+      <td style = "text-align: right;">10.6301</td>
+      <td style = "text-align: right;">46.6154</td>
       <td style = "text-align: right;">42.7551</td>
-      <td style = "text-align: right;">34.0588</td>
-      <td style = "text-align: right;">50.6063</td>
-      <td style = "text-align: right;">22.3607</td>
-      <td style = "text-align: right;">44.5533</td>
-      <td style = "text-align: right;">27.8029</td>
-      <td style = "text-align: right;">52.9245</td>
-      <td style = "text-align: right;">56.921</td>
-      <td style = "text-align: right;">15.0</td>
-      <td style = "text-align: right;">36.6879</td>
-      <td style = "text-align: right;">21.095</td>
-      <td style = "text-align: right;">42.5441</td>
-      <td style = "text-align: right;">25.0799</td>
-      <td style = "text-align: right;">25.4951</td>
-      <td style = "text-align: right;">38.4708</td>
-      <td style = "text-align: right;">54.1479</td>
-      <td style = "text-align: right;">59.9333</td>
-      <td style = "text-align: right;">39.2046</td>
+      <td style = "text-align: right;">54.9181</td>
+      <td style = "text-align: right;">34.8855</td>
     </tr>
     <tr>
       <td class = "rowNumber">4</td>
-      <td style = "text-align: right;">51.0882</td>
-      <td style = "text-align: right;">30.8707</td>
-      <td style = "text-align: right;">29.0</td>
+      <td style = "text-align: right;">55.9464</td>
+      <td style = "text-align: right;">21.4009</td>
+      <td style = "text-align: right;">43.8292</td>
       <td style = "text-align: right;">0.0</td>
-      <td style = "text-align: right;">53.8238</td>
-      <td style = "text-align: right;">53.1507</td>
-      <td style = "text-align: right;">17.2627</td>
-      <td style = "text-align: right;">36.8782</td>
-      <td style = "text-align: right;">58.0086</td>
-      <td style = "text-align: right;">68.4471</td>
-      <td style = "text-align: right;">42.2966</td>
-      <td style = "text-align: right;">24.3311</td>
       <td style = "text-align: right;">50.6063</td>
-      <td style = "text-align: right;">69.857</td>
-      <td style = "text-align: right;">43.1045</td>
-      <td style = "text-align: right;">50.2195</td>
-      <td style = "text-align: right;">34.1321</td>
-      <td style = "text-align: right;">30.3645</td>
-      <td style = "text-align: right;">55.9017</td>
-      <td style = "text-align: right;">47.0106</td>
-      <td style = "text-align: right;">19.4165</td>
-      <td style = "text-align: right;">44.3847</td>
-      <td style = "text-align: right;">44.1475</td>
-      <td style = "text-align: right;">14.3178</td>
-      <td style = "text-align: right;">38.0132</td>
-      <td style = "text-align: right;">34.3657</td>
-      <td style = "text-align: right;">51.0882</td>
+      <td style = "text-align: right;">53.1507</td>
+      <td style = "text-align: right;">17.0294</td>
+      <td style = "text-align: right;">53.8516</td>
+      <td style = "text-align: right;">59.2284</td>
+      <td style = "text-align: right;">77.801</td>
+      <td style = "text-align: right;">59.6406</td>
+      <td style = "text-align: right;">55.9464</td>
     </tr>
     <tr>
       <td class = "rowNumber">5</td>
-      <td style = "text-align: right;">34.7131</td>
-      <td style = "text-align: right;">31.1448</td>
-      <td style = "text-align: right;">26.0</td>
-      <td style = "text-align: right;">53.8238</td>
+      <td style = "text-align: right;">7.28011</td>
+      <td style = "text-align: right;">32.0156</td>
+      <td style = "text-align: right;">27.7849</td>
+      <td style = "text-align: right;">50.6063</td>
       <td style = "text-align: right;">0.0</td>
-      <td style = "text-align: right;">12.7279</td>
-      <td style = "text-align: right;">67.1193</td>
-      <td style = "text-align: right;">17.4642</td>
-      <td style = "text-align: right;">34.9285</td>
-      <td style = "text-align: right;">18.1108</td>
-      <td style = "text-align: right;">36.0555</td>
-      <td style = "text-align: right;">76.4788</td>
-      <td style = "text-align: right;">4.0</td>
-      <td style = "text-align: right;">20.2237</td>
-      <td style = "text-align: right;">42.72</td>
-      <td style = "text-align: right;">73.6817</td>
-      <td style = "text-align: right;">82.8734</td>
-      <td style = "text-align: right;">26.6271</td>
-      <td style = "text-align: right;">23.7065</td>
-      <td style = "text-align: right;">8.544</td>
-      <td style = "text-align: right;">68.542</td>
-      <td style = "text-align: right;">20.025</td>
-      <td style = "text-align: right;">21.0238</td>
-      <td style = "text-align: right;">64.405</td>
-      <td style = "text-align: right;">79.2464</td>
-      <td style = "text-align: right;">85.9069</td>
-      <td style = "text-align: right;">34.7131</td>
+      <td style = "text-align: right;">17.4929</td>
+      <td style = "text-align: right;">65.5515</td>
+      <td style = "text-align: right;">26.4008</td>
+      <td style = "text-align: right;">19.105</td>
+      <td style = "text-align: right;">28.4253</td>
+      <td style = "text-align: right;">81.6088</td>
+      <td style = "text-align: right;">7.28011</td>
     </tr>
     <tr>
       <td class = "rowNumber">6</td>
-      <td style = "text-align: right;">45.8803</td>
-      <td style = "text-align: right;">25.0599</td>
-      <td style = "text-align: right;">24.2074</td>
+      <td style = "text-align: right;">23.3452</td>
+      <td style = "text-align: right;">31.8277</td>
+      <td style = "text-align: right;">15.0333</td>
       <td style = "text-align: right;">53.1507</td>
-      <td style = "text-align: right;">12.7279</td>
+      <td style = "text-align: right;">17.4929</td>
       <td style = "text-align: right;">0.0</td>
-      <td style = "text-align: right;">63.8201</td>
-      <td style = "text-align: right;">17.4642</td>
-      <td style = "text-align: right;">47.0106</td>
-      <td style = "text-align: right;">29.1548</td>
-      <td style = "text-align: right;">45.5412</td>
-      <td style = "text-align: right;">73.6003</td>
-      <td style = "text-align: right;">10.2956</td>
-      <td style = "text-align: right;">31.3847</td>
-      <td style = "text-align: right;">32.1403</td>
-      <td style = "text-align: right;">64.0078</td>
-      <td style = "text-align: right;">78.2943</td>
-      <td style = "text-align: right;">31.5753</td>
-      <td style = "text-align: right;">36.0555</td>
-      <td style = "text-align: right;">18.0278</td>
-      <td style = "text-align: right;">64.8999</td>
-      <td style = "text-align: right;">30.0832</td>
-      <td style = "text-align: right;">31.0483</td>
-      <td style = "text-align: right;">61.4003</td>
-      <td style = "text-align: right;">72.7324</td>
-      <td style = "text-align: right;">82.3772</td>
-      <td style = "text-align: right;">45.8803</td>
+      <td style = "text-align: right;">65.0</td>
+      <td style = "text-align: right;">9.21954</td>
+      <td style = "text-align: right;">36.2353</td>
+      <td style = "text-align: right;">27.8926</td>
+      <td style = "text-align: right;">69.5845</td>
+      <td style = "text-align: right;">23.3452</td>
     </tr>
     <tr>
       <td class = "rowNumber">7</td>
-      <td style = "text-align: right;">68.2642</td>
-      <td style = "text-align: right;">39.0512</td>
-      <td style = "text-align: right;">41.1461</td>
-      <td style = "text-align: right;">17.2627</td>
-      <td style = "text-align: right;">67.1193</td>
-      <td style = "text-align: right;">63.8201</td>
+      <td style = "text-align: right;">71.4703</td>
+      <td style = "text-align: right;">34.0</td>
+      <td style = "text-align: right;">53.0377</td>
+      <td style = "text-align: right;">17.0294</td>
+      <td style = "text-align: right;">65.5515</td>
+      <td style = "text-align: right;">65.0</td>
       <td style = "text-align: right;">0.0</td>
-      <td style = "text-align: right;">49.6588</td>
-      <td style = "text-align: right;">75.1066</td>
-      <td style = "text-align: right;">83.1685</td>
-      <td style = "text-align: right;">59.5399</td>
-      <td style = "text-align: right;">9.89949</td>
-      <td style = "text-align: right;">63.5059</td>
-      <td style = "text-align: right;">84.7703</td>
-      <td style = "text-align: right;">44.7214</td>
-      <td style = "text-align: right;">39.8497</td>
-      <td style = "text-align: right;">17.0</td>
-      <td style = "text-align: right;">46.3897</td>
-      <td style = "text-align: right;">72.3395</td>
-      <td style = "text-align: right;">61.3514</td>
-      <td style = "text-align: right;">2.23607</td>
-      <td style = "text-align: right;">60.531</td>
-      <td style = "text-align: right;">60.407</td>
-      <td style = "text-align: right;">3.0</td>
-      <td style = "text-align: right;">22.0227</td>
-      <td style = "text-align: right;">18.7883</td>
-      <td style = "text-align: right;">68.2642</td>
+      <td style = "text-align: right;">63.6396</td>
+      <td style = "text-align: right;">75.8024</td>
+      <td style = "text-align: right;">91.4166</td>
+      <td style = "text-align: right;">50.9215</td>
+      <td style = "text-align: right;">71.4703</td>
     </tr>
     <tr>
       <td class = "rowNumber">8</td>
-      <td style = "text-align: right;">35.4683</td>
-      <td style = "text-align: right;">15.5242</td>
-      <td style = "text-align: right;">8.544</td>
-      <td style = "text-align: right;">36.8782</td>
-      <td style = "text-align: right;">17.4642</td>
-      <td style = "text-align: right;">17.4642</td>
-      <td style = "text-align: right;">49.6588</td>
+      <td style = "text-align: right;">32.5269</td>
+      <td style = "text-align: right;">32.6497</td>
+      <td style = "text-align: right;">10.6301</td>
+      <td style = "text-align: right;">53.8516</td>
+      <td style = "text-align: right;">26.4008</td>
+      <td style = "text-align: right;">9.21954</td>
+      <td style = "text-align: right;">63.6396</td>
       <td style = "text-align: right;">0.0</td>
-      <td style = "text-align: right;">39.0512</td>
-      <td style = "text-align: right;">34.3657</td>
-      <td style = "text-align: right;">32.2025</td>
-      <td style = "text-align: right;">59.0593</td>
-      <td style = "text-align: right;">13.8924</td>
-      <td style = "text-align: right;">36.2215</td>
-      <td style = "text-align: right;">31.4006</td>
-      <td style = "text-align: right;">59.4811</td>
-      <td style = "text-align: right;">65.4599</td>
-      <td style = "text-align: right;">15.0333</td>
-      <td style = "text-align: right;">30.4138</td>
-      <td style = "text-align: right;">13.0384</td>
-      <td style = "text-align: right;">51.0784</td>
-      <td style = "text-align: right;">19.8494</td>
-      <td style = "text-align: right;">20.5183</td>
-      <td style = "text-align: right;">46.9574</td>
-      <td style = "text-align: right;">62.3939</td>
-      <td style = "text-align: right;">68.4471</td>
-      <td style = "text-align: right;">35.4683</td>
+      <td style = "text-align: right;">45.3431</td>
+      <td style = "text-align: right;">34.0147</td>
+      <td style = "text-align: right;">62.0725</td>
+      <td style = "text-align: right;">32.5269</td>
     </tr>
     <tr>
       <td class = "rowNumber">9</td>
-      <td style = "text-align: right;">7.28011</td>
-      <td style = "text-align: right;">53.535</td>
-      <td style = "text-align: right;">43.909</td>
-      <td style = "text-align: right;">58.0086</td>
-      <td style = "text-align: right;">34.9285</td>
-      <td style = "text-align: right;">47.0106</td>
-      <td style = "text-align: right;">75.1066</td>
-      <td style = "text-align: right;">39.0512</td>
+      <td style = "text-align: right;">13.0384</td>
+      <td style = "text-align: right;">45.2769</td>
+      <td style = "text-align: right;">46.6154</td>
+      <td style = "text-align: right;">59.2284</td>
+      <td style = "text-align: right;">19.105</td>
+      <td style = "text-align: right;">36.2353</td>
+      <td style = "text-align: right;">75.8024</td>
+      <td style = "text-align: right;">45.3431</td>
       <td style = "text-align: right;">0.0</td>
-      <td style = "text-align: right;">30.2655</td>
-      <td style = "text-align: right;">16.4924</td>
-      <td style = "text-align: right;">82.0549</td>
-      <td style = "text-align: right;">36.7151</td>
-      <td style = "text-align: right;">29.6142</td>
-      <td style = "text-align: right;">70.4344</td>
-      <td style = "text-align: right;">96.6075</td>
-      <td style = "text-align: right;">92.0869</td>
-      <td style = "text-align: right;">30.6757</td>
-      <td style = "text-align: right;">11.4018</td>
-      <td style = "text-align: right;">29.4109</td>
-      <td style = "text-align: right;">77.1622</td>
-      <td style = "text-align: right;">19.2094</td>
-      <td style = "text-align: right;">18.6011</td>
-      <td style = "text-align: right;">72.111</td>
-      <td style = "text-align: right;">93.7443</td>
-      <td style = "text-align: right;">92.0869</td>
-      <td style = "text-align: right;">7.28011</td>
+      <td style = "text-align: right;">35.2278</td>
+      <td style = "text-align: right;">99.1615</td>
+      <td style = "text-align: right;">13.0384</td>
     </tr>
     <tr>
       <td class = "rowNumber">10</td>
-      <td style = "text-align: right;">33.8379</td>
-      <td style = "text-align: right;">49.0102</td>
+      <td style = "text-align: right;">26.4008</td>
+      <td style = "text-align: right;">57.4543</td>
       <td style = "text-align: right;">42.7551</td>
-      <td style = "text-align: right;">68.4471</td>
-      <td style = "text-align: right;">18.1108</td>
-      <td style = "text-align: right;">29.1548</td>
-      <td style = "text-align: right;">83.1685</td>
-      <td style = "text-align: right;">34.3657</td>
-      <td style = "text-align: right;">30.2655</td>
+      <td style = "text-align: right;">77.801</td>
+      <td style = "text-align: right;">28.4253</td>
+      <td style = "text-align: right;">27.8926</td>
+      <td style = "text-align: right;">91.4166</td>
+      <td style = "text-align: right;">34.0147</td>
+      <td style = "text-align: right;">35.2278</td>
       <td style = "text-align: right;">0.0</td>
-      <td style = "text-align: right;">39.4462</td>
-      <td style = "text-align: right;">92.1141</td>
-      <td style = "text-align: right;">22.0907</td>
-      <td style = "text-align: right;">2.23607</td>
-      <td style = "text-align: right;">60.6383</td>
-      <td style = "text-align: right;">91.7878</td>
-      <td style = "text-align: right;">99.4585</td>
-      <td style = "text-align: right;">38.5876</td>
-      <td style = "text-align: right;">20.2485</td>
-      <td style = "text-align: right;">21.8403</td>
-      <td style = "text-align: right;">84.7703</td>
-      <td style = "text-align: right;">26.1725</td>
-      <td style = "text-align: right;">26.8701</td>
-      <td style = "text-align: right;">80.3243</td>
-      <td style = "text-align: right;">96.7471</td>
-      <td style = "text-align: right;">101.843</td>
-      <td style = "text-align: right;">33.8379</td>
+      <td style = "text-align: right;">96.0208</td>
+      <td style = "text-align: right;">26.4008</td>
     </tr>
     <tr>
       <td class = "rowNumber">11</td>
-      <td style = "text-align: right;">9.21954</td>
-      <td style = "text-align: right;">43.9318</td>
-      <td style = "text-align: right;">34.0588</td>
-      <td style = "text-align: right;">42.2966</td>
-      <td style = "text-align: right;">36.0555</td>
-      <td style = "text-align: right;">45.5412</td>
-      <td style = "text-align: right;">59.5399</td>
-      <td style = "text-align: right;">32.2025</td>
-      <td style = "text-align: right;">16.4924</td>
-      <td style = "text-align: right;">39.4462</td>
+      <td style = "text-align: right;">88.8876</td>
+      <td style = "text-align: right;">56.8595</td>
+      <td style = "text-align: right;">54.9181</td>
+      <td style = "text-align: right;">59.6406</td>
+      <td style = "text-align: right;">81.6088</td>
+      <td style = "text-align: right;">69.5845</td>
+      <td style = "text-align: right;">50.9215</td>
+      <td style = "text-align: right;">62.0725</td>
+      <td style = "text-align: right;">99.1615</td>
+      <td style = "text-align: right;">96.0208</td>
       <td style = "text-align: right;">0.0</td>
-      <td style = "text-align: right;">66.0076</td>
-      <td style = "text-align: right;">36.0555</td>
-      <td style = "text-align: right;">39.6611</td>
-      <td style = "text-align: right;">61.8466</td>
-      <td style = "text-align: right;">84.5991</td>
-      <td style = "text-align: right;">76.4199</td>
-      <td style = "text-align: right;">19.105</td>
-      <td style = "text-align: right;">19.8494</td>
-      <td style = "text-align: right;">28.0178</td>
-      <td style = "text-align: right;">61.6604</td>
-      <td style = "text-align: right;">16.0312</td>
-      <td style = "text-align: right;">15.0333</td>
-      <td style = "text-align: right;">56.5685</td>
-      <td style = "text-align: right;">79.1202</td>
-      <td style = "text-align: right;">76.0</td>
-      <td style = "text-align: right;">9.21954</td>
+      <td style = "text-align: right;">88.8876</td>
     </tr>
     <tr>
       <td class = "rowNumber">12</td>
-      <td style = "text-align: right;">75.0067</td>
-      <td style = "text-align: right;">48.9183</td>
-      <td style = "text-align: right;">50.6063</td>
-      <td style = "text-align: right;">24.3311</td>
-      <td style = "text-align: right;">76.4788</td>
-      <td style = "text-align: right;">73.6003</td>
-      <td style = "text-align: right;">9.89949</td>
-      <td style = "text-align: right;">59.0593</td>
-      <td style = "text-align: right;">82.0549</td>
-      <td style = "text-align: right;">92.1141</td>
-      <td style = "text-align: right;">66.0076</td>
       <td style = "text-align: right;">0.0</td>
-      <td style = "text-align: right;">72.9452</td>
-      <td style = "text-align: right;">93.6376</td>
-      <td style = "text-align: right;">54.2033</td>
-      <td style = "text-align: right;">45.2769</td>
-      <td style = "text-align: right;">12.2066</td>
-      <td style = "text-align: right;">54.5711</td>
-      <td style = "text-align: right;">80.2309</td>
-      <td style = "text-align: right;">70.3847</td>
-      <td style = "text-align: right;">9.43398</td>
-      <td style = "text-align: right;">68.6586</td>
-      <td style = "text-align: right;">68.4471</td>
-      <td style = "text-align: right;">12.2066</td>
-      <td style = "text-align: right;">23.2594</td>
-      <td style = "text-align: right;">10.0499</td>
-      <td style = "text-align: right;">75.0067</td>
-    </tr>
-    <tr>
-      <td class = "rowNumber">13</td>
-      <td style = "text-align: right;">35.7351</td>
-      <td style = "text-align: right;">27.1662</td>
-      <td style = "text-align: right;">22.3607</td>
-      <td style = "text-align: right;">50.6063</td>
-      <td style = "text-align: right;">4.0</td>
-      <td style = "text-align: right;">10.2956</td>
-      <td style = "text-align: right;">63.5059</td>
-      <td style = "text-align: right;">13.8924</td>
-      <td style = "text-align: right;">36.7151</td>
-      <td style = "text-align: right;">22.0907</td>
-      <td style = "text-align: right;">36.0555</td>
-      <td style = "text-align: right;">72.9452</td>
-      <td style = "text-align: right;">0.0</td>
-      <td style = "text-align: right;">24.1868</td>
-      <td style = "text-align: right;">38.8973</td>
-      <td style = "text-align: right;">69.7209</td>
-      <td style = "text-align: right;">79.1202</td>
-      <td style = "text-align: right;">24.5967</td>
-      <td style = "text-align: right;">25.807</td>
-      <td style = "text-align: right;">8.06226</td>
-      <td style = "text-align: right;">64.8845</td>
-      <td style = "text-align: right;">20.2237</td>
-      <td style = "text-align: right;">21.2132</td>
-      <td style = "text-align: right;">60.8276</td>
-      <td style = "text-align: right;">75.3127</td>
-      <td style = "text-align: right;">82.2922</td>
-      <td style = "text-align: right;">35.7351</td>
-    </tr>
-    <tr>
-      <td class = "rowNumber">14</td>
-      <td style = "text-align: right;">33.6155</td>
-      <td style = "text-align: right;">51.0</td>
-      <td style = "text-align: right;">44.5533</td>
-      <td style = "text-align: right;">69.857</td>
-      <td style = "text-align: right;">20.2237</td>
-      <td style = "text-align: right;">31.3847</td>
-      <td style = "text-align: right;">84.7703</td>
-      <td style = "text-align: right;">36.2215</td>
-      <td style = "text-align: right;">29.6142</td>
-      <td style = "text-align: right;">2.23607</td>
-      <td style = "text-align: right;">39.6611</td>
-      <td style = "text-align: right;">93.6376</td>
-      <td style = "text-align: right;">24.1868</td>
-      <td style = "text-align: right;">0.0</td>
-      <td style = "text-align: right;">62.8172</td>
-      <td style = "text-align: right;">93.9042</td>
-      <td style = "text-align: right;">101.139</td>
-      <td style = "text-align: right;">39.8246</td>
-      <td style = "text-align: right;">20.1246</td>
-      <td style = "text-align: right;">23.5372</td>
-      <td style = "text-align: right;">86.4002</td>
-      <td style = "text-align: right;">27.0185</td>
-      <td style = "text-align: right;">27.6586</td>
-      <td style = "text-align: right;">81.9085</td>
-      <td style = "text-align: right;">98.6154</td>
-      <td style = "text-align: right;">103.407</td>
-      <td style = "text-align: right;">33.6155</td>
-    </tr>
-    <tr>
-      <td class = "rowNumber">15</td>
-      <td style = "text-align: right;">66.4831</td>
-      <td style = "text-align: right;">18.0278</td>
-      <td style = "text-align: right;">27.8029</td>
-      <td style = "text-align: right;">43.1045</td>
-      <td style = "text-align: right;">42.72</td>
-      <td style = "text-align: right;">32.1403</td>
-      <td style = "text-align: right;">44.7214</td>
-      <td style = "text-align: right;">31.4006</td>
-      <td style = "text-align: right;">70.4344</td>
-      <td style = "text-align: right;">60.6383</td>
-      <td style = "text-align: right;">61.8466</td>
-      <td style = "text-align: right;">54.2033</td>
-      <td style = "text-align: right;">38.8973</td>
-      <td style = "text-align: right;">62.8172</td>
-      <td style = "text-align: right;">0.0</td>
-      <td style = "text-align: right;">32.0624</td>
-      <td style = "text-align: right;">54.4885</td>
-      <td style = "text-align: right;">42.8019</td>
-      <td style = "text-align: right;">61.5873</td>
-      <td style = "text-align: right;">42.9418</td>
-      <td style = "text-align: right;">44.7772</td>
-      <td style = "text-align: right;">51.225</td>
-      <td style = "text-align: right;">51.8556</td>
-      <td style = "text-align: right;">43.4626</td>
-      <td style = "text-align: right;">45.2217</td>
-      <td style = "text-align: right;">60.6053</td>
-      <td style = "text-align: right;">66.4831</td>
-    </tr>
-    <tr>
-      <td class = "rowNumber">16</td>
-      <td style = "text-align: right;">91.3017</td>
-      <td style = "text-align: right;">43.9659</td>
-      <td style = "text-align: right;">52.9245</td>
-      <td style = "text-align: right;">50.2195</td>
-      <td style = "text-align: right;">73.6817</td>
-      <td style = "text-align: right;">64.0078</td>
-      <td style = "text-align: right;">39.8497</td>
-      <td style = "text-align: right;">59.4811</td>
-      <td style = "text-align: right;">96.6075</td>
-      <td style = "text-align: right;">91.7878</td>
-      <td style = "text-align: right;">84.5991</td>
-      <td style = "text-align: right;">45.2769</td>
-      <td style = "text-align: right;">69.7209</td>
-      <td style = "text-align: right;">93.9042</td>
-      <td style = "text-align: right;">32.0624</td>
-      <td style = "text-align: right;">0.0</td>
-      <td style = "text-align: right;">38.3275</td>
-      <td style = "text-align: right;">66.242</td>
-      <td style = "text-align: right;">89.5377</td>
-      <td style = "text-align: right;">72.2772</td>
-      <td style = "text-align: right;">38.3275</td>
-      <td style = "text-align: right;">78.0</td>
-      <td style = "text-align: right;">78.3901</td>
-      <td style = "text-align: right;">40.8534</td>
-      <td style = "text-align: right;">24.5153</td>
-      <td style = "text-align: right;">46.2709</td>
-      <td style = "text-align: right;">91.3017</td>
-    </tr>
-    <tr>
-      <td class = "rowNumber">17</td>
-      <td style = "text-align: right;">85.2115</td>
-      <td style = "text-align: right;">53.2353</td>
-      <td style = "text-align: right;">56.921</td>
-      <td style = "text-align: right;">34.1321</td>
-      <td style = "text-align: right;">82.8734</td>
-      <td style = "text-align: right;">78.2943</td>
-      <td style = "text-align: right;">17.0</td>
-      <td style = "text-align: right;">65.4599</td>
-      <td style = "text-align: right;">92.0869</td>
-      <td style = "text-align: right;">99.4585</td>
-      <td style = "text-align: right;">76.4199</td>
-      <td style = "text-align: right;">12.2066</td>
-      <td style = "text-align: right;">79.1202</td>
-      <td style = "text-align: right;">101.139</td>
-      <td style = "text-align: right;">54.4885</td>
-      <td style = "text-align: right;">38.3275</td>
-      <td style = "text-align: right;">0.0</td>
-      <td style = "text-align: right;">63.2851</td>
-      <td style = "text-align: right;">89.2749</td>
-      <td style = "text-align: right;">77.6209</td>
-      <td style = "text-align: right;">15.0333</td>
-      <td style = "text-align: right;">77.4145</td>
-      <td style = "text-align: right;">77.3175</td>
-      <td style = "text-align: right;">20.0</td>
-      <td style = "text-align: right;">14.0</td>
-      <td style = "text-align: right;">8.0</td>
-      <td style = "text-align: right;">85.2115</td>
-    </tr>
-    <tr>
-      <td class = "rowNumber">18</td>
-      <td style = "text-align: right;">25.0599</td>
-      <td style = "text-align: right;">24.8395</td>
-      <td style = "text-align: right;">15.0</td>
-      <td style = "text-align: right;">30.3645</td>
-      <td style = "text-align: right;">26.6271</td>
-      <td style = "text-align: right;">31.5753</td>
-      <td style = "text-align: right;">46.3897</td>
-      <td style = "text-align: right;">15.0333</td>
-      <td style = "text-align: right;">30.6757</td>
-      <td style = "text-align: right;">38.5876</td>
-      <td style = "text-align: right;">19.105</td>
-      <td style = "text-align: right;">54.5711</td>
-      <td style = "text-align: right;">24.5967</td>
-      <td style = "text-align: right;">39.8246</td>
-      <td style = "text-align: right;">42.8019</td>
-      <td style = "text-align: right;">66.242</td>
-      <td style = "text-align: right;">63.2851</td>
-      <td style = "text-align: right;">0.0</td>
-      <td style = "text-align: right;">26.0192</td>
-      <td style = "text-align: right;">18.4391</td>
-      <td style = "text-align: right;">48.2597</td>
-      <td style = "text-align: right;">14.1421</td>
-      <td style = "text-align: right;">14.0357</td>
-      <td style = "text-align: right;">43.4166</td>
-      <td style = "text-align: right;">63.5059</td>
-      <td style = "text-align: right;">64.5368</td>
-      <td style = "text-align: right;">25.0599</td>
-    </tr>
-    <tr>
-      <td class = "rowNumber">19</td>
-      <td style = "text-align: right;">13.6015</td>
-      <td style = "text-align: right;">45.6946</td>
-      <td style = "text-align: right;">36.6879</td>
-      <td style = "text-align: right;">55.9017</td>
-      <td style = "text-align: right;">23.7065</td>
-      <td style = "text-align: right;">36.0555</td>
-      <td style = "text-align: right;">72.3395</td>
-      <td style = "text-align: right;">30.4138</td>
-      <td style = "text-align: right;">11.4018</td>
-      <td style = "text-align: right;">20.2485</td>
-      <td style = "text-align: right;">19.8494</td>
-      <td style = "text-align: right;">80.2309</td>
-      <td style = "text-align: right;">25.807</td>
-      <td style = "text-align: right;">20.1246</td>
-      <td style = "text-align: right;">61.5873</td>
-      <td style = "text-align: right;">89.5377</td>
-      <td style = "text-align: right;">89.2749</td>
-      <td style = "text-align: right;">26.0192</td>
-      <td style = "text-align: right;">0.0</td>
-      <td style = "text-align: right;">19.105</td>
-      <td style = "text-align: right;">74.2428</td>
-      <td style = "text-align: right;">12.0416</td>
-      <td style = "text-align: right;">12.0</td>
-      <td style = "text-align: right;">69.3542</td>
-      <td style = "text-align: right;">89.2749</td>
-      <td style = "text-align: right;">90.2552</td>
-      <td style = "text-align: right;">13.6015</td>
-    </tr>
-    <tr>
-      <td class = "rowNumber">20</td>
-      <td style = "text-align: right;">27.8568</td>
-      <td style = "text-align: right;">28.4429</td>
-      <td style = "text-align: right;">21.095</td>
-      <td style = "text-align: right;">47.0106</td>
-      <td style = "text-align: right;">8.544</td>
-      <td style = "text-align: right;">18.0278</td>
-      <td style = "text-align: right;">61.3514</td>
-      <td style = "text-align: right;">13.0384</td>
-      <td style = "text-align: right;">29.4109</td>
-      <td style = "text-align: right;">21.8403</td>
-      <td style = "text-align: right;">28.0178</td>
-      <td style = "text-align: right;">70.3847</td>
-      <td style = "text-align: right;">8.06226</td>
-      <td style = "text-align: right;">23.5372</td>
-      <td style = "text-align: right;">42.9418</td>
-      <td style = "text-align: right;">72.2772</td>
-      <td style = "text-align: right;">77.6209</td>
-      <td style = "text-align: right;">18.4391</td>
-      <td style = "text-align: right;">19.105</td>
-      <td style = "text-align: right;">0.0</td>
-      <td style = "text-align: right;">62.9365</td>
-      <td style = "text-align: right;">12.1655</td>
-      <td style = "text-align: right;">13.1529</td>
-      <td style = "text-align: right;">58.5235</td>
-      <td style = "text-align: right;">75.2396</td>
-      <td style = "text-align: right;">80.0562</td>
-      <td style = "text-align: right;">27.8568</td>
-    </tr>
-    <tr>
-      <td class = "rowNumber">21</td>
-      <td style = "text-align: right;">70.3491</td>
-      <td style = "text-align: right;">40.0</td>
-      <td style = "text-align: right;">42.5441</td>
-      <td style = "text-align: right;">19.4165</td>
-      <td style = "text-align: right;">68.542</td>
-      <td style = "text-align: right;">64.8999</td>
-      <td style = "text-align: right;">2.23607</td>
-      <td style = "text-align: right;">51.0784</td>
-      <td style = "text-align: right;">77.1622</td>
-      <td style = "text-align: right;">84.7703</td>
-      <td style = "text-align: right;">61.6604</td>
-      <td style = "text-align: right;">9.43398</td>
-      <td style = "text-align: right;">64.8845</td>
-      <td style = "text-align: right;">86.4002</td>
-      <td style = "text-align: right;">44.7772</td>
-      <td style = "text-align: right;">38.3275</td>
-      <td style = "text-align: right;">15.0333</td>
-      <td style = "text-align: right;">48.2597</td>
-      <td style = "text-align: right;">74.2428</td>
-      <td style = "text-align: right;">62.9365</td>
-      <td style = "text-align: right;">0.0</td>
-      <td style = "text-align: right;">62.3939</td>
-      <td style = "text-align: right;">62.2896</td>
-      <td style = "text-align: right;">5.09902</td>
-      <td style = "text-align: right;">19.8494</td>
-      <td style = "text-align: right;">17.4929</td>
-      <td style = "text-align: right;">70.3491</td>
-    </tr>
-    <tr>
-      <td class = "rowNumber">22</td>
-      <td style = "text-align: right;">16.1245</td>
-      <td style = "text-align: right;">34.4819</td>
-      <td style = "text-align: right;">25.0799</td>
-      <td style = "text-align: right;">44.3847</td>
-      <td style = "text-align: right;">20.025</td>
-      <td style = "text-align: right;">30.0832</td>
-      <td style = "text-align: right;">60.531</td>
-      <td style = "text-align: right;">19.8494</td>
-      <td style = "text-align: right;">19.2094</td>
-      <td style = "text-align: right;">26.1725</td>
-      <td style = "text-align: right;">16.0312</td>
-      <td style = "text-align: right;">68.6586</td>
-      <td style = "text-align: right;">20.2237</td>
-      <td style = "text-align: right;">27.0185</td>
-      <td style = "text-align: right;">51.225</td>
-      <td style = "text-align: right;">78.0</td>
-      <td style = "text-align: right;">77.4145</td>
-      <td style = "text-align: right;">14.1421</td>
-      <td style = "text-align: right;">12.0416</td>
-      <td style = "text-align: right;">12.1655</td>
-      <td style = "text-align: right;">62.3939</td>
-      <td style = "text-align: right;">0.0</td>
-      <td style = "text-align: right;">1.0</td>
-      <td style = "text-align: right;">57.5587</td>
-      <td style = "text-align: right;">77.2334</td>
-      <td style = "text-align: right;">78.6448</td>
-      <td style = "text-align: right;">16.1245</td>
-    </tr>
-    <tr>
-      <td class = "rowNumber">23</td>
-      <td style = "text-align: right;">15.2643</td>
-      <td style = "text-align: right;">34.9857</td>
-      <td style = "text-align: right;">25.4951</td>
-      <td style = "text-align: right;">44.1475</td>
-      <td style = "text-align: right;">21.0238</td>
-      <td style = "text-align: right;">31.0483</td>
-      <td style = "text-align: right;">60.407</td>
-      <td style = "text-align: right;">20.5183</td>
-      <td style = "text-align: right;">18.6011</td>
-      <td style = "text-align: right;">26.8701</td>
-      <td style = "text-align: right;">15.0333</td>
-      <td style = "text-align: right;">68.4471</td>
-      <td style = "text-align: right;">21.2132</td>
-      <td style = "text-align: right;">27.6586</td>
-      <td style = "text-align: right;">51.8556</td>
-      <td style = "text-align: right;">78.3901</td>
-      <td style = "text-align: right;">77.3175</td>
-      <td style = "text-align: right;">14.0357</td>
-      <td style = "text-align: right;">12.0</td>
-      <td style = "text-align: right;">13.1529</td>
-      <td style = "text-align: right;">62.2896</td>
-      <td style = "text-align: right;">1.0</td>
-      <td style = "text-align: right;">0.0</td>
-      <td style = "text-align: right;">57.4282</td>
-      <td style = "text-align: right;">77.3175</td>
-      <td style = "text-align: right;">78.4474</td>
-      <td style = "text-align: right;">15.2643</td>
-    </tr>
-    <tr>
-      <td class = "rowNumber">24</td>
-      <td style = "text-align: right;">65.2763</td>
-      <td style = "text-align: right;">36.7967</td>
       <td style = "text-align: right;">38.4708</td>
-      <td style = "text-align: right;">14.3178</td>
-      <td style = "text-align: right;">64.405</td>
-      <td style = "text-align: right;">61.4003</td>
-      <td style = "text-align: right;">3.0</td>
-      <td style = "text-align: right;">46.9574</td>
-      <td style = "text-align: right;">72.111</td>
-      <td style = "text-align: right;">80.3243</td>
-      <td style = "text-align: right;">56.5685</td>
-      <td style = "text-align: right;">12.2066</td>
-      <td style = "text-align: right;">60.8276</td>
-      <td style = "text-align: right;">81.9085</td>
-      <td style = "text-align: right;">43.4626</td>
-      <td style = "text-align: right;">40.8534</td>
-      <td style = "text-align: right;">20.0</td>
-      <td style = "text-align: right;">43.4166</td>
-      <td style = "text-align: right;">69.3542</td>
-      <td style = "text-align: right;">58.5235</td>
-      <td style = "text-align: right;">5.09902</td>
-      <td style = "text-align: right;">57.5587</td>
-      <td style = "text-align: right;">57.4282</td>
-      <td style = "text-align: right;">0.0</td>
-      <td style = "text-align: right;">24.4131</td>
-      <td style = "text-align: right;">21.5407</td>
-      <td style = "text-align: right;">65.2763</td>
-    </tr>
-    <tr>
-      <td class = "rowNumber">25</td>
-      <td style = "text-align: right;">87.3212</td>
-      <td style = "text-align: right;">48.2701</td>
-      <td style = "text-align: right;">54.1479</td>
-      <td style = "text-align: right;">38.0132</td>
-      <td style = "text-align: right;">79.2464</td>
-      <td style = "text-align: right;">72.7324</td>
-      <td style = "text-align: right;">22.0227</td>
-      <td style = "text-align: right;">62.3939</td>
-      <td style = "text-align: right;">93.7443</td>
-      <td style = "text-align: right;">96.7471</td>
-      <td style = "text-align: right;">79.1202</td>
-      <td style = "text-align: right;">23.2594</td>
-      <td style = "text-align: right;">75.3127</td>
-      <td style = "text-align: right;">98.6154</td>
-      <td style = "text-align: right;">45.2217</td>
-      <td style = "text-align: right;">24.5153</td>
-      <td style = "text-align: right;">14.0</td>
-      <td style = "text-align: right;">63.5059</td>
-      <td style = "text-align: right;">89.2749</td>
-      <td style = "text-align: right;">75.2396</td>
-      <td style = "text-align: right;">19.8494</td>
-      <td style = "text-align: right;">77.2334</td>
-      <td style = "text-align: right;">77.3175</td>
-      <td style = "text-align: right;">24.4131</td>
-      <td style = "text-align: right;">0.0</td>
-      <td style = "text-align: right;">22.0</td>
-      <td style = "text-align: right;">87.3212</td>
-    </tr>
-    <tr>
-      <td class = "rowNumber">26</td>
-      <td style = "text-align: right;">85.0235</td>
-      <td style = "text-align: right;">57.4282</td>
-      <td style = "text-align: right;">59.9333</td>
-      <td style = "text-align: right;">34.3657</td>
-      <td style = "text-align: right;">85.9069</td>
-      <td style = "text-align: right;">82.3772</td>
-      <td style = "text-align: right;">18.7883</td>
-      <td style = "text-align: right;">68.4471</td>
-      <td style = "text-align: right;">92.0869</td>
-      <td style = "text-align: right;">101.843</td>
-      <td style = "text-align: right;">76.0</td>
-      <td style = "text-align: right;">10.0499</td>
-      <td style = "text-align: right;">82.2922</td>
-      <td style = "text-align: right;">103.407</td>
-      <td style = "text-align: right;">60.6053</td>
-      <td style = "text-align: right;">46.2709</td>
-      <td style = "text-align: right;">8.0</td>
-      <td style = "text-align: right;">64.5368</td>
-      <td style = "text-align: right;">90.2552</td>
-      <td style = "text-align: right;">80.0562</td>
-      <td style = "text-align: right;">17.4929</td>
-      <td style = "text-align: right;">78.6448</td>
-      <td style = "text-align: right;">78.4474</td>
-      <td style = "text-align: right;">21.5407</td>
-      <td style = "text-align: right;">22.0</td>
-      <td style = "text-align: right;">0.0</td>
-      <td style = "text-align: right;">85.0235</td>
-    </tr>
-    <tr>
-      <td class = "rowNumber">27</td>
-      <td style = "text-align: right;">0.0</td>
-      <td style = "text-align: right;">49.0408</td>
-      <td style = "text-align: right;">39.2046</td>
-      <td style = "text-align: right;">51.0882</td>
-      <td style = "text-align: right;">34.7131</td>
-      <td style = "text-align: right;">45.8803</td>
-      <td style = "text-align: right;">68.2642</td>
-      <td style = "text-align: right;">35.4683</td>
+      <td style = "text-align: right;">34.8855</td>
+      <td style = "text-align: right;">55.9464</td>
       <td style = "text-align: right;">7.28011</td>
-      <td style = "text-align: right;">33.8379</td>
-      <td style = "text-align: right;">9.21954</td>
-      <td style = "text-align: right;">75.0067</td>
-      <td style = "text-align: right;">35.7351</td>
-      <td style = "text-align: right;">33.6155</td>
-      <td style = "text-align: right;">66.4831</td>
-      <td style = "text-align: right;">91.3017</td>
-      <td style = "text-align: right;">85.2115</td>
-      <td style = "text-align: right;">25.0599</td>
-      <td style = "text-align: right;">13.6015</td>
-      <td style = "text-align: right;">27.8568</td>
-      <td style = "text-align: right;">70.3491</td>
-      <td style = "text-align: right;">16.1245</td>
-      <td style = "text-align: right;">15.2643</td>
-      <td style = "text-align: right;">65.2763</td>
-      <td style = "text-align: right;">87.3212</td>
-      <td style = "text-align: right;">85.0235</td>
+      <td style = "text-align: right;">23.3452</td>
+      <td style = "text-align: right;">71.4703</td>
+      <td style = "text-align: right;">32.5269</td>
+      <td style = "text-align: right;">13.0384</td>
+      <td style = "text-align: right;">26.4008</td>
+      <td style = "text-align: right;">88.8876</td>
       <td style = "text-align: right;">0.0</td>
     </tr>
   </tbody>
@@ -1834,10 +1180,8 @@ Start time of node 11
 
 
 <pre class="output">
-5×6×26 Array&#123;Float64, 3&#125;:
+3×6×11 Array&#123;Float64, 3&#125;:
 &#91;:, :, 1&#93; &#61;
- 0.0  0.0  0.0  0.0  0.0  0.0
- 0.0  0.0  0.0  0.0  0.0  0.0
  0.0  0.0  0.0  0.0  0.0  0.0
  0.0  0.0  0.0  0.0  0.0  0.0
  0.0  0.0  0.0  0.0  0.0  0.0
@@ -1846,35 +1190,25 @@ Start time of node 11
  14.0  14.0  14.0  14.0  14.0  14.0
  14.0  14.0  14.0  14.0  14.0  14.0
  14.0  14.0  14.0  14.0  14.0  14.0
- 14.0  14.0  14.0  14.0  14.0  14.0
- 14.0  14.0  14.0  14.0  14.0  14.0
 
 &#91;:, :, 3&#93; &#61;
- 14.0  14.0  14.0  14.0  14.0  14.0
- 14.0  14.0  14.0  14.0  14.0  14.0
  14.0  14.0  14.0  14.0  14.0  14.0
  14.0  14.0  14.0  14.0  14.0  14.0
  14.0  14.0  14.0  14.0  14.0  14.0
 
 ;;; … 
 
-&#91;:, :, 24&#93; &#61;
- 14.0  14.0  14.0  14.0  14.0  14.0
- 14.0  14.0  14.0  14.0  14.0  14.0
- 14.0  14.0  14.0  14.0  14.0  14.0
- 14.0  14.0  14.0  14.0  14.0  14.0
- 14.0  14.0  14.0  14.0  14.0  14.0
-
-&#91;:, :, 25&#93; &#61;
- 14.0  14.0  14.0  14.0  14.0  14.0
- 14.0  14.0  14.0  14.0  14.0  14.0
+&#91;:, :, 9&#93; &#61;
  14.0  14.0  14.0  14.0  14.0  14.0
  14.0  14.0  14.0  14.0  14.0  14.0
  14.0  14.0  14.0  14.0  14.0  14.0
 
-&#91;:, :, 26&#93; &#61;
+&#91;:, :, 10&#93; &#61;
  14.0  14.0  14.0  14.0  14.0  14.0
  14.0  14.0  14.0  14.0  14.0  14.0
+ 14.0  14.0  14.0  14.0  14.0  14.0
+
+&#91;:, :, 11&#93; &#61;
  14.0  14.0  14.0  14.0  14.0  14.0
  14.0  14.0  14.0  14.0  14.0  14.0
  14.0  14.0  14.0  14.0  14.0  14.0
@@ -1890,7 +1224,7 @@ Start time of node 11
 
 
 <pre class="output">
-454.407894
+654.5956510000001
 </pre>
 
 
@@ -1903,7 +1237,7 @@ Start time of node 11
 
 
 <pre class="output">
-&#40;8119.271659, 2609.41503&#41;
+&#40;0.0, 0.0&#41;
 </pre>
 
 
@@ -1916,7 +1250,24 @@ Start time of node 11
 
 
 <pre class="output">
-3727.698194333333
+218.19855033333334
+</pre>
+
+
+<hr />
+<h1>Test startting time</h1>
+
+
+<pre class='hljl'>
+<span class='hljl-n'>par</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>load_object</span><span class='hljl-p'>(</span><span class='hljl-nf'>joinpath</span><span class='hljl-p'>(</span><span class='hljl-nd'>@__DIR</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;data&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;test&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;ins25-1-1.jld2&quot;</span><span class='hljl-p'>));</span><span class='hljl-t'>
+</span><span class='hljl-n'>st</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>initial_starttime</span><span class='hljl-p'>(</span><span class='hljl-n'>par</span><span class='hljl-oB'>.</span><span class='hljl-n'>num_node</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>par</span><span class='hljl-oB'>.</span><span class='hljl-n'>num_vehi</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>par</span><span class='hljl-oB'>.</span><span class='hljl-n'>num_serv</span><span class='hljl-p'>);</span><span class='hljl-t'>
+</span><span class='hljl-n'>stt</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>find_node_starttime</span><span class='hljl-p'>(</span><span class='hljl-n'>par</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-p'>)</span>
+</pre>
+
+
+<pre class="julia-error">
+ERROR: LoadError: UndefVarError: @__DIR not defined
+in expression starting at C:\Users\payakorn_sak\.julia\dev\VehicleRoutingSynPre\report\index.Jmd:2
 </pre>
 
 
@@ -1925,7 +1276,7 @@ Start time of node 11
         <div class="footer">
           <p>
             Published from <a href="index.Jmd">index.Jmd</a>
-            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.10 on 2022-05-12.
+            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.10 on 2022-05-19.
           </p>
         </div>
       </div>

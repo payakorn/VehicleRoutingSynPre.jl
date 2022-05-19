@@ -21,7 +21,7 @@ Benchmark name is in the form, for exmaple, "ins10-1.jld2" is the instance numbe
 To load the instance data use
 
 ```julia
-name = "ins25-1"
+name = "ins10-1"
 num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l = load_data(name);
 ```
 
@@ -118,4 +118,13 @@ tardy, max_tardy = tardiness(particle)
 Objective function value:
 ```julia
 objective_value(particle)
+```
+
+
+---
+# Test startting time
+```julia
+par = load_object(joinpath(@__DIR, "data", "test", "ins25-1-1.jld2"));
+st = initial_starttime(par.num_node, par.num_vehi, par.num_serv);
+stt = find_node_starttime(par, )
 ```
