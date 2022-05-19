@@ -148,6 +148,9 @@ function find_node_starttime(input_route::Array, slot::Dict{Int64, Vector{Int64}
         other_serv = setdiff(syn, [node, service])[1]
         ovehi, oloca = find_location_by_node_service(input_route, node, other_serv)
 
+        if vehi == ovehi
+            return ErrorException("infeasible")
+        end
         # update starttime of syn node
         # if st[node][ovehi, other_serv] != st[node][vehi, service]
         #     st = find_node_starttime(input_route, slot, node, other_serv, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st)
@@ -161,6 +164,7 @@ function find_node_starttime(input_route::Array, slot::Dict{Int64, Vector{Int64}
                 next_serv = input_route[ovehi][oloca+1][2]
                 next_st = st[next_node][ovehi, next_serv]
                 if next_st > e[next_node] || st[node][ovehi, other_serv] + p[ovehi, other_serv, node] + d[node, next_node] > e[next_node]
+                    println("update starttime of syn $node $service to $node $other_serv")
                     st = update_starttime(input_route, slot, node, other_serv, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st)
                 end
             else
@@ -184,6 +188,11 @@ function find_node_starttime(input_route::Array, slot::Dict{Int64, Vector{Int64}
                     if (st[node][ovehi, other_serv] - st[node][vehi, service]) < mind[node]
                         st[node][ovehi, other_serv] = mind[node] + st[node][vehi, service]
 
+                        # same car
+                        if vehi == ovehi
+                            return st
+                        end
+
                         next_node = input_route[ovehi][oloca+1][1]
                         next_serv = input_route[ovehi][oloca+1][2]
                         next_st = st[next_node][ovehi, next_serv]
@@ -200,6 +209,11 @@ function find_node_starttime(input_route::Array, slot::Dict{Int64, Vector{Int64}
                         st[node][vehi, service] = mind[node] + st[node][ovehi, other_serv]
                     elseif (st[node][vehi, service] - st[node][ovehi, other_serv]) > maxd[node]
                         st[node][ovehi, other_serv] = st[node][vehi, service] - maxd[node]
+
+                        # same car
+                        if vehi == ovehi
+                            return st
+                        end
 
                         next_node = input_route[ovehi][oloca+1][1]
                         next_serv = input_route[ovehi][oloca+1][2]
@@ -246,6 +260,7 @@ function find_starttime(route, slot, num_node, num_vehi, num_serv, mind, maxd, a
 
     for (i, vehi) in enumerate(route)
         for ns in vehi
+            # println("finding starttime of $ns")
             st = find_node_starttime(route, slot, ns[1], ns[2], num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st, vehicle=i)
         end
     end
