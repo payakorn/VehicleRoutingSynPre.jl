@@ -60,6 +60,10 @@ export Particle,
        load_ins,
        Sol,
        all_node_serv,
-       sortperm,
+       sortperm_l,
+       generate_empty_sol,
+       inserted_node,
+       insert_node_service,
+       find_before_after_serv,
        Ins
 end
