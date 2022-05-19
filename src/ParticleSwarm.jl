@@ -99,7 +99,9 @@ function update_starttime(input_route::Array, slot::Dict{Int64, Vector{Int64}}, 
         cserv = input_route[vehi][lo][2]
         cvehi, cloca = find_location_by_node_service(input_route, cnode, cserv)
 
-        if in_PRE(cnode, PRE) || in_SYN(cnode, SYN)
+        if in_PRE(cnode, PRE)
+            st = find_node_starttime(input_route, slot, cnode, cserv, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st, vehicle=vehi)
+        elseif in_SYN(cnode, SYN)
             st = find_node_starttime(input_route, slot, cnode, cserv, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st, vehicle=vehi)
         else
             if st[node][vehi, service] + p[vehi, service, node] + d[node, cnode] < e[cnode]
@@ -128,7 +130,7 @@ function find_node_starttime(input_route::Array, slot::Dict{Int64, Vector{Int64}
     if loca != 1
         left_node = input_route[vehi][loca-1][1]
         left_serv = input_route[vehi][loca-1][2]
-        st = find_node_starttime(input_route, slot, left_node, left_serv, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st, vehicle=vehi)
+        # st = find_node_starttime(input_route, slot, left_node, left_serv, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st, vehicle=vehi)
         st_left = st[left_node][vehi, left_serv] + p[vehi, service, left_node] + d[left_node, node]
     else
         st_left = d[1, node]
@@ -151,17 +153,19 @@ function find_node_starttime(input_route::Array, slot::Dict{Int64, Vector{Int64}
         #     st = find_node_starttime(input_route, slot, node, other_serv, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st)
         # end
 
-        if st[node][ovehi, other_serv] < st[node][vehi, service]
-            st[node][ovehi, other_serv] = st[node][vehi, service]
+        if st[node][ovehi, other_serv] != 0.0
+            if st[node][ovehi, other_serv] < st[node][vehi, service]
+                st[node][ovehi, other_serv] = st[node][vehi, service]
 
-            next_node = input_route[ovehi][oloca+1][1]
-            next_serv = input_route[ovehi][oloca+1][2]
-            next_st = st[next_node][ovehi, next_serv]
-            if next_st > e[next_node] || st[node][ovehi, other_serv] + p[ovehi, other_serv, node] + d[node, next_node] > e[next_node]
-                st = update_starttime(input_route, slot, node, other_serv, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st)
+                next_node = input_route[ovehi][oloca+1][1]
+                next_serv = input_route[ovehi][oloca+1][2]
+                next_st = st[next_node][ovehi, next_serv]
+                if next_st > e[next_node] || st[node][ovehi, other_serv] + p[ovehi, other_serv, node] + d[node, next_node] > e[next_node]
+                    st = update_starttime(input_route, slot, node, other_serv, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st)
+                end
+            else
+                st[node][vehi, service] = st[node][ovehi, other_serv]
             end
-        else
-            st[node][vehi, service] = st[node][ovehi, other_serv]
         end
     end
     
@@ -175,35 +179,37 @@ function find_node_starttime(input_route::Array, slot::Dict{Int64, Vector{Int64}
             # update starttime of PRE node
             # st = find_node_starttime(input_route, slot, node, other_serv, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st)
 
-            if in_position == 2
-                if (st[node][ovehi, other_serv] - st[node][vehi, service]) < mind[node]
-                    st[node][ovehi, other_serv] = mind[node] + st[node][vehi, service]
+            if st[node][ovehi, other_serv] != 0.0
+                if in_position == 2
+                    if (st[node][ovehi, other_serv] - st[node][vehi, service]) < mind[node]
+                        st[node][ovehi, other_serv] = mind[node] + st[node][vehi, service]
 
-                    next_node = input_route[ovehi][oloca+1][1]
-                    next_serv = input_route[ovehi][oloca+1][2]
-                    next_st = st[next_node][ovehi, next_serv]
-                    if next_st > e[next_node] || st[node][ovehi, other_serv] + p[ovehi, other_serv, node] + d[node, next_node] > e[next_node]
-                        st = update_starttime(input_route, slot, node, other_serv, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st)
+                        next_node = input_route[ovehi][oloca+1][1]
+                        next_serv = input_route[ovehi][oloca+1][2]
+                        next_st = st[next_node][ovehi, next_serv]
+                        if next_st > e[next_node] || st[node][ovehi, other_serv] + p[ovehi, other_serv, node] + d[node, next_node] > e[next_node]
+                            st = update_starttime(input_route, slot, node, other_serv, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st)
+                        end
+
+                        # st = update_starttime(input_route, slot, node, other_serv, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st)
+                    elseif (st[node][ovehi, other_serv] - st[node][vehi, service]) > maxd[node]
+                        st[node][vehi, service] = st[node][ovehi, other_serv] - maxd[node]
                     end
+                elseif in_position == 3
+                    if (st[node][vehi, service] - st[node][ovehi, other_serv]) < mind[node]
+                        st[node][vehi, service] = mind[node] + st[node][ovehi, other_serv]
+                    elseif (st[node][vehi, service] - st[node][ovehi, other_serv]) > maxd[node]
+                        st[node][ovehi, other_serv] = st[node][vehi, service] - maxd[node]
 
-                    # st = update_starttime(input_route, slot, node, other_serv, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st)
-                elseif (st[node][ovehi, other_serv] - st[node][vehi, service]) > maxd[node]
-                    st[node][vehi, service] = st[node][ovehi, other_serv] - maxd[node]
-                end
-            elseif in_position == 3
-                if (st[node][vehi, service] - st[node][ovehi, other_serv]) < mind[node]
-                    st[node][vehi, service] = mind[node] + st[node][ovehi, other_serv]
-                elseif (st[node][vehi, service] - st[node][ovehi, other_serv]) > maxd[node]
-                    st[node][ovehi, other_serv] = st[node][vehi, service] - maxd[node]
+                        next_node = input_route[ovehi][oloca+1][1]
+                        next_serv = input_route[ovehi][oloca+1][2]
+                        next_st = st[next_node][ovehi, next_serv]
+                        if next_st > e[next_node] || st[node][ovehi, other_serv] + p[ovehi, other_serv, node] + d[node, next_node] > e[next_node]
+                            st = update_starttime(input_route, slot, node, other_serv, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st)
+                        end
 
-                    next_node = input_route[ovehi][oloca+1][1]
-                    next_serv = input_route[ovehi][oloca+1][2]
-                    next_st = st[next_node][ovehi, next_serv]
-                    if next_st > e[next_node] || st[node][ovehi, other_serv] + p[ovehi, other_serv, node] + d[node, next_node] > e[next_node]
-                        st = update_starttime(input_route, slot, node, other_serv, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st)
+                        # st = update_starttime(input_route, slot, node, other_serv, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st)
                     end
-
-                    # st = update_starttime(input_route, slot, node, other_serv, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st)
                 end
             end
         end
@@ -233,8 +239,15 @@ end
 
 function find_starttime(route, slot, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN)
     st = initial_starttime(num_node, num_vehi, num_serv)
-    for i in 1:num_vehi
-        st = find_node_starttime(route, slot, 1, 1, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st, vehicle=i)
+    # for i in 1:num_vehi
+    #     st = find_node_starttime(route, slot, 1, 1, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st, vehicle=i)
+    # end
+    # return st
+
+    for (i, vehi) in enumerate(route)
+        for ns in vehi
+            st = find_node_starttime(route, slot, ns[1], ns[2], num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st, vehicle=i)
+        end
     end
     return st
 end
@@ -246,6 +259,13 @@ function find_starttime(par::Particle)
     #     st = find_node_starttime(par, 1, 1, st, vehicle=i)
     # end
     return find_starttime(par.route, par.slot, par.num_node, par.num_vehi, par.num_serv, par.mind, par.maxd, par.a, par.r, par.d, par.p, par.e, par.l, par.PRE, par.SYN)
+
+    # for (i, vehi) in enumerate(par.route)
+    #     for ns in vehi
+    #         st = find_node_starttime(par, ns[1], ns[2], st, vehicle=i)
+    #     end
+    # end
+    # return st
 end
 
 
