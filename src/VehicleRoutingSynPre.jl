@@ -4,6 +4,7 @@ using JLD2, Random, Glob, Printf
 # Write your package code here.
 include("ParticleSwarm.jl")
 include("Solution.jl")
+include("instance.jl")
 
 export Particle,
        IndexSolution,
@@ -55,5 +56,10 @@ export Particle,
        union_route,
        find_node_starttime,
        initial_starttime,
-       PSO
+       PSO,
+       load_ins,
+       Sol,
+       all_node_serv,
+       sortperm,
+       Ins
 end
