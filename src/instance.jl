@@ -240,7 +240,33 @@ end
 
 function swap(sol::Sol)
     list = List(sol.ins.num_node, sol.ins.num_vehi, sol.ins.num_serv, sol.ins.r, sol.ins.SYN, sol.ins.PRE)
-    return swap(sol.route, sol.slot, sol.ins.num_node, sol.ins.num_vehi, sol.ins.num_serv, sol.ins.mind, sol.ins.maxd, sol.ins.a, sol.ins.r, sol.ins.serv_a, sol.ins.serv_r, sol.ins.d, sol.ins.p, sol.ins.e, sol.ins.l, sol.ins.PRE, sol.ins.SYN, list)
+    sol.route = swap(sol.route, sol.slot, sol.ins.num_node, sol.ins.num_vehi, sol.ins.num_serv, sol.ins.mind, sol.ins.maxd, sol.ins.a, sol.ins.r, sol.ins.serv_a, sol.ins.serv_r, sol.ins.d, sol.ins.p, sol.ins.e, sol.ins.l, sol.ins.PRE, sol.ins.SYN, list)
+    return sol
+end
+
+
+function List(sol::Sol)
+    list = List(sol.ins.num_node, sol.ins.num_vehi, sol.ins.num_serv, sol.ins.r, sol.ins.SYN, sol.ins.PRE)
+end
+
+
+function swap(sol::Sol, list)
+    sol.route = swap(sol.route, sol.slot, sol.ins.num_node, sol.ins.num_vehi, sol.ins.num_serv, sol.ins.mind, sol.ins.maxd, sol.ins.a, sol.ins.r, sol.ins.serv_a, sol.ins.serv_r, sol.ins.d, sol.ins.p, sol.ins.e, sol.ins.l, sol.ins.PRE, sol.ins.SYN, list)
+    return sol
+end
+
+
+function move(sol::Sol)
+    list = List(sol.ins.num_node, sol.ins.num_vehi, sol.ins.num_serv, sol.ins.r, sol.ins.SYN, sol.ins.PRE)
+    sol.route = move(sol.route, sol.slot, sol.ins.num_node, sol.ins.num_vehi, sol.ins.num_serv, sol.ins.mind, sol.ins.maxd, sol.ins.a, sol.ins.r, sol.ins.serv_a, sol.ins.serv_r, sol.ins.d, sol.ins.p, sol.ins.e, sol.ins.l, sol.ins.PRE, sol.ins.SYN, list)
+    return sol
+end
+
+
+function random_move(sol::Sol)
+    list = List(sol.ins.num_node, sol.ins.num_vehi, sol.ins.num_serv, sol.ins.r, sol.ins.SYN, sol.ins.PRE)
+    sol.route = random_move(sol.route, sol.slot, sol.ins.num_node, sol.ins.num_vehi, sol.ins.num_serv, sol.ins.mind, sol.ins.maxd, sol.ins.a, sol.ins.r, sol.ins.serv_a, sol.ins.serv_r, sol.ins.d, sol.ins.p, sol.ins.e, sol.ins.l, sol.ins.PRE, sol.ins.SYN, list)
+    return sol
 end
 
 
@@ -253,6 +279,21 @@ function find_other_serv_in_syn_pre(node, serv, SET)
     pre = SET[findfirst(x->x[1]==node, SET)]
     other_serv = setdiff(pre, [node, serv])[1]
     return other_serv
+end
+
+
+function check_SYN(sol::Sol)
+    check_SYN(sol.route, sol.ins.SYN)
+end
+
+
+function check_PRE(sol::Sol)
+    check_PRE(sol.route ,find_starttime(sol), sol.ins.maxd, sol.ins.PRE)
+end
+
+
+function compatibility(sol::Sol)
+    compatibility(sol.route, sol.slot, sol.ins.a, sol.ins.r, sol.ins.serv_a, sol.ins.serv_r, sol.ins.PRE, sol.ins.SYN)
 end
 
 
@@ -300,12 +341,13 @@ function starttime(sol::Sol)
                     @show ovehi, oloca = find_location_by_node_service(sol.route, node, other_serv)
                     if min_st < st[node][ovehi, other_serv]
                         println("update min_st")
+                        st[node][vehi, serv] = st[node][ovehi, other_serv]
                     elseif min_st < st[node][ovehi, other_serv]
                         nothing
                     else
                         st[node][v, serv] = min_st
                     end
-                elseif in_PRE(node, sol.ins.PRE)
+                elseif in_PRE(node, sol.ins.PRE) && in(node, calculated)
                     nothing
                 else
                     st[node][v, serv] = min_st

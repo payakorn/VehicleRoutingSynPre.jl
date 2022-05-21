@@ -906,7 +906,7 @@ end
 
 function List(num_node::Int64, num_vehi::Int64, num_serv::Int64, r::Matrix, SYN::Vector{Tuple}, PRE::Vector{Tuple})
     r[1, :] = zeros(1, num_serv)
-    index = getindex.(findall(x->x==1, r[1:11, :]), [1 2])
+    index = getindex.(findall(x->x==1, r[1:num_node, :]), [1 2])
     set_of_all_index = (Tuple(index[i, :]) for i in 1:size(index, 1))
     set = Iterators.filter(x -> x[1] != x[2], Iterators.product(set_of_all_index, set_of_all_index))
 end
@@ -965,6 +965,32 @@ function move(route::Array, slot::Dict{Int64, Vector{Int64}}, num_node::Int64, n
         st = find_starttime(route, slot, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN)
 
         if compatibility(test_route, slot, a, r, serv_a, serv_r, PRE, SYN) && objective_value(test_route, test_st, p, l, d) < objective_value(route, st, p, l, d) && check_PRE(test_route, test_st, maxd, PRE) && check_SYN(test_route, SYN)
+            println("cost reduce in Move")
+            input_route = deepcopy(test_route)
+        end
+    end
+    return input_route
+end
+
+
+function random_move(route::Array, slot::Dict{Int64, Vector{Int64}}, num_node::Int64, num_vehi::Int64, num_serv::Int64, mind::Vector, maxd::Array, a::Matrix, r::Matrix, serv_a::Tuple, serv_r::Dict, d::Matrix, p::Array, e::Array, l::Array, PRE::Array, SYN::Array, list)
+    input_route = deepcopy(route)
+    list = collect(list)
+    for ls in list[1:Int(round(length(list)/4))]
+        num_v1, num_loca1 = find_location_by_node_service(input_route, ls[1][1], ls[1][2])
+        num_v2, num_loca2 = find_location_by_node_service(input_route, ls[2][1], ls[2][2])
+        test_route = deepcopy(input_route)
+
+        #  move
+        moved_item = splice!(test_route[num_v1], num_loca1)
+        insert!(test_route[num_v2], num_loca2, moved_item)
+
+        # find starttime
+        test_st = find_starttime(test_route, slot, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN)
+        st = find_starttime(route, slot, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN)
+
+        if compatibility(test_route, slot, a, r, serv_a, serv_r, PRE, SYN)
+            println("random Move")
             input_route = deepcopy(test_route)
         end
     end
