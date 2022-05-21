@@ -3,6 +3,8 @@ struct Ins
     num_node::Int64
     num_vehi::Int64
     num_serv::Int64
+    serv_a::Tuple
+    serv_r::Dict
     mind::Vector{Float64}
     maxd::Vector{Float64}
     a::Array{Int64}
@@ -44,7 +46,7 @@ function load_ins(Name::String)
     serv_a = find_compat_vehicle_node(a, r)
     SYN = find_SYN(serv_r, mind, maxd)
     PRE = find_PRE(serv_r, mind, maxd)
-    return Ins(Name, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN)
+    return Ins(Name, num_node, num_vehi, num_serv, serv_a, serv_r, mind, maxd, a, r, d, p, e, l, PRE, SYN)
 end
 
 """
@@ -187,7 +189,16 @@ function find_before_after_serv(ins::Ins, node::Int64)
     throw("find_before_after_serv => Not found node $node in PRE or SYN")
 end
 
+"""
+```julia
+    insert_node_service(test_sol::Sol)
+```
 
+---
+
+use to insert all node service to route in sol
+
+"""
 function insert_node_service(test_sol::Sol)
     sol = deepcopy(test_sol)
     remain_node = inserted_node(sol)
@@ -224,4 +235,87 @@ function insert_node_service(test_sol::Sol)
         end
     end
     return sol
+end
+
+
+function swap(sol::Sol)
+    list = List(sol.ins.num_node, sol.ins.num_vehi, sol.ins.num_serv, sol.ins.r, sol.ins.SYN, sol.ins.PRE)
+    return swap(sol.route, sol.slot, sol.ins.num_node, sol.ins.num_vehi, sol.ins.num_serv, sol.ins.mind, sol.ins.maxd, sol.ins.a, sol.ins.r, sol.ins.serv_a, sol.ins.serv_r, sol.ins.d, sol.ins.p, sol.ins.e, sol.ins.l, sol.ins.PRE, sol.ins.SYN, list)
+end
+
+
+function initial_starttime(sol::Sol)
+    initial_starttime(sol.ins.num_node, sol.ins.num_vehi, sol.ins.num_serv)
+end
+
+
+function find_other_serv_in_syn_pre(node, serv, SET)
+    pre = SET[findfirst(x->x[1]==node, SET)]
+    other_serv = setdiff(pre, [node, serv])[1]
+    return other_serv
+end
+
+
+function forward_starttime(st::Dict, start_lo, stop_lo, vehi)
+    nothing
+end
+
+
+function starttime(sol::Sol)
+    st = initial_starttime(sol)
+
+    # find max column
+    len_route = [length(sol.route[i]) for i in 1:sol.ins.num_vehi]
+    @show maxcolumn = maximum(len_route)
+
+    calculated = Int64[]
+
+    for column in 1:maxcolumn
+        for v in 1:sol.ins.num_vehi
+            if column <= len_route[v]
+
+                # find departure and arrival node
+                if column == 1
+                    bnode = 1
+                    bserv = 1
+                else
+                    bnode = sol.route[v][column-1][1]
+                    bserv = sol.route[v][column-1][2]
+                end
+                node = sol.route[v][column][1]
+                serv = sol.route[v][column][2]
+                
+                min_st = st[bnode][v, bserv] + sol.ins.d[bnode, node] + sol.ins.p[v, bserv, bnode]
+                if min_st < sol.ins.e[node]
+                    min_st = sol.ins.e[node]
+                end
+
+
+                println("calculate column $column vehicle $v node $(sol.route[v][column])")
+                println("e = $(sol.ins.e[node]), d = $(sol.ins.d[bnode, node]) arrive time = $(st[bnode][v, bserv] + sol.ins.d[bnode, node] + sol.ins.p[v, bserv, bnode])")
+
+                if in_SYN(node, sol.ins.SYN) && in(node, calculated)
+                    # find location of syn node
+                    other_serv = find_other_serv_in_syn_pre(node, serv, sol.ins.SYN)
+                    @show ovehi, oloca = find_location_by_node_service(sol.route, node, other_serv)
+                    if min_st < st[node][ovehi, other_serv]
+                        println("update min_st")
+                    elseif min_st < st[node][ovehi, other_serv]
+                        nothing
+                    else
+                        st[node][v, serv] = min_st
+                    end
+                elseif in_PRE(node, sol.ins.PRE)
+                    nothing
+                else
+                    st[node][v, serv] = min_st
+                end
+
+
+                push!(calculated, node)
+            end
+            println(" ")
+        end
+    end
+    return st
 end
