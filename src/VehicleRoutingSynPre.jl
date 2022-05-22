@@ -1,6 +1,6 @@
 module VehicleRoutingSynPre
 
-using JLD2, Random, Glob, Printf
+using JLD2, Random, Glob, Printf, Combinatorics
 # Write your package code here.
 include("ParticleSwarm.jl")
 include("Solution.jl")
@@ -66,6 +66,8 @@ export Particle,
        insert_node_service,
        find_before_after_serv,
        starttime,
-       random_move
+       random_move,
+       test_forloop,
+       load_example1
        Ins
 end
