@@ -454,88 +454,88 @@ function forward_starttime(sol::Sol, st::Dict, start_lo::Int64, stop_lo::Int64, 
 end
 
 
-function find_starttime(route, slot, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN)
-    st = initial_starttime(num_node, num_vehi, num_serv)
+# function find_starttime(route, slot, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN)
+#     st = initial_starttime(num_node, num_vehi, num_serv)
 
-    # find max column
-    len_route = [length(route[i]) for i in 1:num_vehi]
-    maxcolumn = maximum(len_route)
+#     # find max column
+#     len_route = [length(route[i]) for i in 1:num_vehi]
+#     maxcolumn = maximum(len_route)
 
-    calculated = Int64[]
+#     calculated = Int64[]
 
-    for column in 1:maxcolumn
-        for v in 1:num_vehi
-            if column <= len_route[v]
+#     for column in 1:maxcolumn
+#         for v in 1:num_vehi
+#             if column <= len_route[v]
 
-                # find departure and arrival node
-                if column == 1
-                    bnode = 1
-                    bserv = 1
-                else
-                    bnode = route[v][column-1][1]
-                    bserv = route[v][column-1][2]
-                end
-                node = route[v][column][1]
-                serv = route[v][column][2]
+#                 # find departure and arrival node
+#                 if column == 1
+#                     bnode = 1
+#                     bserv = 1
+#                 else
+#                     bnode = route[v][column-1][1]
+#                     bserv = route[v][column-1][2]
+#                 end
+#                 node = route[v][column][1]
+#                 serv = route[v][column][2]
                 
-                min_st = st[bnode][v, bserv] + d[bnode, node] + p[v, bserv, bnode]
-                if min_st < e[node]
-                    min_st = e[node]
-                end
+#                 min_st = st[bnode][v, bserv] + d[bnode, node] + p[v, bserv, bnode]
+#                 if min_st < e[node]
+#                     min_st = e[node]
+#                 end
 
 
-                println("calculate column $column vehicle $v node $(route[v][column])")
-                println("e = $(e[node]), d = $(d[bnode, node]) arrive time = $(st[bnode][v, bserv] + d[bnode, node] + p[v, bserv, bnode])")
+#                 println("calculate column $column vehicle $v node $(route[v][column])")
+#                 println("e = $(e[node]), d = $(d[bnode, node]) arrive time = $(st[bnode][v, bserv] + d[bnode, node] + p[v, bserv, bnode])")
 
-                if in_SYN(node, SYN) && in(node, calculated)
-                    # find location of syn node
-                    other_serv = find_other_serv_in_syn_pre(node, serv, SYN)
-                    ovehi, oloca = find_location_by_node_service(sol.route, node, other_serv)
-                    if min_st < st[node][ovehi, other_serv]
-                        # println("update min_st")
-                        st[node][v, serv] = st[node][ovehi, other_serv]
-                    elseif min_st > st[node][ovehi, other_serv]
-                        st[node][v, serv] = min_st
-                        st[node][ovehi, other_serv] = min_st
-                        st = forward_starttime(sol, st, oloca, column, ovehi)
-                    else
-                        st[node][v, serv] = min_st
-                    end
-                elseif in_PRE(node, PRE) && in(node, calculated)
+#                 if in_SYN(node, SYN) && in(node, calculated)
+#                     # find location of syn node
+#                     other_serv = find_other_serv_in_syn_pre(node, serv, SYN)
+#                     ovehi, oloca = find_location_by_node_service(route, node, other_serv)
+#                     if min_st < st[node][ovehi, other_serv]
+#                         # println("update min_st")
+#                         st[node][v, serv] = st[node][ovehi, other_serv]
+#                     elseif min_st > st[node][ovehi, other_serv]
+#                         st[node][v, serv] = min_st
+#                         st[node][ovehi, other_serv] = min_st
+#                         st = forward_starttime(sol, st, oloca, column, ovehi)
+#                     else
+#                         st[node][v, serv] = min_st
+#                     end
+#                 elseif in_PRE(node, PRE) && in(node, calculated)
 
-                    # find location of pre node
-                    other_serv, before_serv = find_other_serv_in_syn_pre(node, serv, PRE, is_pre=true)
-                    ovehi, oloca = find_location_by_node_service(sol.route, node, other_serv)
+#                     # find location of pre node
+#                     other_serv, before_serv = find_other_serv_in_syn_pre(node, serv, PRE, is_pre=true)
+#                     ovehi, oloca = find_location_by_node_service(route, node, other_serv)
 
-                    if before_serv # other service has to process first
-                        if min_st - st[node][ovehi, other_serv] < mind[node]
-                            st[node][v, serv] = st[node][ovehi, other_serv] + mind[node]
-                        elseif min_st - st[node][ovehi, other_serv] > maxd[node]
-                            st[node][v, serv] = min_st
-                            st[node][ovehi, other_serv] = min_st - maxd[node]
-                            st = forward_starttime(sol, st, oloca, column, ovehi)
-                        end
-                    else
-                        if st[node][ovehi, other_serv] - min_st < mind[node]
-                            st[node][v, serv] = min_st
-                            st[node][ovehi, other_serv] = min_st + mind[node]
-                            st = forward_starttime(sol, st, oloca, column, ovehi)
-                        elseif st[node][ovehi, other_serv] - min_st > maxd[node]
-                            st[node][v, serv] = st[node][ovehi, other_serv] - maxd[node]
-                        end
-                    end
-                else
-                    st[node][v, serv] = min_st
-                end
+#                     if before_serv # other service has to process first
+#                         if min_st - st[node][ovehi, other_serv] < mind[node]
+#                             st[node][v, serv] = st[node][ovehi, other_serv] + mind[node]
+#                         elseif min_st - st[node][ovehi, other_serv] > maxd[node]
+#                             st[node][v, serv] = min_st
+#                             st[node][ovehi, other_serv] = min_st - maxd[node]
+#                             st = forward_starttime(sol, st, oloca, column, ovehi)
+#                         end
+#                     else
+#                         if st[node][ovehi, other_serv] - min_st < mind[node]
+#                             st[node][v, serv] = min_st
+#                             st[node][ovehi, other_serv] = min_st + mind[node]
+#                             st = forward_starttime(sol, st, oloca, column, ovehi)
+#                         elseif st[node][ovehi, other_serv] - min_st > maxd[node]
+#                             st[node][v, serv] = st[node][ovehi, other_serv] - maxd[node]
+#                         end
+#                     end
+#                 else
+#                     st[node][v, serv] = min_st
+#                 end
 
 
-                push!(calculated, node)
-            end
-            # println(" ")
-        end
-    end
-    return st
-end
+#                 push!(calculated, node)
+#             end
+#             # println(" ")
+#         end
+#     end
+#     return st
+# end
 
 
 function starttime(sol::Sol, route::Array)

@@ -251,21 +251,21 @@ function find_starttime2(par::Particle, node::Int64, vehi::Int64)
 end
 
 
-# function find_starttime(route, slot, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN)
-#     st = initial_starttime(num_node, num_vehi, num_serv)
-#     # for i in 1:num_vehi
-#     #     st = find_node_starttime(route, slot, 1, 1, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st, vehicle=i)
-#     # end
-#     # return st
+function find_starttime(route, slot, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN)
+    st = initial_starttime(num_node, num_vehi, num_serv)
+    # for i in 1:num_vehi
+    #     st = find_node_starttime(route, slot, 1, 1, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st, vehicle=i)
+    # end
+    # return st
 
-#     for (i, vehi) in enumerate(route)
-#         for ns in vehi
-#             # println("finding starttime of $ns")
-#             st = find_node_starttime(route, slot, ns[1], ns[2], num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st, vehicle=i)
-#         end
-#     end
-#     return st
-# end
+    for (i, vehi) in enumerate(route)
+        for ns in vehi
+            # println("finding starttime of $ns")
+            st = find_node_starttime(route, slot, ns[1], ns[2], num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st, vehicle=i)
+        end
+    end
+    return st
+end
 
 
 function find_starttime(par::Particle)
@@ -924,7 +924,7 @@ end
 
 
 function swap(route::Array, slot::Dict{Int64, Vector{Int64}}, num_node::Int64, num_vehi::Int64, num_serv::Int64, mind::Vector, maxd::Array, a::Matrix, r::Matrix, serv_a::Tuple, serv_r::Dict, d::Matrix, p::Array, e::Array, l::Array, PRE::Array, SYN::Array, list)
-    input_route = deepcopy(sol.route)
+    input_route = deepcopy(route)
     for ls in list
         num_v1, num_loca1 = find_location_by_node_service(input_route, ls[1][1], ls[1][2])
         num_v2, num_loca2 = find_location_by_node_service(input_route, ls[2][1], ls[2][2])
