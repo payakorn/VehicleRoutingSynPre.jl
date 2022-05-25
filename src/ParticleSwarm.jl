@@ -832,6 +832,15 @@ function objective_value(route, starttime, p, l, d; lambda=[1/3, 1/3, 1/3])
 end
 
 
+function objective_value(particles::Vector)
+    obj = Float64[]
+    for par in particles
+        push!(obj, objective_value(par))
+    end
+    return obj
+end
+
+
 function objective_value(particle::Particle; lambda=[1/3, 1/3, 1/3])
     tardy, max_tardy = tardiness(particle)
     return lambda[1]*total_distance(particle) + lambda[2]*tardy + lambda[3]*max_tardy
@@ -930,12 +939,12 @@ end
 
 function in_same_route(input_route::Array)
     for (vehi, route) in enumerate(input_route)
-        @show all_node = [x[1] for x in route]
+        all_node = [x[1] for x in route]
         old_len = length(all_node)
-        @show unique!(all_node)
+        unique!(all_node)
         new_len = length(all_node)
         if old_len > new_len
-            println("Same vehicle")
+            # println("Same vehicle")
             return false
         end
     end
@@ -955,8 +964,8 @@ function swap(route::Array, slot::Dict{Int64, Vector{Int64}}, num_node::Int64, n
         num_v2, num_loca2 = find_location_by_node_service(input_route, ls[2][1], ls[2][2])
         test_route = deepcopy(input_route)
         test_route[num_v1][num_loca1], test_route[num_v2][num_loca2] = test_route[num_v2][num_loca2], test_route[num_v1][num_loca1]
-        if compatibility(test_route, slot, a, r, serv_a, serv_r, PRE, SYN) && in_same_route(test_route)
-            test_st = find_starttime(test_route, slot, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN)
+        if compatibility(test_route, slot, a, r, serv_a, serv_r, PRE, SYN) && in_same_route(test_route) && num_v1 != num_v2
+            test_st = try find_starttime(test_route, slot, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN) catch e; continue end
             st = find_starttime(route, slot, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN)
             if objective_value(test_route, test_st, p, l, d) < objective_value(route, st, p, l, d) && check_PRE(test_route, test_st, maxd, PRE) && check_SYN(test_route, SYN)
                 input_route = deepcopy(test_route)
@@ -1088,7 +1097,7 @@ function local_search(particle::Particle, best_par::Particle)
     list = List(particle.num_node, particle.num_vehi, particle.num_serv, particle.r, particle.SYN, particle.PRE)
     # first_obj = objective_value(test_par)
     test_par = swap(test_par, list=list)
-    test_par = move(test_par, list=list)
+    # test_par = move(test_par, list=list)
     # test_par = path_relinking(test_par, best_par)
     return test_par
 end
@@ -1111,10 +1120,11 @@ end
 
 function PSO(Name::String; num_par=15, max_iter=150)
     particles = []
-    obj = []
+    # obj = []
 
     particles = [generate_particles(Name) for _ in 1:num_par]
-    obj = objective_value.(particles)
+    # obj = objective_value.(particles)
+    obj = objective_value(particles)
 
     # find best particle
     best_index = argmin(obj)
@@ -1141,7 +1151,7 @@ function PSO(Name::String; num_par=15, max_iter=150)
         # particles = [local_search(particles[i]) for i in 1:num_par]
 
         # find best particle
-        obj = objective_value.(particles)
+        obj = objective_value(particles)
         best_index = argmin(obj)
 
         if obj[best_index] < new_best

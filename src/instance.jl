@@ -197,19 +197,27 @@ function move(sol::Sol, list)
     for ls in list
         num_v1, num_loca1 = find_location_by_node_service(input_route, ls[1][1], ls[1][2])
         num_v2, num_loca2 = find_location_by_node_service(input_route, ls[2][1], ls[2][2])
+
+        if num_v1 == num_v2
+            continue
+        end
+
         test_route = deepcopy(input_route)
 
         #  move
         moved_item = splice!(test_route[num_v1], num_loca1)
         insert!(test_route[num_v2], num_loca2, moved_item)
 
-        # find starttime
-        test_st = try starttime(sol, test_route) catch StackOverflowError; continue end
-        st = starttime(sol, input_route)
+        
+        if compatibility(test_route, sol.slot, sol.ins.a, sol.ins.r, sol.ins.serv_a, sol.ins.serv_r, sol.ins.PRE, sol.ins.SYN) && in_same_route(test_route)
+            # find starttime
+            test_st = starttime(sol, test_route)
+            st = starttime(sol, input_route)
 
-        if compatibility(test_route, sol.slot, sol.ins.a, sol.ins.r, sol.ins.serv_a, sol.ins.serv_r, sol.ins.PRE, sol.ins.SYN) && objective_value(test_route, test_st, sol.ins.p, sol.ins.l, sol.ins.d) < objective_value(input_route, st, sol.ins.p, sol.ins.l, sol.ins.d) && check_PRE(test_route, test_st, sol.ins.maxd, sol.ins.PRE) && check_SYN(test_route, sol.ins.SYN)
-            # println("cost reduce in Move")
-            input_route = deepcopy(test_route)
+            if objective_value(test_route, test_st, sol.ins.p, sol.ins.l, sol.ins.d) < objective_value(input_route, st, sol.ins.p, sol.ins.l, sol.ins.d) && check_PRE(test_route, test_st, sol.ins.maxd, sol.ins.PRE) && check_SYN(test_route, sol.ins.SYN)
+                # println("cost reduce in Move")
+                input_route = deepcopy(test_route)
+            end
         end
     end
     sol.route = input_route
@@ -441,11 +449,15 @@ function forward_starttime(sol::Sol, st::Dict, start_lo::Int64, stop_lo::Int64, 
                 if st[node][vehi, serv] - st[node][ovehi, other_serv] > sol.ins.maxd[node]
                     st[node][ovehi, other_serv] = st[node][vehi, serv] - sol.ins.maxd[node]
                     st = forward_starttime(sol, st, oloca, lo, ovehi)
+                else
+                    return st
                 end
             else
                 if st[node][ovehi, other_serv] - st[node][vehi, serv] < sol.ins.mind[node]
                     st[node][ovehi, other_serv] = sol.ins.mind[node] + st[node][vehi, serv]
                     st = forward_starttime(sol, st, oloca, lo, ovehi)
+                else
+                    return st
                 end
             end
         else
@@ -635,7 +647,7 @@ function PSO(ins::Ins; num_par=15, max_iter=150)
     obj = []
 
     particles = [generate_particles(ins) for _ in 1:num_par]
-    obj = objective_value.(particles)
+    obj = objective_value(particles)
 
     # find best particle
     best_index = argmin(obj)
@@ -662,7 +674,7 @@ function PSO(ins::Ins; num_par=15, max_iter=150)
         # particles = [local_search(particles[i]) for i in 1:num_par]
 
         # find best particle
-        obj = objective_value.(particles)
+        obj = objective_value(particles)
         best_index = argmin(obj)
 
         if obj[best_index] < new_best
