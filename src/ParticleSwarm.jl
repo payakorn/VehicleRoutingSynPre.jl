@@ -153,7 +153,7 @@ function find_node_starttime(input_route::Array, slot::Dict{Int64, Vector{Int64}
         end
         # update starttime of syn node
         # if st[node][ovehi, other_serv] != st[node][vehi, service]
-        #     st = find_node_starttime(input_route, slot, node, other_serv, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st)
+        #     st = find_node_starttime (input_route, slot, node, other_serv, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st)
         # end
 
         if st[node][ovehi, other_serv] != 0.0
@@ -164,7 +164,7 @@ function find_node_starttime(input_route::Array, slot::Dict{Int64, Vector{Int64}
                 next_serv = input_route[ovehi][oloca+1][2]
                 next_st = st[next_node][ovehi, next_serv]
                 if next_st > e[next_node] || st[node][ovehi, other_serv] + p[ovehi, other_serv, node] + d[node, next_node] > e[next_node]
-                    println("update starttime of syn $node $service to $node $other_serv")
+                    # println("update starttime of syn $node $service to $node $other_serv")
                     st = update_starttime(input_route, slot, node, other_serv, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st)
                 end
             else
@@ -237,13 +237,13 @@ function find_node_starttime(par::Particle, node::Int64, service::Int64, st::Dic
 end
 
 
-function find_starttime2(input_route::Array, slot::Dict{Int64, Vector{Int64}}, node::Int64, vehi::Int64, num_node::Int64, num_vehi::Int64, num_serv::Int64, mind::Vector, maxd::Array, a::Matrix, r::Matrix, d::Matrix, p::Array, e::Array, l::Array, PRE::Array, SYN::Array)
-    notcalculate = Vector{Int64}[]
-    route = input_route[vehi]
-    # for inode in route[node:end]
-    #     @show inode
-    # end
-end
+# function find_starttime2(input_route::Array, slot::Dict{Int64, Vector{Int64}}, node::Int64, vehi::Int64, num_node::Int64, num_vehi::Int64, num_serv::Int64, mind::Vector, maxd::Array, a::Matrix, r::Matrix, d::Matrix, p::Array, e::Array, l::Array, PRE::Array, SYN::Array)
+#     notcalculate = Vector{Int64}[]
+#     route = input_route[vehi]
+#     # for inode in route[node:end]
+#     #     @show inode
+#     # end
+# end
 
 
 function find_starttime2(par::Particle, node::Int64, vehi::Int64)
@@ -251,7 +251,7 @@ function find_starttime2(par::Particle, node::Int64, vehi::Int64)
 end
 
 
-function find_starttime(route, slot, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN)
+function find_starttime(route::Array, slot::Dict, num_node::Int64, num_vehi::Int64, num_serv::Int64, mind::Vector, maxd::Vector, a::Matrix, r::Matrix, d::Matrix, p::Array, e::Vector, l::Vector, PRE::Vector, SYN::Vector)
     st = initial_starttime(num_node, num_vehi, num_serv)
     # for i in 1:num_vehi
     #     st = find_node_starttime(route, slot, 1, 1, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN, st, vehicle=i)
@@ -914,12 +914,37 @@ function List(num_node::Int64, num_vehi::Int64, num_serv::Int64, r::Matrix, SYN:
 end
 
 
+function List(par::Particle)
+    return List(par.num_node, par.num_vehi, par.num_serv, par.r, par.SYN, par.PRE)
+end
+
+
 function test_forloop(list)
     for (i, j) in enumerate(list)
         if i == 500
             println("reach 500 iterations")
         end
     end
+end
+
+
+function in_same_route(input_route::Array)
+    for (vehi, route) in enumerate(input_route)
+        @show all_node = [x[1] for x in route]
+        old_len = length(all_node)
+        @show unique!(all_node)
+        new_len = length(all_node)
+        if old_len > new_len
+            println("Same vehicle")
+            return false
+        end
+    end
+    return true
+end
+
+
+function in_same_route(par::Particle)
+    return in_same_route(par.route)
 end
 
 
@@ -930,7 +955,7 @@ function swap(route::Array, slot::Dict{Int64, Vector{Int64}}, num_node::Int64, n
         num_v2, num_loca2 = find_location_by_node_service(input_route, ls[2][1], ls[2][2])
         test_route = deepcopy(input_route)
         test_route[num_v1][num_loca1], test_route[num_v2][num_loca2] = test_route[num_v2][num_loca2], test_route[num_v1][num_loca1]
-        if compatibility(test_route, slot, a, r, serv_a, serv_r, PRE, SYN) 
+        if compatibility(test_route, slot, a, r, serv_a, serv_r, PRE, SYN) && in_same_route(test_route)
             test_st = find_starttime(test_route, slot, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN)
             st = find_starttime(route, slot, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN)
             if objective_value(test_route, test_st, p, l, d) < objective_value(route, st, p, l, d) && check_PRE(test_route, test_st, maxd, PRE) && check_SYN(test_route, SYN)
@@ -1064,7 +1089,7 @@ function local_search(particle::Particle, best_par::Particle)
     # first_obj = objective_value(test_par)
     test_par = swap(test_par, list=list)
     test_par = move(test_par, list=list)
-    test_par = path_relinking(test_par, best_par)
+    # test_par = path_relinking(test_par, best_par)
     return test_par
 end
 

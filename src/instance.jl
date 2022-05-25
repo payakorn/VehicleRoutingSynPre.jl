@@ -175,11 +175,13 @@ function swap(sol::Sol, list)
         num_v2, num_loca2 = find_location_by_node_service(input_route, ls[2][1], ls[2][2])
         test_route = deepcopy(input_route)
         test_route[num_v1][num_loca1], test_route[num_v2][num_loca2] = test_route[num_v2][num_loca2], test_route[num_v1][num_loca1]
-        if compatibility(test_route, sol.slot, sol.ins.a, sol.ins.r, sol.ins.serv_a, sol.ins.serv_r, sol.ins.PRE, sol.ins.SYN) 
+        if compatibility(test_route, sol.slot, sol.ins.a, sol.ins.r, sol.ins.serv_a, sol.ins.serv_r, sol.ins.PRE, sol.ins.SYN) && in_same_route(test_route)
             # test_st = starttime(test_route, slot, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN)
             # st = starttime(route, slot, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN)
-            test_st = try starttime(sol, test_route) catch StackOverflowError; continue end
-            st = try starttime(sol, input_route) catch StackOverflowError; continue end 
+            # test_st = try starttime(sol, test_route) catch StackOverflowError; continue end
+            # st = try starttime(sol, input_route) catch StackOverflowError; continue end 
+            test_st = starttime(sol, test_route)
+            st = starttime(sol, input_route)
             if objective_value(test_route, test_st, sol.ins.p, sol.ins.l, sol.ins.d) < objective_value(input_route, st, sol.ins.p, sol.ins.l, sol.ins.d) && check_PRE(test_route, test_st, sol.ins.maxd, sol.ins.PRE) && check_SYN(test_route, sol.ins.SYN)
                 input_route = deepcopy(test_route)
             end
@@ -686,4 +688,14 @@ function PSO(ins::Ins; num_par=15, max_iter=150)
     # save solution
     # save_particle(best_par, Name)
 
+end
+
+
+function load_example1_par()
+    par = generate_particles("ins10-1")
+    route, slot = example()
+    par.route = route
+    par.slot = slot
+    par.starttime = find_starttime(par)
+    return par
 end

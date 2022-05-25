@@ -68,6 +68,8 @@ export Particle,
        starttime,
        random_move,
        test_forloop,
-       load_example1
+       load_example1,
+       load_example1_par,
+       in_same_route
        Ins
 end
