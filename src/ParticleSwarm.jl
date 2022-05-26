@@ -965,7 +965,7 @@ function swap(route::Array, slot::Dict{Int64, Vector{Int64}}, num_node::Int64, n
         test_route = deepcopy(input_route)
         test_route[num_v1][num_loca1], test_route[num_v2][num_loca2] = test_route[num_v2][num_loca2], test_route[num_v1][num_loca1]
         if compatibility(test_route, slot, a, r, serv_a, serv_r, PRE, SYN) && in_same_route(test_route) && num_v1 != num_v2
-            test_st = try find_starttime(test_route, slot, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN) catch e; continue end
+            test_st = try find_starttime(test_route, slot, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN) catch StackOverflowError; continue end
             st = find_starttime(route, slot, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN)
             if objective_value(test_route, test_st, p, l, d) < objective_value(route, st, p, l, d) && check_PRE(test_route, test_st, maxd, PRE) && check_SYN(test_route, SYN)
                 input_route = deepcopy(test_route)
@@ -1006,12 +1006,16 @@ function move(route::Array, slot::Dict{Int64, Vector{Int64}}, num_node::Int64, n
         insert!(test_route[num_v2], num_loca2, moved_item)
 
         # find starttime
-        test_st = find_starttime(test_route, slot, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN)
-        st = find_starttime(route, slot, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN)
+        
+        if compatibility(test_route, slot, a, r, serv_a, serv_r, PRE, SYN) && check_SYN(test_route, SYN)
 
-        if compatibility(test_route, slot, a, r, serv_a, serv_r, PRE, SYN) && objective_value(test_route, test_st, p, l, d) < objective_value(route, st, p, l, d) && check_PRE(test_route, test_st, maxd, PRE) && check_SYN(test_route, SYN)
-            println("cost reduce in Move")
-            input_route = deepcopy(test_route)
+            test_st = try find_starttime(test_route, slot, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN) catch StackOverflowError; continue end
+            st = find_starttime(route, slot, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN)
+
+            if objective_value(test_route, test_st, p, l, d) < objective_value(route, st, p, l, d) && check_PRE(test_route, test_st, maxd, PRE)
+                # println("cost reduce in Move")
+                input_route = deepcopy(test_route)
+            end
         end
     end
     return input_route
@@ -1097,7 +1101,7 @@ function local_search(particle::Particle, best_par::Particle)
     list = List(particle.num_node, particle.num_vehi, particle.num_serv, particle.r, particle.SYN, particle.PRE)
     # first_obj = objective_value(test_par)
     test_par = swap(test_par, list=list)
-    # test_par = move(test_par, list=list)
+    test_par = move(test_par, list=list)
     # test_par = path_relinking(test_par, best_par)
     return test_par
 end
@@ -1124,7 +1128,7 @@ function PSO(Name::String; num_par=15, max_iter=150)
 
     particles = [generate_particles(Name) for _ in 1:num_par]
     # obj = objective_value.(particles)
-    obj = objective_value(particles)
+    obj = objective_value.(particles)
 
     # find best particle
     best_index = argmin(obj)
@@ -1151,7 +1155,7 @@ function PSO(Name::String; num_par=15, max_iter=150)
         # particles = [local_search(particles[i]) for i in 1:num_par]
 
         # find best particle
-        obj = objective_value(particles)
+        obj = objective_value.(particles)
         best_index = argmin(obj)
 
         if obj[best_index] < new_best
