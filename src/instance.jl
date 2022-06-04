@@ -231,7 +231,7 @@ function local_search(particle::Sol, best_par::Sol)
     # first_obj = objective_value(test_par)
     test_par = swap(test_par, list)
     test_par = move(test_par, list)
-    # test_par = path_relinking(test_par, best_par)
+    test_par = path_relinking(test_par, best_par)
     return test_par
 end
 
@@ -355,7 +355,32 @@ function random_move(sol::Sol)
 end
 
 
-function path_relinking(route::Array, best_route::Array, a)
+function path_relinking_insert(input_route::Vector, remain_node::Vector, a::Matrix{Int64})
+    for ns in remain_node
+        test_route = deepcopy(input_route)
+        choose_vehi = rand(findall(x->x==1, a[:, ns[2]]))
+        len_route = length(test_route[choose_vehi])
+        choose_posi = randcycle(len_route)
+
+        terminate = false
+        posi = 1
+        while !terminate && posi <= len_route
+            posi = choose_posi[posi]
+            insert!(test_route[choose_vehi], posi, ns)
+            posi += 1
+
+            # try calculate starttime
+            st = try starttime(test_route) catch e; continue end
+            inout_route = deepcopy(test_route)
+
+            terminate = true
+        end
+    end
+    return input_route
+end
+
+
+function path_relinking(route::Array, best_route::Array, a::Matrix)
     test_route = deepcopy(route)
 
     rand_vehi = rand(1:length(route))
@@ -368,12 +393,22 @@ function path_relinking(route::Array, best_route::Array, a)
     test_route[rand_vehi] = best_route[rand_vehi]
 
     # insert
+    test_route = path_relinking_insert(test_route, remain_node, a)
+
+    # check
+    insert_all = true
     for ns in remain_node
-        choose_vehi = rand(findall(x->x==1, a[:, ns[2]]))
-        choose_posi = length(test_route[choose_vehi])
-        insert!(test_route[choose_vehi], choose_posi, ns)
+        if !check_assigned_node(test_route, ns[1], ns[2], length(test_route))
+            insert_all = false
+            break
+        end
     end
-    return test_route
+    if insert_all
+        # println("can apply path relinking!!!")
+        return test_route
+    else
+        return route
+    end
 end
 
 
@@ -675,7 +710,7 @@ function PSO(ins::Ins; num_par=15, max_iter=150)
         # particles = [local_search(particles[i]) for i in 1:num_par]
 
         # find best particle
-        obj = objective_value(particles)
+        obj = objective_value.(particles)
         best_index = argmin(obj)
 
         if obj[best_index] < new_best
