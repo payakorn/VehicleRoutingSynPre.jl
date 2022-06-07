@@ -747,3 +747,101 @@ function load_example1_par()
     par.starttime = find_starttime(par)
     return par
 end
+
+
+function load_ins_text(num_node::Int64, num_ins::Int64)
+    location = joinpath(@__DIR__, "..", "data", "raw_HHCRSP", "HHCRSP")
+    s = open(joinpath(location, "InstanzCPLEX_HCSRP_$(num_node)_$(num_ins).txt"))
+    lines = readlines(s)
+    close(s)
+    # for (i, line) in enumerate(lines)
+    #     println("$i: $line")
+    # end
+
+    variables = ["nbNodes",
+                "nbVehi",
+                "nbServi",
+                "r",
+                "DS",
+                "a",
+                "x",
+                "y",
+                "d",
+                "p",
+                "mind",
+                "maxd",
+                "e",
+                "l"
+    ]
+
+    line_var = Int64[]
+    for var in variables
+        if !isempty(findall(occursin.(var, lines)))
+            println("line: $(findfirst(occursin.("$var=", lines))) has $(var)=")
+            push!(line_var, findfirst(occursin.("$var=", lines)))
+        end
+    end
+
+    # parse number of nodes, vehicles, services
+    num_node = parse(Int64, split(replace(lines[1], ";" => ""), "=")[2]) - 1
+    num_vehi = parse(Int64, split(replace(lines[2], ";" => ""), "=")[2])
+    num_serv = parse(Int64, split(replace(lines[3], ";" => ""), "=")[2])
+
+
+
+    # r
+    r = []
+    rr = lines[(line_var[4] + 1):(line_var[5]-2)]
+    rr = replace.(rr, "[" => "")
+    rr = replace.(rr, "]" => "")
+    for (i, j) in enumerate(rr)
+        j = String.(split(j, ","))
+        push!(r, parse.(Int64, j))
+    end
+    r = [r[i][j] for i in 1:num_node, j in 1:num_serv]
+    
+    # a
+    a = []
+    aa = lines[(line_var[6]):(line_var[7]-2)]
+    aa = replace.(aa, "a=" => "")
+    aa = replace.(aa, "[" => "")
+    aa = replace.(aa, "]" => "")
+    for (i, j) in enumerate(aa)
+        j = String.(split(j, ","))
+        push!(a, parse.(Int64, j))
+    end
+    a = [a[i][j] for i in 1:num_vehi, j in 1:num_serv]
+
+
+    # d
+    d = []
+    dd = lines[(line_var[9]+1):(line_var[10]-2)]
+    dd = replace.(dd, "a=" => "")
+    dd = replace.(dd, "[" => "")
+    dd = replace.(dd, "]" => "")
+    for (i, j) in enumerate(dd)
+        j = String.(split(j, ","))
+        push!(d, parse.(Float64, j))
+    end
+    d = [d[i][j] for i in 1:num_node, j in 1:num_node]
+
+    mind = parse.(Int64, String.(split(replace(replace(replace(replace(lines[line_var[11]], ";" => ""), "[" => ""), "]" => ""), "$(variables[11])=" => ""), ",")))
+    maxd = parse.(Int64, String.(split(replace(replace(replace(replace(lines[line_var[12]], ";" => ""), "[" => ""), "]" => ""), "$(variables[12])=" => ""), ",")))
+    e = parse.(Int64, String.(split(replace(replace(replace(replace(lines[line_var[13]], ";" => ""), "[" => ""), "]" => ""), "$(variables[13])=" => ""), ",")))
+    l = parse.(Int64, String.(split(replace(replace(replace(replace(lines[line_var[14]], ";" => ""), "[" => ""), "]" => ""), "$(variables[14])=" => ""), ",")))
+    
+    x = parse.(Int64, String.(split(replace(replace(replace(replace(lines[line_var[7]], ";" => ""), "{" => ""), "}" => ""), "//$(variables[7])=" => ""), ",")))
+    y = parse.(Int64, String.(split(replace(replace(replace(replace(lines[line_var[8]], ";" => ""), "{" => ""), "}" => ""), "//$(variables[8])=" => ""), ",")))
+    DS = parse.(Int64, String.(split(replace(replace(replace(replace(lines[line_var[5]], ";" => ""), "{" => ""), "}" => ""), "$(variables[5])=" => ""), ",")))
+
+    # p
+    pp = parse.(Float64, String.(split(replace(replace(replace(lines[line_var[10]+num_vehi+2], ";" => ""), "[" => ""), "]" => ""), ",")))
+    service_time = pp[1]
+    p = zeros(Float64, num_vehi, num_serv)
+    for i in 2:num_node
+        p = cat(p, service_time*ones(Float64, num_vehi, num_serv), dims=3)
+    end
+
+
+    return num_node, num_vehi, num_serv, r, a, d, mind, maxd, e, l, p
+end

@@ -70,6 +70,7 @@ export Particle,
        test_forloop,
        load_example1,
        load_example1_par,
-       in_same_route
+       in_same_route,
+       load_ins_text,
        Ins
 end
