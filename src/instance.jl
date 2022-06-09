@@ -654,6 +654,8 @@ function starttime(sol::Sol)
                             st[node][v, serv] = min_st
                             st[node][ovehi, other_serv] = min_st - sol.ins.maxd[node]
                             st = forward_starttime(sol, st, oloca, column, ovehi)
+                        else
+                            st[node][v, serv] = min_st
                         end
                     else
                         if st[node][ovehi, other_serv] - min_st < sol.ins.mind[node]
@@ -662,7 +664,9 @@ function starttime(sol::Sol)
                             st = forward_starttime(sol, st, oloca, column, ovehi)
                         elseif st[node][ovehi, other_serv] - min_st > sol.ins.maxd[node]
                             st[node][v, serv] = st[node][ovehi, other_serv] - sol.ins.maxd[node]
-                        end
+                        else
+                            st[node][v, serv] = min_st
+                        end 
                     end
                 else
                     st[node][v, serv] = min_st
@@ -734,7 +738,7 @@ function PSO(ins::Ins; num_par=15, max_iter=150)
     end
 
     # save solution
-    # save_particle(best_par, Name)
+    save_particle(best_par)
 
 end
 
