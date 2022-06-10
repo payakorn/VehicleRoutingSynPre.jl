@@ -490,7 +490,7 @@ end
 function find_SYN(serv_request::Dict, mind::Vector, maxd::Vector)
     SYN = Tuple[]
     for i in 2:length(mind)-1
-        if mind[i] == 0 && maxd[i] == 0
+        if mind[i] == 0 && maxd[i] == 0 && length(serv_request[i]) == 2
             push!(SYN, (i, serv_request[i]...))
         end
     end

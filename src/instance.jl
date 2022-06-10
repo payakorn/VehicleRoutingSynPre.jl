@@ -295,7 +295,7 @@ function insert_node_service(test_sol::Sol)
                 insert!(sol.route[compat_vehicle], length(sol.route[compat_vehicle]), [node, com_serv[1]])
                 # println("node: $node, has 1 service")
             else
-                # println("node: $node, has 2 services")
+                println("node: $node, has 2 services")
                 serv_all = [i for i in find_before_after_serv(sol.ins, node)]
 
                 com_vehi1 = findall(x->x==1, sol.ins.a[:, serv_all[1]])
@@ -310,6 +310,10 @@ function insert_node_service(test_sol::Sol)
                 elseif isempty(setdiff(com_vehi2, com_vehi1))
                     com1 = rand(com_vehi1)
                     com2 = rand(setdiff(com_vehi1, com1))
+                    com_vehi = [com1, com2]
+                elseif !isempty(setdiff(com_vehi1, com_vehi2)) && !isempty(setdiff(com_vehi2, com_vehi1))
+                    com1 = rand(setdiff(com_vehi1, com_vehi2))
+                    com2 = rand(setdiff(com_vehi2, com_vehi1))
                     com_vehi = [com1, com2]
                 end
 
