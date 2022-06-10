@@ -740,6 +740,28 @@ function PSO(ins::Ins; num_par=15, max_iter=150)
     # save solution
     save_particle(best_par)
 
+    # sent_email
+end
+
+
+function sent_email(subject::String, massage::String)
+    username = "payakorn.sak@gmail.com"
+    opt = SendOptions(
+    isSSL = true,
+    username = "payakorn.sak@gmail.com",
+    passwd = "daxdEw-kyrgap-2bejge")
+    #Provide the message body as RFC5322 within an IO
+    body = IOBuffer(
+    # "Date: Fri, 18 Oct 2013 21:44:29 +0100\r\n" *
+    "From: You <$username>\r\n" *
+    "To: payakornn@gmail.com\r\n" *
+    "Subject: $subject\r\n" *
+    "\r\n" *
+    "$massage\r\n")
+    url = "smtps://smtp.gmail.com:465"
+    rcpt = ["<payakornn@gmail.com>"]
+    from = "<$username>"
+    resp = send(url, rcpt, from, body, opt)
 end
 
 
@@ -802,7 +824,7 @@ function load_ins_text(num_node::Int64, num_ins::Int64)
         j = String.(split(j, ","))
         push!(r, parse.(Int64, j))
     end
-    r = [r[i][j] for i in 1:num_node, j in 1:num_serv]
+    r = [r[i][j] for i in 1:num_node+1, j in 1:num_serv]
     
     # a
     a = []
@@ -847,5 +869,18 @@ function load_ins_text(num_node::Int64, num_ins::Int64)
     end
 
 
-    return num_node, num_vehi, num_serv, r, a, d, mind, maxd, e, l, p
+    # find Synchronization and Precedence constraints
+    serv_r = find_service_request(r)
+    serv_a = find_compat_vehicle_node(a, r)
+    SYN = find_SYN(serv_r, mind, maxd)
+    PRE = find_PRE(serv_r, mind, maxd)
+    return Ins("ins$(num_node-1)-$num_ins", num_node, num_vehi, num_serv, serv_a, serv_r, mind, maxd, a, r, d, p, e, l, PRE, SYN)
+end
+
+
+function save_particle(particle::Sol; initial=false)
+    instance_name = particle.ins.name
+    location = "$(location_simulation(instance_name, initial=initial))"
+    num = length(glob("$instance_name*.jld2", location))
+    save_object("$(location_simulation(instance_name, initial=initial))/$instance_name-$(num+1).jld2", particle)
 end

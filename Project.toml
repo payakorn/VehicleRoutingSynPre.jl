@@ -11,6 +11,7 @@ Latexify = "23fbe1c1-3f47-55db-b15f-69d7ec21a316"
 Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
+SMTPClient = "c35d69d1-b747-5018-a192-25bc5e63c83d"
 Weave = "44d3d7a6-8a23-5bf8-98c5-b353f8df5ec9"
 
 [compat]

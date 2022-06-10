@@ -57,11 +57,3 @@ function find_starttime(sol::IndexSolution, route::Array)
     end
     return st
 end
-
-
-function save_particle(particle::Sol; initial=false)
-    instance_name = particle.ins.name
-    location = "$(location_simulation(instance_name, initial=initial))"
-    num = length(glob("$instance_name*.jld2", location))
-    save_object("$(location_simulation(instance_name, initial=initial))/$instance_name-$(num+1).jld2", particle)
-end
