@@ -73,5 +73,6 @@ export Particle,
        in_same_route,
        load_ins_text,
        sent_email,
+       dist,
        Ins
 end
