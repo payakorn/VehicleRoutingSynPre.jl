@@ -782,106 +782,219 @@ function load_example1_par()
 end
 
 
-function load_ins_text(num_node::Int64, num_ins::Int64)
+function dist(x1::Int64, x2::Int64, y1::Int64, y2::Int64)
+    x1 = float(x1)
+    x2 = float(x2)
+    y1 = float(y1)
+    y2 = float(y2)
+    dist(x1, x2, y1, y2)
+end
+
+
+function dist(x1::Float64, x2::Float64, y1::Float64, y2::Float64)
+    sqrt((x1-x2)^2 + (y1-y2)^2)
+end
+
+
+function dist(x::Vector, y::Vector)
+    [dist(x[i], x[j], y[i], y[j]) for i in 1:length(x), j in 1:length(y)]
+end
+
+
+function load_ins_text100(num_node::Int64, num_ins::Int64)
+
     location = joinpath(@__DIR__, "..", "data", "raw_HHCRSP", "HHCRSP")
-    s = open(joinpath(location, "InstanzCPLEX_HCSRP_$(num_node)_$(num_ins).txt"))
+    s = open(joinpath(location, "InstanzVNS_HCSRP_$(num_node)_$(num_ins).txt"))
     lines = readlines(s)
     close(s)
-    # for (i, line) in enumerate(lines)
-    #     println("$i: $line")
-    # end
 
-    variables = ["nbNodes",
+    variables = ["nbServi",
                 "nbVehi",
-                "nbServi",
-                "r",
-                "DS",
-                "a",
-                "x",
-                "y",
-                "d",
-                "p",
-                "mind",
-                "maxd",
+                "nbCust",
+                "nbSynch",
                 "e",
-                "l"
-    ]
-
+                "l",
+                "cx",
+                "cy",
+                "s",
+                "delta",
+                "p",
+                "att"]
+    
     line_var = Int64[]
-    for var in variables
+    for (i, var) in enumerate(variables)
         if !isempty(findall(occursin.(var, lines)))
-            println("line: $(findfirst(occursin.("$var=", lines))) has $(var)=")
-            push!(line_var, findfirst(occursin.("$var=", lines)))
+            println("line: $(findfirst(occursin.("$var", lines[i:end]))+i-1) has $(var)")
+            push!(line_var, findfirst(occursin.("$var", lines[i:end]))+i-1)
         end
     end
 
     # parse number of nodes, vehicles, services
-    num_node = parse(Int64, split(replace(lines[1], ";" => ""), "=")[2]) - 1
+    num_serv = parse(Int64, split(replace(lines[1], ";" => ""), "=")[2])
     num_vehi = parse(Int64, split(replace(lines[2], ";" => ""), "=")[2])
-    num_serv = parse(Int64, split(replace(lines[3], ";" => ""), "=")[2])
+    num_cust = parse(Int64, split(replace(lines[3], ";" => ""), "=")[2])
+    num_sync = parse(Int64, split(replace(lines[4], ";" => ""), "=")[2])
+    num_node = num_cust + num_sync
 
-
+    e =     parse.(Int64, split(lines[line_var[5]+1:line_var[6]-1][1]))
+    l =     parse.(Int64, split(lines[line_var[6]+1:line_var[7]-1][1]))
+    cx =    parse.(Int64, split(lines[line_var[7]+1:line_var[8]-1][1]))
+    cy =    parse.(Int64, split(lines[line_var[8]+1:line_var[9]-1][1]))
 
     # r
     r = []
-    rr = lines[(line_var[4] + 1):(line_var[5]-2)]
-    rr = replace.(rr, "[" => "")
-    rr = replace.(rr, "]" => "")
+    rr = lines[(line_var[9] + 1):(line_var[10]-1)]
     for (i, j) in enumerate(rr)
-        j = String.(split(j, ","))
+        j = String.(split(j))
         push!(r, parse.(Int64, j))
     end
     r = [r[i][j] for i in 1:num_node+1, j in 1:num_serv]
-    
+
+
+    # delta
+    delta = []
+    ddelta = lines[(line_var[10] + 1):(line_var[11]-1)]
+    for (i, j) in enumerate(ddelta)
+        j = String.(split(j))
+        push!(delta, parse.(Int64, j))
+    end
+    delta = [delta[i][j] for i in 1:num_node+1, j in 1:2]
+    mind = delta[:, 1]
+    maxd = delta[:, 2]
+
+    # p_text = lines[line_var[11]+1:line_var[12]-1]
+    p_text = parse.(Int64, split(lines[line_var[11] + num_vehi + 1]))[1]
+    p = zeros(Float64, num_vehi, num_serv)
+    for i in 2:num_node
+        p = cat(p, p_text*ones(Float64, num_vehi, num_serv), dims=3)
+    end
+
     # a
     a = []
-    aa = lines[(line_var[6]):(line_var[7]-2)]
-    aa = replace.(aa, "a=" => "")
-    aa = replace.(aa, "[" => "")
-    aa = replace.(aa, "]" => "")
-    for (i, j) in enumerate(aa)
-        j = String.(split(j, ","))
+    att =   lines[line_var[12]+1:end]
+    for (i, j) in enumerate(att)
+        j = String.(split(j))
         push!(a, parse.(Int64, j))
     end
     a = [a[i][j] for i in 1:num_vehi, j in 1:num_serv]
 
-
-    # d
-    d = []
-    dd = lines[(line_var[9]+1):(line_var[10]-2)]
-    dd = replace.(dd, "a=" => "")
-    dd = replace.(dd, "[" => "")
-    dd = replace.(dd, "]" => "")
-    for (i, j) in enumerate(dd)
-        j = String.(split(j, ","))
-        push!(d, parse.(Float64, j))
-    end
-    d = [d[i][j] for i in 1:num_node, j in 1:num_node]
-
-    mind = parse.(Int64, String.(split(replace(replace(replace(replace(lines[line_var[11]], ";" => ""), "[" => ""), "]" => ""), "$(variables[11])=" => ""), ",")))
-    maxd = parse.(Int64, String.(split(replace(replace(replace(replace(lines[line_var[12]], ";" => ""), "[" => ""), "]" => ""), "$(variables[12])=" => ""), ",")))
-    e = parse.(Int64, String.(split(replace(replace(replace(replace(lines[line_var[13]], ";" => ""), "[" => ""), "]" => ""), "$(variables[13])=" => ""), ",")))
-    l = parse.(Int64, String.(split(replace(replace(replace(replace(lines[line_var[14]], ";" => ""), "[" => ""), "]" => ""), "$(variables[14])=" => ""), ",")))
-    
-    x = parse.(Int64, String.(split(replace(replace(replace(replace(lines[line_var[7]], ";" => ""), "{" => ""), "}" => ""), "//$(variables[7])=" => ""), ",")))
-    y = parse.(Int64, String.(split(replace(replace(replace(replace(lines[line_var[8]], ";" => ""), "{" => ""), "}" => ""), "//$(variables[8])=" => ""), ",")))
-    DS = parse.(Int64, String.(split(replace(replace(replace(replace(lines[line_var[5]], ";" => ""), "{" => ""), "}" => ""), "$(variables[5])=" => ""), ",")))
-
-    # p
-    pp = parse.(Float64, String.(split(replace(replace(replace(lines[line_var[10]+num_vehi+2], ";" => ""), "[" => ""), "]" => ""), ",")))
-    service_time = pp[1]
-    p = zeros(Float64, num_vehi, num_serv)
-    for i in 2:num_node
-        p = cat(p, service_time*ones(Float64, num_vehi, num_serv), dims=3)
-    end
-
+    d = dist(cx, cy)
 
     # find Synchronization and Precedence constraints
     serv_r = find_service_request(r)
     serv_a = find_compat_vehicle_node(a, r)
     SYN = find_SYN(serv_r, mind, maxd)
     PRE = find_PRE(serv_r, mind, maxd)
-    return Ins("ins$(num_node-1)-$num_ins", num_node, num_vehi, num_serv, serv_a, serv_r, mind, maxd, a, r, d, p, e, l, PRE, SYN)
+    return Ins("ins$(num_node)-$num_ins", num_node, num_vehi, num_serv, serv_a, serv_r, mind, maxd, a, r, d, p, e, l, PRE, SYN)
+end
+
+
+function load_ins_text(num_node::Int64, num_ins::Int64)
+
+    if num_node >= 100
+        load_ins_text100(num_node, num_ins)
+    else
+        
+        location = joinpath(@__DIR__, "..", "data", "raw_HHCRSP", "HHCRSP")
+        s = open(joinpath(location, "InstanzCPLEX_HCSRP_$(num_node)_$(num_ins).txt"))
+        lines = readlines(s)
+        close(s)
+        # for (i, line) in enumerate(lines)
+        #     println("$i: $line")
+        # end
+
+        variables = ["nbNodes",
+                    "nbVehi",
+                    "nbServi",
+                    "r",
+                    "DS",
+                    "a",
+                    "x",
+                    "y",
+                    "d",
+                    "p",
+                    "mind",
+                    "maxd",
+                    "e",
+                    "l"
+        ]
+
+        line_var = Int64[]
+        for var in variables
+            if !isempty(findall(occursin.(var, lines)))
+                println("line: $(findfirst(occursin.("$var=", lines))) has $(var)=")
+                push!(line_var, findfirst(occursin.("$var=", lines)))
+            end
+        end
+
+        # parse number of nodes, vehicles, services
+        num_node = parse(Int64, split(replace(lines[1], ";" => ""), "=")[2]) - 1
+        num_vehi = parse(Int64, split(replace(lines[2], ";" => ""), "=")[2])
+        num_serv = parse(Int64, split(replace(lines[3], ";" => ""), "=")[2])
+
+
+
+        # r
+        r = []
+        rr = lines[(line_var[4] + 1):(line_var[5]-2)]
+        rr = replace.(rr, "[" => "")
+        rr = replace.(rr, "]" => "")
+        for (i, j) in enumerate(rr)
+            j = String.(split(j, ","))
+            push!(r, parse.(Int64, j))
+        end
+        r = [r[i][j] for i in 1:num_node+1, j in 1:num_serv]
+        
+        # a
+        a = []
+        aa = lines[(line_var[6]):(line_var[7]-2)]
+        aa = replace.(aa, "a=" => "")
+        aa = replace.(aa, "[" => "")
+        aa = replace.(aa, "]" => "")
+        for (i, j) in enumerate(aa)
+            j = String.(split(j, ","))
+            push!(a, parse.(Int64, j))
+        end
+        a = [a[i][j] for i in 1:num_vehi, j in 1:num_serv]
+
+
+        # d
+        d = []
+        dd = lines[(line_var[9]+1):(line_var[10]-2)]
+        dd = replace.(dd, "a=" => "")
+        dd = replace.(dd, "[" => "")
+        dd = replace.(dd, "]" => "")
+        for (i, j) in enumerate(dd)
+            j = String.(split(j, ","))
+            push!(d, parse.(Float64, j))
+        end
+        d = [d[i][j] for i in 1:num_node, j in 1:num_node]
+
+        mind = parse.(Int64, String.(split(replace(replace(replace(replace(lines[line_var[11]], ";" => ""), "[" => ""), "]" => ""), "$(variables[11])=" => ""), ",")))
+        maxd = parse.(Int64, String.(split(replace(replace(replace(replace(lines[line_var[12]], ";" => ""), "[" => ""), "]" => ""), "$(variables[12])=" => ""), ",")))
+        e = parse.(Int64, String.(split(replace(replace(replace(replace(lines[line_var[13]], ";" => ""), "[" => ""), "]" => ""), "$(variables[13])=" => ""), ",")))
+        l = parse.(Int64, String.(split(replace(replace(replace(replace(lines[line_var[14]], ";" => ""), "[" => ""), "]" => ""), "$(variables[14])=" => ""), ",")))
+        
+        x = parse.(Int64, String.(split(replace(replace(replace(replace(lines[line_var[7]], ";" => ""), "{" => ""), "}" => ""), "//$(variables[7])=" => ""), ",")))
+        y = parse.(Int64, String.(split(replace(replace(replace(replace(lines[line_var[8]], ";" => ""), "{" => ""), "}" => ""), "//$(variables[8])=" => ""), ",")))
+        DS = parse.(Int64, String.(split(replace(replace(replace(replace(lines[line_var[5]], ";" => ""), "{" => ""), "}" => ""), "$(variables[5])=" => ""), ",")))
+
+        # p
+        pp = parse.(Float64, String.(split(replace(replace(replace(lines[line_var[10]+num_vehi+2], ";" => ""), "[" => ""), "]" => ""), ",")))
+        service_time = pp[1]
+        p = zeros(Float64, num_vehi, num_serv)
+        for i in 2:num_node
+            p = cat(p, service_time*ones(Float64, num_vehi, num_serv), dims=3)
+        end
+
+
+        # find Synchronization and Precedence constraints
+        serv_r = find_service_request(r)
+        serv_a = find_compat_vehicle_node(a, r)
+        SYN = find_SYN(serv_r, mind, maxd)
+        PRE = find_PRE(serv_r, mind, maxd)
+        return Ins("ins$(num_node-1)-$num_ins", num_node, num_vehi, num_serv, serv_a, serv_r, mind, maxd, a, r, d, p, e, l, PRE, SYN)
+    end
 end
 
 
