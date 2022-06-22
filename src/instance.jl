@@ -231,7 +231,7 @@ function local_search(particle::Sol, best_par::Sol)
     # first_obj = objective_value(test_par)
     test_par = swap(test_par, list)
     test_par = move(test_par, list)
-    test_par = path_relinking(test_par, best_par)
+    test_par = path_relinking(test_par, best_par, sol)
     return test_par
 end
 
@@ -384,7 +384,7 @@ function path_relinking_insert(input_route::Vector, remain_node::Vector, a::Matr
 end
 
 
-function path_relinking(route::Array, best_route::Array, a::Matrix)
+function path_relinking(route::Array, best_route::Array, a::Matrix, sol::Sol)
     test_route = deepcopy(route)
 
     rand_vehi = rand(1:length(route))
@@ -409,6 +409,8 @@ function path_relinking(route::Array, best_route::Array, a::Matrix)
     end
     if insert_all
         # println("can apply path relinking!!!")
+        sol.route = test_route
+        try starttime(sol) catch e; return route end
         return test_route
     else
         return route
