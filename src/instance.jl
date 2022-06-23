@@ -231,7 +231,7 @@ function local_search(particle::Sol, best_par::Sol)
     # first_obj = objective_value(test_par)
     test_par = swap(test_par, list)
     test_par = move(test_par, list)
-    test_par = path_relinking(test_par, best_par, sol)
+    test_par = path_relinking(test_par, best_par)
     return test_par
 end
 
