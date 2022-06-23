@@ -865,7 +865,7 @@ function load_ins_text100(num_node::Int64, num_ins::Int64)
     # p_text = lines[line_var[11]+1:line_var[12]-1]
     p_text = parse.(Int64, split(lines[line_var[11] + num_vehi + 1]))[1]
     p = zeros(Float64, num_vehi, num_serv)
-    for i in 2:num_node
+    for i in 2:num_node+1
         p = cat(p, p_text*ones(Float64, num_vehi, num_serv), dims=3)
     end
 
@@ -885,7 +885,7 @@ function load_ins_text100(num_node::Int64, num_ins::Int64)
     serv_a = find_compat_vehicle_node(a, r)
     SYN = find_SYN(serv_r, mind, maxd)
     PRE = find_PRE(serv_r, mind, maxd)
-    return Ins("ins$(num_node)-$num_ins", num_node, num_vehi, num_serv, serv_a, serv_r, mind, maxd, a, r, d, p, e, l, PRE, SYN)
+    return Ins("ins$(num_node)-$num_ins", num_node+1, num_vehi, num_serv, serv_a, serv_r, mind, maxd, a, r, d, p, e, l, PRE, SYN)
 end
 
 
