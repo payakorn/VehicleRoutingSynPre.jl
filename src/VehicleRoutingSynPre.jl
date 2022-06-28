@@ -1,6 +1,6 @@
 module VehicleRoutingSynPre
 
-using JLD2, Random, Glob, Printf, Combinatorics, SMTPClient
+using JLD2, Random, Glob, Printf, Combinatorics, SMTPClient, Markdown
 # Write your package code here.
 include("ParticleSwarm.jl")
 include("Solution.jl")

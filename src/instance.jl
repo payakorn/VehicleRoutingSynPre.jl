@@ -758,13 +758,31 @@ function sent_email(subject::String, massage::String)
     passwd = "cdtcdmxydxihuroo")
     # passwd = "daxdEw-kyrgap-2bejge")
     #Provide the message body as RFC5322 within an IO
-    body = IOBuffer(
-    # "Date: Fri, 18 Oct 2013 21:44:29 +0100\r\n" *
-    "From: You <$username>\r\n" *
-    "To: payakornn@gmail.com\r\n" *
-    "Subject: $subject\r\n" *
-    "\r\n" *
-    "$massage\r\n")
+    msg = Markdown.parse(
+        """# The Julia Programming Language
+
+        ## Julia in a Nutshell
+
+        1. **Fast** - Julia was designed from the beginning for [high performance](https://docs.julialang.org/en/v1/manual/types/).
+        1. **Dynamic** - Julia is [dynamically typed](https://docs.julialang.org/en/v1/manual/types/).
+        1. **Reproducible** - recreate the same [Julia environment](https://julialang.github.io/Pkg.jl/v1/environments/) every time.
+        1. **Composable** - Julia uses [multiple dispatch](https://docs.julialang.org/en/v1/manual/methods/) as a paradigm.
+        1. **General** - One can build entire [Applications and Microservices](https://www.youtube.com/watch?v=uLhXgt_gKJc) in Julia.
+        1. **Open source** - Available under the [MIT license](https://github.com/JuliaLang/julia/blob/master/LICENSE.md), with the [source code](https://github.com/JuliaLang/julia) on GitHub.
+
+        It has *over 5,000* [Julia packages](https://juliahub.com/ui/Packages) and a *variety* of advanced ecosystems. Check out more on [the Julia Programing Language website](https://julialang.org).
+        """
+    )
+
+    msg = get_mime_msg(msg)
+    body = get_body(["<payakornn@gmail.com>"], "You <$username>", subject, msg)
+    # body = IOBuffer(
+    # # "Date: Fri, 18 Oct 2013 21:44:29 +0100\r\n" *
+    # "From: You <$username>\r\n" *
+    # "To: payakornn@gmail.com\r\n" *
+    # "Subject: $subject\r\n" *
+    # "\r\n" *
+    # "$massage\r\n")
     url = "smtps://smtp.gmail.com:465"
     rcpt = ["<payakornn@gmail.com>"]
     from = "<$username>"
