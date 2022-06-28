@@ -67,7 +67,7 @@ use to sort the upper time window of instance
 
 """
 function sortperm_l(ins::Ins)
-    setdiff(Base.sortperm(ins.l), [1, length(ins.l)])
+    setdiff(Base.sortperm(ins.l), [1])
 end
 
 """
@@ -420,7 +420,7 @@ end
 
 function path_relinking(par::Sol, par_best::Sol)
     # best_route = rand(par_best.route)
-    route = path_relinking(par.route, par_best.route, par.ins.a)
+    route = path_relinking(par.route, par_best.route, par.ins.a, par)
     par.route = route
     return par
 end
