@@ -30,7 +30,7 @@ end
     num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l = load_data("ins10-1")
 """
 function load_data(name::String)
-    f = load(joinpath(@__DIR__, "..", "data", "raw_HHCRSP", "$name.jld2"))
+    f = JLD2.load(joinpath(@__DIR__, "..", "data", "raw_HHCRSP", "$name.jld2"))
     return f["num_node"], f["num_vehi"], f["num_serv"], f["mind"], f["maxd"], f["a"], f["r"], f["d"], f["p"], f["e"], f["l"]
 end
 
