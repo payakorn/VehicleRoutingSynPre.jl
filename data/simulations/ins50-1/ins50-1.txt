@@ -1,0 +1,11 @@
+iter: 1 best[15]: 1296.41, PRE: true, SYN: true, Compat: true
+iter: 2 best[15]: 1292.35, PRE: true, SYN: true, Compat: true
+iter: 3 best[13]: 1279.91, PRE: true, SYN: true, Compat: true
+iter: 4 best[11]: 1244.15, PRE: true, SYN: true, Compat: true
+iter: 5 best[6]: 1225.97, PRE: true, SYN: true, Compat: true
+iter: 6 best[6]: 1192.43, PRE: true, SYN: true, Compat: true
+iter: 7 best[6]: 1192.43, PRE: true, SYN: true, Compat: true
+iter: 8 best[11]: 1184.36, PRE: true, SYN: true, Compat: true
+iter: 9 best[11]: 1184.36, PRE: true, SYN: true, Compat: true
+iter: 10 best[11]: 1184.36, PRE: true, SYN: true, Compat: true
+iter: 11 best[11]: 1184.36, PRE: true, SYN: true, Compat: true

@@ -1,0 +1,6 @@
+iter: 11 best[10]: 222.30, PRE: true, SYN: true, Compat: true
+iter: 1 best[3]: 222.30, PRE: true, SYN: true, Compat: true
+iter: 2 best[3]: 222.30, PRE: true, SYN: true, Compat: true
+iter: 3 best[3]: 222.30, PRE: true, SYN: true, Compat: true
+iter: 4 best[3]: 222.30, PRE: true, SYN: true, Compat: true
+iter: 5 best[3]: 222.30, PRE: true, SYN: true, Compat: true

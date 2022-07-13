@@ -295,7 +295,7 @@ function insert_node_service(test_sol::Sol)
                 insert!(sol.route[compat_vehicle], length(sol.route[compat_vehicle]), [node, com_serv[1]])
                 # println("node: $node, has 1 service")
             else
-                println("node: $node, has 2 services")
+                # println("node: $node, has 2 services")
                 serv_all = [i for i in find_before_after_serv(sol.ins, node)]
 
                 com_vehi1 = findall(x->x==1, sol.ins.a[:, serv_all[1]])
@@ -707,7 +707,7 @@ function PSO(ins::Ins; num_par=15, max_iter=150)
     not_improve = 1
 
     # loop
-    while iter < max_iter && not_improve < 10
+    while iter < max_iter && not_improve < 5
 
         # save objective_value
         # old_best = new_best
@@ -740,12 +740,14 @@ function PSO(ins::Ins; num_par=15, max_iter=150)
         # end
 
         println("iter: $iter best[$best_index]: $(@sprintf("%.2f", new_best)), PRE: $(check_PRE(best_par)), SYN: $(check_SYN(best_par)), Compat: $(compatibility(best_par))")
+        io = open(joinpath(@__DIR__, "..", "data", "simulations", ins.name, "$(ins.name).txt"), "a")
+        write(io, "iter: $iter best[$best_index]: $(@sprintf("%.2f", new_best)), PRE: $(check_PRE(best_par)), SYN: $(check_SYN(best_par)), Compat: $(compatibility(best_par))\n")
+        close(io)
         iter += 1
     end
 
     # save solution
     save_particle(best_par)
-
     sent_email("$(ins.name)", "iter: $iter, $(@sprintf("%.2f", new_best)), PRE: $(check_PRE(best_par)), SYN: $(check_SYN(best_par)), Compat: $(compatibility(best_par))")
 end
 
@@ -759,7 +761,8 @@ function sent_email(subject::String, massage::String)
     # passwd = "daxdEw-kyrgap-2bejge")
     #Provide the message body as RFC5322 within an IO
     msg = Markdown.parse(
-        """# The Julia Programming Language
+        """
+        - $massage
 
         ## Julia in a Nutshell
 

@@ -1,0 +1,7 @@
+iter: 12 best[4]: 189.54, PRE: true, SYN: true, Compat: true
+iter: 1 best[1]: 189.64, PRE: true, SYN: true, Compat: true
+iter: 2 best[1]: 189.54, PRE: true, SYN: true, Compat: true
+iter: 3 best[1]: 189.54, PRE: true, SYN: true, Compat: true
+iter: 4 best[1]: 189.54, PRE: true, SYN: true, Compat: true
+iter: 5 best[1]: 189.54, PRE: true, SYN: true, Compat: true
+iter: 6 best[1]: 189.54, PRE: true, SYN: true, Compat: true
