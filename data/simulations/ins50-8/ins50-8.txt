@@ -1,1 +1,8 @@
 iter: 15 best[11]: 499.86, PRE: true, SYN: true, Compat: true
+iter: 1 best[14]: 572.88, PRE: true, SYN: true, Compat: true
+iter: 2 best[5]: 551.12, PRE: true, SYN: true, Compat: true
+iter: 3 best[7]: 523.98, PRE: true, SYN: true, Compat: true
+iter: 4 best[7]: 523.98, PRE: true, SYN: true, Compat: true
+iter: 5 best[7]: 523.98, PRE: true, SYN: true, Compat: true
+iter: 6 best[7]: 523.98, PRE: true, SYN: true, Compat: true
+iter: 7 best[7]: 523.98, PRE: true, SYN: true, Compat: true
