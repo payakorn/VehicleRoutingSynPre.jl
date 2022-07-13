@@ -706,9 +706,14 @@ function PSO(ins::Ins; num_par=15, max_iter=150)
     new_best = Inf
     not_improve = 1
 
+    # find current number of run
+    location = "$(location_simulation(ins.name, initial=false))"
+    num = length(glob("$(ins.name)*.jld2", location))+1
+    io = open(joinpath(@__DIR__, "..", "data", "simulations", ins.name, "$(ins.name)-$num.csv"), "w")
+    write(io, "iter,obj,time\n")
     # loop
     while iter < max_iter && not_improve < 5
-
+        t = @elapsed begin
         # save objective_value
         # old_best = new_best
 
@@ -738,21 +743,26 @@ function PSO(ins::Ins; num_par=15, max_iter=150)
         # if old_best - new_best < 1e4
         #     not_improve += 1
         # end
+        end
 
         println("iter: $iter best[$best_index]: $(@sprintf("%.2f", new_best)), PRE: $(check_PRE(best_par)), SYN: $(check_SYN(best_par)), Compat: $(compatibility(best_par))")
-        io = open(joinpath(@__DIR__, "..", "data", "simulations", ins.name, "$(ins.name).txt"), "a")
-        write(io, "iter: $iter best[$best_index]: $(@sprintf("%.2f", new_best)), PRE: $(check_PRE(best_par)), SYN: $(check_SYN(best_par)), Compat: $(compatibility(best_par))\n")
-        close(io)
+        write(io, "$iter,$(@sprintf("%.2f", new_best)),$(@sprintf("%.2f", t))\n")
         iter += 1
     end
+    close(io)
 
     # save solution
     save_particle(best_par)
-    sent_email("$(ins.name)", "iter: $iter, $(@sprintf("%.2f", new_best)), PRE: $(check_PRE(best_par)), SYN: $(check_SYN(best_par)), Compat: $(compatibility(best_par))")
+
+    tab = CSV.File(joinpath(@__DIR__, "..", "data", "simulations", ins.name, "$(ins.name)-$num.csv")) |> DataFrame
+    sent_email("$(ins.name)", "iter: $iter, $(@sprintf("%.2f", new_best)), PRE: $(check_PRE(best_par)), SYN: $(check_SYN(best_par)), Compat: $(compatibility(best_par))\n", df=tab)
+    ic = open(joinpath(@__DIR__, "..", "data", "simulations", ins.name, "$(ins.name)-$num.md"), "w")
+    write(ic, "$(latexify(tab, env=:mdtable))\n")
+    close(ic)
 end
 
 
-function sent_email(subject::String, massage::String)
+function sent_email(subject::String, massage; df=nothing)
     username = "payakorn.sak@gmail.com"
     opt = SendOptions(
     isSSL = true,
@@ -762,9 +772,16 @@ function sent_email(subject::String, massage::String)
     #Provide the message body as RFC5322 within an IO
     msg = Markdown.parse(
         """
-        - $massage
+        $massage
 
-        ## Julia in a Nutshell
+        $(latexify(df, env=:mdtable, latex=false))
+
+        """
+    )
+
+    """
+    Example:
+    ## Julia in a Nutshell
 
         1. **Fast** - Julia was designed from the beginning for [high performance](https://docs.julialang.org/en/v1/manual/types/).
         1. **Dynamic** - Julia is [dynamically typed](https://docs.julialang.org/en/v1/manual/types/).
@@ -774,8 +791,7 @@ function sent_email(subject::String, massage::String)
         1. **Open source** - Available under the [MIT license](https://github.com/JuliaLang/julia/blob/master/LICENSE.md), with the [source code](https://github.com/JuliaLang/julia) on GitHub.
 
         It has *over 5,000* [Julia packages](https://juliahub.com/ui/Packages) and a *variety* of advanced ecosystems. Check out more on [the Julia Programing Language website](https://julialang.org).
-        """
-    )
+    """
 
     msg = get_mime_msg(msg)
     body = get_body(["<payakornn@gmail.com>"], "You <$username>", subject, msg)
@@ -1024,4 +1040,9 @@ function save_particle(particle::Sol; initial=false)
     location = "$(location_simulation(instance_name, initial=initial))"
     num = length(glob("$instance_name*.jld2", location))
     save_object("$(location_simulation(instance_name, initial=initial))/$instance_name-$(num+1).jld2", particle)
+end
+
+
+function save_information_run(name, best_par, t, iter)
+    nothing
 end

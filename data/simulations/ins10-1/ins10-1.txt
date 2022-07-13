@@ -6,3 +6,9 @@ iter: 2 best[1]: 218.20, PRE: true, SYN: true, Compat: true
 iter: 3 best[1]: 218.20, PRE: true, SYN: true, Compat: true
 iter: 4 best[1]: 218.20, PRE: true, SYN: true, Compat: true
 iter: 5 best[1]: 218.20, PRE: true, SYN: true, Compat: true
+iter: 1 best[1]: 226.98, PRE: true, SYN: true, Compat: true time: 1.520383685
+iter: 2 best[3]: 218.20, PRE: true, SYN: true, Compat: true time: 0.239981886
+iter: 3 best[3]: 218.20, PRE: true, SYN: true, Compat: true time: 0.293727187
+iter: 4 best[3]: 218.20, PRE: true, SYN: true, Compat: true time: 0.29301716
+iter: 5 best[3]: 218.20, PRE: true, SYN: true, Compat: true time: 0.301260463
+iter: 6 best[3]: 218.20, PRE: true, SYN: true, Compat: true time: 0.283709734
