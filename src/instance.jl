@@ -762,6 +762,29 @@ function PSO(ins::Ins; num_par=15, max_iter=150)
 end
 
 
+function find_min_objective(ins_name::String)
+    min_obj = []
+    min_iter = []
+    min_time = []
+    location = "$(location_simulation(ins_name, initial=false))"
+    for fo in glob("$(ins_name)*.csv", location)
+        df = CSV.File(fo) |> DataFrame
+        # println("iter: $(size(df, 1)) $(minimum(df[!, 2])) time: $(sum(df[!, 3]))")
+        push!(min_iter, size(df, 1))
+        push!(min_obj, minimum(df[!, 2]))
+        push!(min_time, sum(df[!, 3]))
+    end
+    println("TOTAL: $(length(min_obj))")
+    if length(min_iter) == 0
+        return nothing
+    else
+        println("min obj: $(minimum(min_obj))")
+        println("min iter: $(minimum(min_iter))")
+        println("min time: $(minimum(min_time))")
+    end
+end
+
+
 function sent_email(subject::String, massage; df=nothing)
     username = "payakorn.sak@gmail.com"
     opt = SendOptions(

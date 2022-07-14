@@ -74,5 +74,6 @@ export Particle,
        load_ins_text,
        sent_email,
        dist,
-       Ins
+       Ins,
+       find_min_objective
 end
