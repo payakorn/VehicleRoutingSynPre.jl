@@ -762,7 +762,7 @@ function PSO(ins::Ins; num_par=15, max_iter=150)
 end
 
 
-function find_min_objective(ins_name::String)
+function find_min_objective(ins_name::AbstractString)
     min_obj = []
     min_iter = []
     min_time = []
@@ -776,12 +776,29 @@ function find_min_objective(ins_name::String)
     end
     println("TOTAL: $(length(min_obj))")
     if length(min_iter) == 0
-        return nothing
+        return (0,0,0,0)
     else
+        println("ins: $ins_name")
         println("min obj: $(minimum(min_obj))")
         println("min iter: $(minimum(min_iter))")
         println("min time: $(minimum(min_time))")
+        return (minimum(min_iter), minimum(min_obj), minimum(min_time), minimum(min_time)/60)
     end
+end
+
+
+function create_csv_2014()
+    df = CSV.File(joinpath(@__DIR__, "..", "data", "table", "table.csv")) |> DataFrame
+    io = open(joinpath(@__DIR__, "..", "data", "table", "our.csv"), "w")
+    write(io, "Instance,Obj2014,obj,numiteration,time(second),time(min)\n")
+    for (i, ins_name) in enumerate(df[!, 1])
+        min_iter, min_obj, min_time, min_time60 = find_min_objective(ins_name)
+        obj2014 = try minimum([df[i, 3], df[i, 6], df[i,7], df[i, 9], df[i, 11], df[i, 13]]) catch e; minimum([df[i, 6], df[i, 7], df[i, 9], df[i, 11], df[i, 13]]) end
+        write(io, "$ins_name,$(obj2014),$(min_obj),$(min_iter),$(@sprintf("%.2f", min_time)),$(@sprintf("%.2f", min_time60))\n")
+    end
+    close(io)
+    dg = CSV.File(joinpath(@__DIR__, "..", "data", "table", "our.csv")) |> DataFrame
+    sent_email("conclusion our and 2014", "# Table", df=dg)
 end
 
 

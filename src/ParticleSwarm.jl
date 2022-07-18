@@ -1184,7 +1184,7 @@ function PSO(Name::String; num_par=15, max_iter=150)
 end
 
 
-function location_simulation(instance_name::String; initial=false)
+function location_simulation(instance_name::AbstractString; initial=false)
     if initial
         return mkpath("data/simulations/$instance_name/initial")
     else
