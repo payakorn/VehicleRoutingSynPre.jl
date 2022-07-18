@@ -75,5 +75,6 @@ export Particle,
        sent_email,
        dist,
        Ins,
-       find_min_objective
+       find_min_objective,
+       create_csv_2014
 end
