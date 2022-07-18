@@ -771,8 +771,9 @@ function find_min_objective(ins_name::AbstractString)
         df = CSV.File(fo) |> DataFrame
         # println("iter: $(size(df, 1)) $(minimum(df[!, 2])) time: $(sum(df[!, 3]))")
         push!(min_iter, size(df, 1))
-        push!(min_obj, minimum(df[!, 2]))
-        push!(min_time, sum(df[!, 3]))
+        try push!(min_obj, minimum(df[!, 2])) catch e; push!(min_obj, 0.0) end
+        try push!(min_time, sum(df[!, 3])) catch e; push!(min_time, 0.0) end
+        # push!(min_time, sum(df[!, 3]))
     end
     println("TOTAL: $(length(min_obj))")
     if length(min_iter) == 0
