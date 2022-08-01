@@ -70,6 +70,11 @@ function sortperm_l(ins::Ins)
     setdiff(Base.sortperm(ins.l), [1])
 end
 
+
+function sortperm_e(ins::Ins)
+    setdiff(Base.sortperm(ins.e), [1])
+end
+
 """
 ```julia
     all_node_serv(ins::Ins)
@@ -286,7 +291,7 @@ use to insert all node service to route in sol
 function insert_node_service(test_sol::Sol)
     sol = deepcopy(test_sol)
     remain_node = inserted_node(sol)
-    sorted_node = sortperm_l(sol.ins)
+    sorted_node = sortperm_e(sol.ins)
     for node in sorted_node
         if any(in.(node, remain_node))
             com_serv = findall(x->x==1, sol.ins.r[node, :])
@@ -305,11 +310,11 @@ function insert_node_service(test_sol::Sol)
                     com_vehi = [rand(com_vehi1), rand(com_vehi2)]
                 elseif isempty(setdiff(com_vehi1, com_vehi2))
                     com2 = rand(com_vehi2)
-                    com1 = rand(setdiff(com_vehi2, com2))
+                    com1 = rand(setdiff(com_vehi1, com2))
                     com_vehi = [com1, com2]
                 elseif isempty(setdiff(com_vehi2, com_vehi1))
                     com1 = rand(com_vehi1)
-                    com2 = rand(setdiff(com_vehi1, com1))
+                    com2 = rand(setdiff(com_vehi2, com1))
                     com_vehi = [com1, com2]
                 elseif !isempty(setdiff(com_vehi1, com_vehi2)) && !isempty(setdiff(com_vehi2, com_vehi1))
                     com1 = rand(setdiff(com_vehi1, com_vehi2))
