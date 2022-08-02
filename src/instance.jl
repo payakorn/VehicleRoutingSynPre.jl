@@ -1106,3 +1106,13 @@ function df_pretty_table()
     h1 = Highlighter((df, i, j) -> (df[i, 6] > 0.5), foreground = :blue)
     pretty_table(df, show_row_number=true, header=header, highlighters=h1)
 end
+
+
+function report()
+    stopper = Ref(false)
+    task = @async while !stopper[]
+        create_csv_2014()
+        sleep(60)
+    end
+    return task, stopper
+end

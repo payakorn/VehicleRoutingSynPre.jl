@@ -78,5 +78,6 @@ export Particle,
        find_min_objective,
        create_csv_2014,
        df_conclusion_table,
-       df_pretty_table
+       df_pretty_table,
+       report
 end
