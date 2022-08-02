@@ -808,7 +808,15 @@ function create_csv_2014()
 end
 
 
-function sent_email(subject::String, massage; df=nothing)
+function sent_email_report(file_name::String; df=nothing)
+    attachments = [joinpath(@__DIR__, "..", "report", file_name)]
+    subject = "report"
+    massage = ""
+    sent_email(subject, massage, df=df, attachments=attachments)
+end
+
+
+function sent_email(subject::String, massage; df=nothing, attachments=[])
     username = "payakorn.sak@gmail.com"
     opt = SendOptions(
     isSSL = true,
@@ -816,14 +824,18 @@ function sent_email(subject::String, massage; df=nothing)
     passwd = "cdtcdmxydxihuroo")
     # passwd = "daxdEw-kyrgap-2bejge")
     #Provide the message body as RFC5322 within an IO
-    msg = Markdown.parse(
-        """
-        $massage
+    if isnothing(df)
+        msg = "$massage"
+    else
+        msg = Markdown.parse(
+            """
+            $massage
 
-        $(latexify(df, env=:mdtable, latex=false))
+            $(latexify(df, env=:mdtable, latex=false))
 
-        """
-    )
+            """
+        )
+    end
 
     """
     Example:
@@ -840,7 +852,7 @@ function sent_email(subject::String, massage; df=nothing)
     """
 
     msg = get_mime_msg(msg)
-    body = get_body(["<payakornn@gmail.com>"], "You <$username>", subject, msg)
+    body = get_body(["<payakornn@gmail.com>"], "You <$username>", subject, msg; attachments)
     # body = IOBuffer(
     # # "Date: Fri, 18 Oct 2013 21:44:29 +0100\r\n" *
     # "From: You <$username>\r\n" *
