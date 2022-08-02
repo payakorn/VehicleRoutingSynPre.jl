@@ -1255,19 +1255,94 @@ Start time of node 11
 
 
 <hr />
-<h1>Test startting time</h1>
+<h1>Conclusion</h1>
 
 
 <pre class='hljl'>
-<span class='hljl-n'>par</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>load_object</span><span class='hljl-p'>(</span><span class='hljl-nf'>joinpath</span><span class='hljl-p'>(</span><span class='hljl-nd'>@__DIR</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;data&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;test&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;ins25-1-1.jld2&quot;</span><span class='hljl-p'>));</span><span class='hljl-t'>
-</span><span class='hljl-n'>st</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>initial_starttime</span><span class='hljl-p'>(</span><span class='hljl-n'>par</span><span class='hljl-oB'>.</span><span class='hljl-n'>num_node</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>par</span><span class='hljl-oB'>.</span><span class='hljl-n'>num_vehi</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>par</span><span class='hljl-oB'>.</span><span class='hljl-n'>num_serv</span><span class='hljl-p'>);</span><span class='hljl-t'>
-</span><span class='hljl-n'>stt</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>find_node_starttime</span><span class='hljl-p'>(</span><span class='hljl-n'>par</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-p'>)</span>
+<span class='hljl-n'>df</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>df_conclusion_table</span><span class='hljl-p'>()</span><span class='hljl-t'>
+</span><span class='hljl-n'>header</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>([</span><span class='hljl-s'>&quot;Instance&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;Obj2014&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;ObjOur&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;#iteration&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;time&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;time&quot;</span><span class='hljl-p'>],</span><span class='hljl-t'> 
+</span><span class='hljl-p'>[</span><span class='hljl-s'>&quot;&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;second&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;min&quot;</span><span class='hljl-p'>])</span><span class='hljl-t'>
+</span><span class='hljl-n'>h1</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>Highlighter</span><span class='hljl-p'>((</span><span class='hljl-n'>df</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>i</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>j</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>-&gt;</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>df</span><span class='hljl-p'>[</span><span class='hljl-n'>i</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-ni'>6</span><span class='hljl-p'>]</span><span class='hljl-t'> </span><span class='hljl-oB'>&gt;</span><span class='hljl-t'> </span><span class='hljl-nfB'>0.5</span><span class='hljl-p'>),</span><span class='hljl-t'> </span><span class='hljl-n'>foreground</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-sc'>:blue</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-nf'>pretty_table</span><span class='hljl-p'>(</span><span class='hljl-n'>df</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>show_row_number</span><span class='hljl-oB'>=</span><span class='hljl-kc'>true</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>header</span><span class='hljl-oB'>=</span><span class='hljl-n'>header</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>highlighters</span><span class='hljl-oB'>=</span><span class='hljl-n'>h1</span><span class='hljl-p'>)</span>
 </pre>
 
 
-<pre class="julia-error">
-ERROR: LoadError: UndefVarError: @__DIR not defined
-in expression starting at C:\Users\payakorn_sak\.julia\dev\VehicleRoutingSynPre\report\index.Jmd:2
+<pre class="output">
+┌─────┬───────────┬─────────┬─────────┬────────────┬───────────┬─────────┐
+│ Row │  Instance │ Obj2014 │  ObjOur │ #iteration │      time │    time │
+│     │           │         │         │            │    second │     min │
+├─────┼───────────┼─────────┼─────────┼────────────┼───────────┼─────────┤
+│   1 │   ins10-1 │   218.2 │   218.2 │          5 │      1.23 │    0.02 │
+│   2 │   ins10-2 │   248.1 │  246.63 │          5 │       6.8 │    0.11 │
+│   3 │   ins10-3 │   305.9 │  305.86 │          5 │     12.49 │    0.21 │
+│   4 │   ins10-4 │   186.9 │  223.55 │          5 │      0.65 │    0.01 │
+│   5 │   ins10-5 │   192.0 │  189.54 │          6 │     16.77 │    0.28 │
+│   6 │   ins10-6 │   200.1 │   200.1 │          5 │      6.18 │     0.1 │
+│   7 │   ins10-7 │   225.4 │  232.37 │          5 │      0.37 │    0.01 │
+│   8 │   ins10-8 │   232.0 │  232.05 │          6 │      0.29 │     0.0 │
+│   9 │   ins10-9 │   222.3 │   222.3 │          5 │     14.71 │    0.25 │
+│  10 │  ins10-10 │   225.0 │  225.01 │          5 │      0.34 │    0.01 │
+│  11 │   ins25-1 │   458.9 │  432.64 │          6 │     58.43 │    0.97 │
+│  12 │   ins25-2 │   544.2 │  480.66 │         11 │    256.41 │    4.27 │
+│  13 │   ins25-3 │   431.4 │  418.51 │          7 │     143.1 │    2.38 │
+│  14 │   ins25-4 │   577.5 │  423.41 │         11 │    134.83 │    2.25 │
+│  15 │   ins25-5 │   391.1 │  406.57 │          8 │    133.36 │    2.22 │
+│  16 │   ins25-6 │   534.7 │  478.61 │         10 │    280.52 │    4.68 │
+│  17 │   ins25-7 │   355.5 │  343.74 │          7 │    126.24 │     2.1 │
+│  18 │   ins25-8 │   410.9 │  369.75 │          8 │     136.9 │    2.28 │
+│  19 │   ins25-9 │   487.9 │  405.32 │          9 │    276.33 │    4.61 │
+│  20 │  ins25-10 │   500.4 │  468.32 │          8 │    309.72 │    5.16 │
+│  21 │   ins50-1 │  1123.6 │ 1243.28 │          7 │    183.03 │    3.05 │
+│  22 │   ins50-2 │   673.8 │   659.3 │          7 │    395.65 │    6.59 │
+│  23 │   ins50-3 │   642.4 │  637.37 │          8 │    456.13 │     7.6 │
+│  24 │   ins50-4 │   580.4 │  568.64 │          7 │    573.95 │    9.57 │
+│  25 │   ins50-5 │   754.6 │  782.17 │          9 │    563.04 │    9.38 │
+│  26 │   ins50-6 │   951.6 │  970.61 │          9 │    157.73 │    2.63 │
+│  27 │   ins50-7 │   577.4 │  626.95 │          8 │    913.01 │   15.22 │
+│  28 │   ins50-8 │   540.6 │  520.85 │          8 │    786.73 │   13.11 │
+│  29 │   ins50-9 │   608.7 │  599.44 │          9 │    303.48 │    5.06 │
+│  30 │  ins50-10 │   679.3 │  677.39 │          6 │    300.65 │    5.01 │
+│  31 │   ins75-1 │  1321.8 │ 1290.15 │         11 │   2139.19 │   35.65 │
+│  32 │   ins75-2 │   892.7 │  819.89 │         10 │   2104.62 │   35.08 │
+│  33 │   ins75-3 │   819.4 │  770.23 │          9 │   1640.37 │   27.34 │
+│  34 │   ins75-4 │   877.4 │  933.63 │          9 │   1321.33 │   22.02 │
+│  35 │   ins75-5 │   872.1 │  818.24 │          8 │    885.23 │   14.75 │
+│  36 │   ins75-6 │   835.2 │  789.18 │          9 │   2113.24 │   35.22 │
+│  37 │   ins75-7 │   706.3 │  693.67 │          8 │    947.55 │   15.79 │
+│  38 │   ins75-8 │   811.4 │  785.06 │          8 │   1384.58 │   23.08 │
+│  39 │   ins75-9 │   842.7 │  761.44 │         10 │    925.33 │   15.42 │
+│  40 │  ins75-10 │  1306.6 │ 1398.63 │          9 │   1206.29 │    20.1 │
+│  41 │  ins100-1 │  1604.9 │ 1664.05 │         10 │   4800.86 │   80.01 │
+│  42 │  ins100-2 │  1101.9 │ 1041.71 │         12 │   3492.86 │   58.21 │
+│  43 │  ins100-3 │   986.4 │  904.48 │          9 │   2850.67 │   47.51 │
+│  44 │  ins100-4 │   871.0 │  856.57 │         11 │   3642.43 │   60.71 │
+│  45 │  ins100-5 │  1018.0 │  976.24 │         10 │   3561.61 │   59.36 │
+│  46 │  ins100-6 │  1003.0 │  954.06 │          9 │   2909.75 │    48.5 │
+│  47 │  ins100-7 │   921.1 │ 2944.17 │          5 │     51.69 │    0.86 │
+│  48 │  ins100-8 │   884.6 │  900.12 │          8 │   3126.42 │   52.11 │
+│  49 │  ins100-9 │  1131.7 │ 1117.18 │          8 │   2004.21 │    33.4 │
+│  50 │ ins100-10 │  1053.6 │  1047.6 │         10 │    852.88 │   14.21 │
+│  51 │  ins200-1 │  1721.4 │ 1720.81 │         14 │   68582.4 │ 1143.04 │
+│  52 │  ins200-2 │  1763.8 │  1635.0 │         11 │   52590.0 │   876.5 │
+│  53 │  ins200-3 │  1549.6 │ 1494.37 │         12 │   59857.0 │  997.62 │
+│  54 │  ins200-4 │  1420.4 │ 1396.32 │         10 │   38677.8 │  644.63 │
+│  55 │  ins200-5 │  1701.9 │ 1577.81 │         11 │   65347.0 │ 1089.12 │
+│  56 │  ins200-6 │  1639.7 │ 15092.9 │          5 │    449.42 │    7.49 │
+│  57 │  ins200-7 │  1384.3 │ 1432.74 │         14 │   92263.4 │ 1537.72 │
+│  58 │  ins200-8 │  1544.6 │ 1387.63 │         12 │   46004.2 │  766.74 │
+│  59 │  ins200-9 │  1572.9 │ 1543.49 │         14 │   40420.0 │  673.67 │
+│  60 │ ins200-10 │  1581.0 │ 1637.83 │         12 │   45340.6 │  755.68 │
+│  61 │  ins300-1 │  2248.0 │ 2179.02 │         14 │ 3.73417e5 │ 6223.61 │
+│  62 │  ins300-2 │  2316.1 │ 2311.84 │         15 │ 5.53177e5 │ 9219.62 │
+│  63 │  ins300-3 │  1885.3 │ 1872.53 │         14 │  424102.0 │ 7068.37 │
+│  64 │  ins300-4 │  2023.2 │ 1898.69 │          5 │   1622.34 │   27.04 │
+│  65 │  ins300-5 │  2247.6 │     0.0 │          0 │       0.0 │     0.0 │
+│  66 │  ins300-6 │  2144.4 │ 2219.16 │          5 │   2096.04 │   34.93 │
+│  67 │  ins300-7 │  1971.5 │  1996.2 │         13 │ 2.01953e5 │ 3365.88 │
+│  68 │  ins300-8 │  1987.4 │ 1955.26 │         12 │ 2.56356e5 │  4272.6 │
+│  69 │  ins300-9 │  2415.5 │     0.0 │          0 │       0.0 │     0.0 │
+│  70 │ ins300-10 │  2373.4 │ 2252.51 │         15 │ 2.50664e5 │ 4177.74 │
+└─────┴───────────┴─────────┴─────────┴────────────┴───────────┴─────────┘
 </pre>
 
 
@@ -1276,7 +1351,7 @@ in expression starting at C:\Users\payakorn_sak\.julia\dev\VehicleRoutingSynPre\
         <div class="footer">
           <p>
             Published from <a href="index.Jmd">index.Jmd</a>
-            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.10 on 2022-05-19.
+            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.10 on 2022-08-01.
           </p>
         </div>
       </div>

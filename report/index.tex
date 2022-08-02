@@ -12,14 +12,14 @@
 
 \hypersetup
        {   pdfauthor = { Payakorn Saksuriya },
-           pdftitle={ Tutorial for VehicleRoutingSynPre },
+           pdftitle={ VehicleRoutingSynPre },
            colorlinks=TRUE,
            linkcolor=black,
            citecolor=blue,
            urlcolor=blue
        }
 
-\title{ Tutorial for VehicleRoutingSynPre }
+\title{ VehicleRoutingSynPre }
 
 \author{ Payakorn Saksuriya }
 
@@ -128,7 +128,7 @@ Import package
 
 \begin{lstlisting}
 (*@\HLJLk{using}@*) (*@\HLJLn{VehicleRoutingSynPre}@*)
-(*@\HLJLk{using}@*) (*@\HLJLn{Latexify}@*)
+(*@\HLJLk{using}@*) (*@\HLJLn{PrettyTables}@*)
 \end{lstlisting}
 
 
@@ -148,37 +148,37 @@ To load the instance data use
 where
 
 \begin{itemize}
-\item num\_node: total number of nodes (including depot)
+\item \texttt{num\_node}: total number of nodes (including depot)
 
 
-\item num\_vehi: total number of vehicles
+\item \texttt{num\_vehi}: total number of vehicles
 
 
-\item num\_serv: total number of services
+\item \texttt{num\_serv}: total number of services
 
 
-\item mind: minumum different of starting time between two services of each node
+\item \texttt{mind}:     minumum different of starting time between two services of each node
 
 
-\item maxd: maximum different of starting time between two services of each node
+\item \texttt{maxd}:     maximum different of starting time between two services of each node
 
 
-\item a: compatibility matrix a[i,j] = 1 if vehicle i can process service j
+\item \texttt{a}:        compatibility matrix a[i,j] = 1 if vehicle i can process service j
 
 
-\item r: requiment matrix r[i,j] = 1 if node i requires service j
+\item \texttt{r}:        requiment matrix r[i,j] = 1 if node i requires service j
 
 
-\item d: distance matrix
+\item \texttt{d}:        distance matrix
 
 
-\item p: processing time matrix, p[i, j, k] = processing time of service j of vehicle i on node k
+\item \texttt{p}:        processing time matrix, p[i, j, k] = processing time of service j of vehicle i on node k
 
 
-\item e: earilest start time of each node
+\item \texttt{e}:        earilest start time of each node
 
 
-\item l: latest start time of each node
+\item \texttt{l}:        latest start time of each node
 
 \end{itemize}
 \rule{\textwidth}{1pt}
@@ -186,19 +186,7 @@ Generate random particle (solution)
 
 
 \begin{lstlisting}
-(*@\HLJLn{particle}@*) (*@\HLJLoB{=}@*) (*@\HLJLnf{generate{\_}particles}@*)(*@\HLJLp{(}@*)(*@\HLJLs{"{}ins10-1"{}}@*)(*@\HLJLp{);}@*)
-\end{lstlisting}
-
-\begin{lstlisting}
-11, [6]
-7, [5]
-4, [2]
-6, [3]
-3, [5]
-10, [1]
-2, [4]
-5, [4]
-8, [3]
+(*@\HLJLn{particle}@*) (*@\HLJLoB{=}@*) (*@\HLJLnf{generate{\_}particles}@*)(*@\HLJLp{(}@*)(*@\HLJLn{name}@*)(*@\HLJLp{);}@*)
 \end{lstlisting}
 
 
@@ -232,16 +220,53 @@ Particle <: Any
 \end{lstlisting}
 
 
+\rule{\textwidth}{1pt}
+
+\begin{lstlisting}
+(*@\HLJLn{particle}@*)(*@\HLJLoB{.}@*)(*@\HLJLn{route}@*)(*@\HLJLp{,}@*) (*@\HLJLn{particle}@*)(*@\HLJLoB{.}@*)(*@\HLJLn{slot}@*) (*@\HLJLoB{=}@*) (*@\HLJLnf{example}@*)(*@\HLJLp{();}@*)
+(*@\HLJLn{particle}@*)(*@\HLJLoB{.}@*)(*@\HLJLn{starttime}@*) (*@\HLJLoB{=}@*) (*@\HLJLnf{find{\_}starttime}@*)(*@\HLJLp{(}@*)(*@\HLJLn{particle}@*)(*@\HLJLp{)}@*)
+\end{lstlisting}
+
+\begin{lstlisting}
+Dict(*@{{\{}}@*)Int64, Matrix(*@{{\{}}@*)Float64(*@{{\}}}@*)(*@{{\}}}@*) with 12 entries:
+  5  => [0.0 0.0 (*@\ensuremath{\ldots}@*) 0.0 0.0; 0.0 0.0 (*@\ensuremath{\ldots}@*) 0.0 0.0; 0.0 0.0 (*@\ensuremath{\ldots}@*) 0.0 0.0]
+  7  => [0.0 0.0 (*@\ensuremath{\ldots}@*) 0.0 0.0; 0.0 0.0 (*@\ensuremath{\ldots}@*) 0.0 0.0; 0.0 0.0 (*@\ensuremath{\ldots}@*) 224.083 0.0]
+  8  => [0.0 0.0 (*@\ensuremath{\ldots}@*) 0.0 0.0; 0.0 0.0 (*@\ensuremath{\ldots}@*) 0.0 0.0; 0.0 0.0 (*@\ensuremath{\ldots}@*) 0.0 0.0]
+  1  => [480.527 0.0 (*@\ensuremath{\ldots}@*) 0.0 0.0; 73.0384 0.0 (*@\ensuremath{\ldots}@*) 0.0 0.0; 480.16 0.0 (*@\ensuremath{\ldots}@*) 0.0 0.0
+]
+  0  => [0.0 0.0 (*@\ensuremath{\ldots}@*) 0.0 0.0; 0.0 0.0 (*@\ensuremath{\ldots}@*) 0.0 0.0; 0.0 0.0 (*@\ensuremath{\ldots}@*) 0.0 0.0]
+  4  => [0.0 247.0 (*@\ensuremath{\ldots}@*) 0.0 0.0; 0.0 0.0 (*@\ensuremath{\ldots}@*) 0.0 0.0; 0.0 0.0 (*@\ensuremath{\ldots}@*) 0.0 0.0]
+  6  => [0.0 0.0 (*@\ensuremath{\ldots}@*) 0.0 0.0; 0.0 0.0 (*@\ensuremath{\ldots}@*) 0.0 0.0; 0.0 0.0 (*@\ensuremath{\ldots}@*) 0.0 0.0]
+  2  => [0.0 0.0 (*@\ensuremath{\ldots}@*) 0.0 0.0; 0.0 0.0 (*@\ensuremath{\ldots}@*) 0.0 0.0; 0.0 0.0 (*@\ensuremath{\ldots}@*) 0.0 0.0]
+  10 => [356.043 0.0 (*@\ensuremath{\ldots}@*) 0.0 0.0; 0.0 0.0 (*@\ensuremath{\ldots}@*) 0.0 0.0; 0.0 0.0 (*@\ensuremath{\ldots}@*) 0.0 0.0]
+  11 => [0.0 0.0 (*@\ensuremath{\ldots}@*) 0.0 0.0; 0.0 0.0 (*@\ensuremath{\ldots}@*) 0.0 0.0; 0.0 0.0 (*@\ensuremath{\ldots}@*) 0.0 159.161]
+  9  => [0.0 0.0 (*@\ensuremath{\ldots}@*) 0.0 0.0; 0.0 0.0 (*@\ensuremath{\ldots}@*) 0.0 46.0; 0.0 0.0 (*@\ensuremath{\ldots}@*) 46.0 0.0]
+  3  => [0.0 0.0 (*@\ensuremath{\ldots}@*) 0.0 0.0; 0.0 0.0 (*@\ensuremath{\ldots}@*) 0.0 0.0; 0.0 0.0 (*@\ensuremath{\ldots}@*) 291.121 0.0]
+\end{lstlisting}
+
+
 \begin{lstlisting}
 (*@\HLJLn{particle}@*)(*@\HLJLoB{.}@*)(*@\HLJLn{route}@*)
 \end{lstlisting}
 
 \begin{lstlisting}
 3-element Vector(*@{{\{}}@*)Vector(*@{{\{}}@*)Vector(*@{{\{}}@*)Int64(*@{{\}}}@*)(*@{{\}}}@*)(*@{{\}}}@*):
- [[4, 2], [6, 3], [10, 1], [8, 3], [1, 1]]
- [[9, 6], [11, 6], [7, 5], [1, 1]]
- [[9, 5], [3, 5], [2, 4], [5, 4], [1, 1]]
+ [[11, 3], [4, 2], [6, 3], [10, 1], [8, 3], [1, 1]]
+ [[9, 6], [1, 1]]
+ [[9, 5], [11, 6], [7, 5], [3, 5], [2, 4], [10, 4], [5, 4], [1, 1]]
 \end{lstlisting}
+
+
+where route start and end from depot node \texttt{1}
+
+For example, 
+
+in row 1 first element [11, 3] represents route of vehicle 1 from node 1 to node 11 and process service 3
+
+in row 1 second element [4, 2] represents route of vehicle 1 from node 11 to node 4 and process service 2
+
+\rule{\textwidth}{1pt}
+slot is the service sequence of each node
 
 
 \begin{lstlisting}
@@ -255,24 +280,411 @@ Dict(*@{{\{}}@*)Int64, Vector(*@{{\{}}@*)Int64(*@{{\}}}@*)(*@{{\}}}@*) with 10 e
   6  => [3]
   7  => [5]
   2  => [4]
-  10 => [1]
-  11 => [6]
+  10 => [1, 4]
+  11 => [3, 6]
   9  => [5, 6]
   8  => [3]
   3  => [5]
 \end{lstlisting}
 
 
+\rule{\textwidth}{1pt}
+The starting time at each node 
+
+
 \begin{lstlisting}
-(*@\HLJLnf{print}@*)(*@\HLJLp{(}@*)(*@\HLJLnf{latexify}@*)(*@\HLJLp{(}@*)(*@\HLJLs{"{}x/y"{}}@*)(*@\HLJLp{))}@*)
+(*@\HLJLk{for}@*) (*@\HLJLn{i}@*) (*@\HLJLkp{in}@*) (*@\HLJLni{1}@*)(*@\HLJLoB{:}@*)(*@\HLJLni{11}@*)
+    (*@\HLJLnf{println}@*)(*@\HLJLp{(}@*)(*@\HLJLs{"{}Start}@*) (*@\HLJLs{time}@*) (*@\HLJLs{of}@*) (*@\HLJLs{node}@*) (*@\HLJLsi{{\$}i}@*)(*@\HLJLs{"{}}@*)(*@\HLJLp{)}@*)
+    (*@\HLJLnf{pretty{\_}table}@*)(*@\HLJLp{(}@*)(*@\HLJLn{particle}@*)(*@\HLJLoB{.}@*)(*@\HLJLn{starttime}@*)(*@\HLJLp{[}@*)(*@\HLJLn{i}@*)(*@\HLJLp{])}@*)
+(*@\HLJLk{end}@*)
 \end{lstlisting}
 
 \begin{lstlisting}
-(*@{{\$}}@*)(*@{{\textbackslash}}@*)frac(*@{{\{}}@*)x(*@{{\}}}@*)(*@{{\{}}@*)y(*@{{\}}}@*)(*@{{\$}}@*)
+Start time of node 1
+┌─────────┬────────┬────────┬────────┬────────┬────────┐
+│  Col. 1 │ Col. 2 │ Col. 3 │ Col. 4 │ Col. 5 │ Col. 6 │
+├─────────┼────────┼────────┼────────┼────────┼────────┤
+│ 480.527 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
+│ 73.0384 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
+│  480.16 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
+└─────────┴────────┴────────┴────────┴────────┴────────┘
+Start time of node 2
+┌────────┬────────┬────────┬────────┬────────┬────────┐
+│ Col. 1 │ Col. 2 │ Col. 3 │ Col. 4 │ Col. 5 │ Col. 6 │
+├────────┼────────┼────────┼────────┼────────┼────────┤
+│    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
+│    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
+│    0.0 │    0.0 │    0.0 │  345.0 │    0.0 │    0.0 │
+└────────┴────────┴────────┴────────┴────────┴────────┘
+Start time of node 3
+┌────────┬────────┬────────┬────────┬─────────┬────────┐
+│ Col. 1 │ Col. 2 │ Col. 3 │ Col. 4 │  Col. 5 │ Col. 6 │
+├────────┼────────┼────────┼────────┼─────────┼────────┤
+│    0.0 │    0.0 │    0.0 │    0.0 │     0.0 │    0.0 │
+│    0.0 │    0.0 │    0.0 │    0.0 │     0.0 │    0.0 │
+│    0.0 │    0.0 │    0.0 │    0.0 │ 291.121 │    0.0 │
+└────────┴────────┴────────┴────────┴─────────┴────────┘
+Start time of node 4
+┌────────┬────────┬────────┬────────┬────────┬────────┐
+│ Col. 1 │ Col. 2 │ Col. 3 │ Col. 4 │ Col. 5 │ Col. 6 │
+├────────┼────────┼────────┼────────┼────────┼────────┤
+│    0.0 │  247.0 │    0.0 │    0.0 │    0.0 │    0.0 │
+│    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
+│    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
+└────────┴────────┴────────┴────────┴────────┴────────┘
+Start time of node 5
+┌────────┬────────┬────────┬────────┬────────┬────────┐
+│ Col. 1 │ Col. 2 │ Col. 3 │ Col. 4 │ Col. 5 │ Col. 6 │
+├────────┼────────┼────────┼────────┼────────┼────────┤
+│    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
+│    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
+│    0.0 │    0.0 │    0.0 │ 458.88 │    0.0 │    0.0 │
+└────────┴────────┴────────┴────────┴────────┴────────┘
+Start time of node 6
+┌────────┬────────┬─────────┬────────┬────────┬────────┐
+│ Col. 1 │ Col. 2 │  Col. 3 │ Col. 4 │ Col. 5 │ Col. 6 │
+├────────┼────────┼─────────┼────────┼────────┼────────┤
+│    0.0 │    0.0 │ 314.151 │    0.0 │    0.0 │    0.0 │
+│    0.0 │    0.0 │     0.0 │    0.0 │    0.0 │    0.0 │
+│    0.0 │    0.0 │     0.0 │    0.0 │    0.0 │    0.0 │
+└────────┴────────┴─────────┴────────┴────────┴────────┘
+Start time of node 7
+┌────────┬────────┬────────┬────────┬─────────┬────────┐
+│ Col. 1 │ Col. 2 │ Col. 3 │ Col. 4 │  Col. 5 │ Col. 6 │
+├────────┼────────┼────────┼────────┼─────────┼────────┤
+│    0.0 │    0.0 │    0.0 │    0.0 │     0.0 │    0.0 │
+│    0.0 │    0.0 │    0.0 │    0.0 │     0.0 │    0.0 │
+│    0.0 │    0.0 │    0.0 │    0.0 │ 224.083 │    0.0 │
+└────────┴────────┴────────┴────────┴─────────┴────────┘
+Start time of node 8
+┌────────┬────────┬────────┬────────┬────────┬────────┐
+│ Col. 1 │ Col. 2 │ Col. 3 │ Col. 4 │ Col. 5 │ Col. 6 │
+├────────┼────────┼────────┼────────┼────────┼────────┤
+│    0.0 │    0.0 │  434.0 │    0.0 │    0.0 │    0.0 │
+│    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
+│    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
+└────────┴────────┴────────┴────────┴────────┴────────┘
+Start time of node 9
+┌────────┬────────┬────────┬────────┬────────┬────────┐
+│ Col. 1 │ Col. 2 │ Col. 3 │ Col. 4 │ Col. 5 │ Col. 6 │
+├────────┼────────┼────────┼────────┼────────┼────────┤
+│    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │
+│    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │   46.0 │
+│    0.0 │    0.0 │    0.0 │    0.0 │   46.0 │    0.0 │
+└────────┴────────┴────────┴────────┴────────┴────────┘
+Start time of node 10
+┌─────────┬────────┬────────┬─────────┬────────┬────────┐
+│  Col. 1 │ Col. 2 │ Col. 3 │  Col. 4 │ Col. 5 │ Col. 6 │
+├─────────┼────────┼────────┼─────────┼────────┼────────┤
+│ 356.043 │    0.0 │    0.0 │     0.0 │    0.0 │    0.0 │
+│     0.0 │    0.0 │    0.0 │     0.0 │    0.0 │    0.0 │
+│     0.0 │    0.0 │    0.0 │ 416.454 │    0.0 │    0.0 │
+└─────────┴────────┴────────┴─────────┴────────┴────────┘
+Start time of node 11
+┌────────┬────────┬────────┬────────┬────────┬─────────┐
+│ Col. 1 │ Col. 2 │ Col. 3 │ Col. 4 │ Col. 5 │  Col. 6 │
+├────────┼────────┼────────┼────────┼────────┼─────────┤
+│    0.0 │    0.0 │  148.0 │    0.0 │    0.0 │     0.0 │
+│    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │     0.0 │
+│    0.0 │    0.0 │    0.0 │    0.0 │    0.0 │ 159.161 │
+└────────┴────────┴────────┴────────┴────────┴─────────┘
 \end{lstlisting}
 
 
-Total distance
+\rule{\textwidth}{1pt}
+Distance matrix
+
+
+\begin{lstlisting}
+(*@\HLJLnf{pretty{\_}table}@*)(*@\HLJLp{(}@*)(*@\HLJLn{particle}@*)(*@\HLJLoB{.}@*)(*@\HLJLn{d}@*)(*@\HLJLp{,}@*) (*@\HLJLn{tf}@*)(*@\HLJLoB{=}@*)(*@\HLJLn{tf{\_}html{\_}matrix}@*)(*@\HLJLp{,}@*) (*@\HLJLn{show{\_}row{\_}number}@*)(*@\HLJLoB{=}@*)(*@\HLJLkc{true}@*)(*@\HLJLp{)}@*)
+\end{lstlisting}
+
+
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<style>
+  table {
+      position: relative;
+  }
+
+  table::before,
+  table::after {
+      border: 1px solid #000;
+      content: "";
+      height: 100%;
+      position: absolute;
+      top: 0;
+      width: 6px;
+  }
+
+  table::before {
+      border-right: 0px;
+      left: -6px;
+  }
+
+  table::after {
+      border-left: 0px;
+      right: -6px;
+  }
+
+  td {
+      padding: 5px;
+      text-align: center;
+  }
+
+</style>
+<body>
+<table>
+  <thead>
+    <tr class = "header headerLastRow">
+      <th class = "rowNumber">Row</th>
+      <th style = "text-align: right;">Col. 1</th>
+      <th style = "text-align: right;">Col. 2</th>
+      <th style = "text-align: right;">Col. 3</th>
+      <th style = "text-align: right;">Col. 4</th>
+      <th style = "text-align: right;">Col. 5</th>
+      <th style = "text-align: right;">Col. 6</th>
+      <th style = "text-align: right;">Col. 7</th>
+      <th style = "text-align: right;">Col. 8</th>
+      <th style = "text-align: right;">Col. 9</th>
+      <th style = "text-align: right;">Col. 10</th>
+      <th style = "text-align: right;">Col. 11</th>
+      <th style = "text-align: right;">Col. 12</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class = "rowNumber">1</td>
+      <td style = "text-align: right;">0.0</td>
+      <td style = "text-align: right;">38.4708</td>
+      <td style = "text-align: right;">34.8855</td>
+      <td style = "text-align: right;">55.9464</td>
+      <td style = "text-align: right;">7.28011</td>
+      <td style = "text-align: right;">23.3452</td>
+      <td style = "text-align: right;">71.4703</td>
+      <td style = "text-align: right;">32.5269</td>
+      <td style = "text-align: right;">13.0384</td>
+      <td style = "text-align: right;">26.4008</td>
+      <td style = "text-align: right;">88.8876</td>
+      <td style = "text-align: right;">0.0</td>
+    </tr>
+    <tr>
+      <td class = "rowNumber">2</td>
+      <td style = "text-align: right;">38.4708</td>
+      <td style = "text-align: right;">0.0</td>
+      <td style = "text-align: right;">23.0868</td>
+      <td style = "text-align: right;">21.4009</td>
+      <td style = "text-align: right;">32.0156</td>
+      <td style = "text-align: right;">31.8277</td>
+      <td style = "text-align: right;">34.0</td>
+      <td style = "text-align: right;">32.6497</td>
+      <td style = "text-align: right;">45.2769</td>
+      <td style = "text-align: right;">57.4543</td>
+      <td style = "text-align: right;">56.8595</td>
+      <td style = "text-align: right;">38.4708</td>
+    </tr>
+    <tr>
+      <td class = "rowNumber">3</td>
+      <td style = "text-align: right;">34.8855</td>
+      <td style = "text-align: right;">23.0868</td>
+      <td style = "text-align: right;">0.0</td>
+      <td style = "text-align: right;">43.8292</td>
+      <td style = "text-align: right;">27.7849</td>
+      <td style = "text-align: right;">15.0333</td>
+      <td style = "text-align: right;">53.0377</td>
+      <td style = "text-align: right;">10.6301</td>
+      <td style = "text-align: right;">46.6154</td>
+      <td style = "text-align: right;">42.7551</td>
+      <td style = "text-align: right;">54.9181</td>
+      <td style = "text-align: right;">34.8855</td>
+    </tr>
+    <tr>
+      <td class = "rowNumber">4</td>
+      <td style = "text-align: right;">55.9464</td>
+      <td style = "text-align: right;">21.4009</td>
+      <td style = "text-align: right;">43.8292</td>
+      <td style = "text-align: right;">0.0</td>
+      <td style = "text-align: right;">50.6063</td>
+      <td style = "text-align: right;">53.1507</td>
+      <td style = "text-align: right;">17.0294</td>
+      <td style = "text-align: right;">53.8516</td>
+      <td style = "text-align: right;">59.2284</td>
+      <td style = "text-align: right;">77.801</td>
+      <td style = "text-align: right;">59.6406</td>
+      <td style = "text-align: right;">55.9464</td>
+    </tr>
+    <tr>
+      <td class = "rowNumber">5</td>
+      <td style = "text-align: right;">7.28011</td>
+      <td style = "text-align: right;">32.0156</td>
+      <td style = "text-align: right;">27.7849</td>
+      <td style = "text-align: right;">50.6063</td>
+      <td style = "text-align: right;">0.0</td>
+      <td style = "text-align: right;">17.4929</td>
+      <td style = "text-align: right;">65.5515</td>
+      <td style = "text-align: right;">26.4008</td>
+      <td style = "text-align: right;">19.105</td>
+      <td style = "text-align: right;">28.4253</td>
+      <td style = "text-align: right;">81.6088</td>
+      <td style = "text-align: right;">7.28011</td>
+    </tr>
+    <tr>
+      <td class = "rowNumber">6</td>
+      <td style = "text-align: right;">23.3452</td>
+      <td style = "text-align: right;">31.8277</td>
+      <td style = "text-align: right;">15.0333</td>
+      <td style = "text-align: right;">53.1507</td>
+      <td style = "text-align: right;">17.4929</td>
+      <td style = "text-align: right;">0.0</td>
+      <td style = "text-align: right;">65.0</td>
+      <td style = "text-align: right;">9.21954</td>
+      <td style = "text-align: right;">36.2353</td>
+      <td style = "text-align: right;">27.8926</td>
+      <td style = "text-align: right;">69.5845</td>
+      <td style = "text-align: right;">23.3452</td>
+    </tr>
+    <tr>
+      <td class = "rowNumber">7</td>
+      <td style = "text-align: right;">71.4703</td>
+      <td style = "text-align: right;">34.0</td>
+      <td style = "text-align: right;">53.0377</td>
+      <td style = "text-align: right;">17.0294</td>
+      <td style = "text-align: right;">65.5515</td>
+      <td style = "text-align: right;">65.0</td>
+      <td style = "text-align: right;">0.0</td>
+      <td style = "text-align: right;">63.6396</td>
+      <td style = "text-align: right;">75.8024</td>
+      <td style = "text-align: right;">91.4166</td>
+      <td style = "text-align: right;">50.9215</td>
+      <td style = "text-align: right;">71.4703</td>
+    </tr>
+    <tr>
+      <td class = "rowNumber">8</td>
+      <td style = "text-align: right;">32.5269</td>
+      <td style = "text-align: right;">32.6497</td>
+      <td style = "text-align: right;">10.6301</td>
+      <td style = "text-align: right;">53.8516</td>
+      <td style = "text-align: right;">26.4008</td>
+      <td style = "text-align: right;">9.21954</td>
+      <td style = "text-align: right;">63.6396</td>
+      <td style = "text-align: right;">0.0</td>
+      <td style = "text-align: right;">45.3431</td>
+      <td style = "text-align: right;">34.0147</td>
+      <td style = "text-align: right;">62.0725</td>
+      <td style = "text-align: right;">32.5269</td>
+    </tr>
+    <tr>
+      <td class = "rowNumber">9</td>
+      <td style = "text-align: right;">13.0384</td>
+      <td style = "text-align: right;">45.2769</td>
+      <td style = "text-align: right;">46.6154</td>
+      <td style = "text-align: right;">59.2284</td>
+      <td style = "text-align: right;">19.105</td>
+      <td style = "text-align: right;">36.2353</td>
+      <td style = "text-align: right;">75.8024</td>
+      <td style = "text-align: right;">45.3431</td>
+      <td style = "text-align: right;">0.0</td>
+      <td style = "text-align: right;">35.2278</td>
+      <td style = "text-align: right;">99.1615</td>
+      <td style = "text-align: right;">13.0384</td>
+    </tr>
+    <tr>
+      <td class = "rowNumber">10</td>
+      <td style = "text-align: right;">26.4008</td>
+      <td style = "text-align: right;">57.4543</td>
+      <td style = "text-align: right;">42.7551</td>
+      <td style = "text-align: right;">77.801</td>
+      <td style = "text-align: right;">28.4253</td>
+      <td style = "text-align: right;">27.8926</td>
+      <td style = "text-align: right;">91.4166</td>
+      <td style = "text-align: right;">34.0147</td>
+      <td style = "text-align: right;">35.2278</td>
+      <td style = "text-align: right;">0.0</td>
+      <td style = "text-align: right;">96.0208</td>
+      <td style = "text-align: right;">26.4008</td>
+    </tr>
+    <tr>
+      <td class = "rowNumber">11</td>
+      <td style = "text-align: right;">88.8876</td>
+      <td style = "text-align: right;">56.8595</td>
+      <td style = "text-align: right;">54.9181</td>
+      <td style = "text-align: right;">59.6406</td>
+      <td style = "text-align: right;">81.6088</td>
+      <td style = "text-align: right;">69.5845</td>
+      <td style = "text-align: right;">50.9215</td>
+      <td style = "text-align: right;">62.0725</td>
+      <td style = "text-align: right;">99.1615</td>
+      <td style = "text-align: right;">96.0208</td>
+      <td style = "text-align: right;">0.0</td>
+      <td style = "text-align: right;">88.8876</td>
+    </tr>
+    <tr>
+      <td class = "rowNumber">12</td>
+      <td style = "text-align: right;">0.0</td>
+      <td style = "text-align: right;">38.4708</td>
+      <td style = "text-align: right;">34.8855</td>
+      <td style = "text-align: right;">55.9464</td>
+      <td style = "text-align: right;">7.28011</td>
+      <td style = "text-align: right;">23.3452</td>
+      <td style = "text-align: right;">71.4703</td>
+      <td style = "text-align: right;">32.5269</td>
+      <td style = "text-align: right;">13.0384</td>
+      <td style = "text-align: right;">26.4008</td>
+      <td style = "text-align: right;">88.8876</td>
+      <td style = "text-align: right;">0.0</td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>
+
+
+\rule{\textwidth}{1pt}
+Processing time of each node
+
+
+\begin{lstlisting}
+(*@\HLJLn{particle}@*)(*@\HLJLoB{.}@*)(*@\HLJLn{p}@*)
+\end{lstlisting}
+
+\begin{lstlisting}
+3(*@\ensuremath{\times}@*)6(*@\ensuremath{\times}@*)11 Array(*@{{\{}}@*)Float64, 3(*@{{\}}}@*):
+[:, :, 1] =
+ 0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0
+
+[:, :, 2] =
+ 14.0  14.0  14.0  14.0  14.0  14.0
+ 14.0  14.0  14.0  14.0  14.0  14.0
+ 14.0  14.0  14.0  14.0  14.0  14.0
+
+[:, :, 3] =
+ 14.0  14.0  14.0  14.0  14.0  14.0
+ 14.0  14.0  14.0  14.0  14.0  14.0
+ 14.0  14.0  14.0  14.0  14.0  14.0
+
+;;; (*@\ensuremath{\ldots}@*) 
+
+[:, :, 9] =
+ 14.0  14.0  14.0  14.0  14.0  14.0
+ 14.0  14.0  14.0  14.0  14.0  14.0
+ 14.0  14.0  14.0  14.0  14.0  14.0
+
+[:, :, 10] =
+ 14.0  14.0  14.0  14.0  14.0  14.0
+ 14.0  14.0  14.0  14.0  14.0  14.0
+ 14.0  14.0  14.0  14.0  14.0  14.0
+
+[:, :, 11] =
+ 14.0  14.0  14.0  14.0  14.0  14.0
+ 14.0  14.0  14.0  14.0  14.0  14.0
+ 14.0  14.0  14.0  14.0  14.0  14.0
+\end{lstlisting}
+
+
+Total distance:
 
 
 \begin{lstlisting}
@@ -280,7 +692,121 @@ Total distance
 \end{lstlisting}
 
 \begin{lstlisting}
-560.1594410000001
+654.5956510000001
+\end{lstlisting}
+
+
+Tardiness
+
+
+\begin{lstlisting}
+(*@\HLJLn{tardy}@*)(*@\HLJLp{,}@*) (*@\HLJLn{max{\_}tardy}@*) (*@\HLJLoB{=}@*) (*@\HLJLnf{tardiness}@*)(*@\HLJLp{(}@*)(*@\HLJLn{particle}@*)(*@\HLJLp{)}@*)
+\end{lstlisting}
+
+\begin{lstlisting}
+(0.0, 0.0)
+\end{lstlisting}
+
+
+Objective function value:
+
+
+\begin{lstlisting}
+(*@\HLJLnf{objective{\_}value}@*)(*@\HLJLp{(}@*)(*@\HLJLn{particle}@*)(*@\HLJLp{)}@*)
+\end{lstlisting}
+
+\begin{lstlisting}
+218.19855033333334
+\end{lstlisting}
+
+
+\rule{\textwidth}{1pt}
+\section{Conclusion}
+
+\begin{lstlisting}
+(*@\HLJLn{df}@*) (*@\HLJLoB{=}@*) (*@\HLJLnf{df{\_}conclusion{\_}table}@*)(*@\HLJLp{()}@*)
+(*@\HLJLn{header}@*) (*@\HLJLoB{=}@*) (*@\HLJLp{([}@*)(*@\HLJLs{"{}Instance"{}}@*)(*@\HLJLp{,}@*) (*@\HLJLs{"{}Obj2014"{}}@*)(*@\HLJLp{,}@*) (*@\HLJLs{"{}ObjOur"{}}@*)(*@\HLJLp{,}@*) (*@\HLJLs{"{}{\#}iteration"{}}@*)(*@\HLJLp{,}@*) (*@\HLJLs{"{}time"{}}@*)(*@\HLJLp{,}@*) (*@\HLJLs{"{}time"{}}@*)(*@\HLJLp{],}@*) 
+(*@\HLJLp{[}@*)(*@\HLJLs{"{}"{}}@*)(*@\HLJLp{,}@*) (*@\HLJLs{"{}"{}}@*)(*@\HLJLp{,}@*) (*@\HLJLs{"{}"{}}@*)(*@\HLJLp{,}@*) (*@\HLJLs{"{}"{}}@*)(*@\HLJLp{,}@*) (*@\HLJLs{"{}second"{}}@*)(*@\HLJLp{,}@*) (*@\HLJLs{"{}min"{}}@*)(*@\HLJLp{])}@*)
+(*@\HLJLn{h1}@*) (*@\HLJLoB{=}@*) (*@\HLJLnf{Highlighter}@*)(*@\HLJLp{((}@*)(*@\HLJLn{df}@*)(*@\HLJLp{,}@*) (*@\HLJLn{i}@*)(*@\HLJLp{,}@*) (*@\HLJLn{j}@*)(*@\HLJLp{)}@*) (*@\HLJLoB{->}@*) (*@\HLJLp{(}@*)(*@\HLJLn{df}@*)(*@\HLJLp{[}@*)(*@\HLJLn{i}@*)(*@\HLJLp{,}@*) (*@\HLJLni{6}@*)(*@\HLJLp{]}@*) (*@\HLJLoB{>}@*) (*@\HLJLnfB{0.5}@*)(*@\HLJLp{),}@*) (*@\HLJLn{foreground}@*) (*@\HLJLoB{=}@*) (*@\HLJLsc{:blue}@*)(*@\HLJLp{)}@*)
+(*@\HLJLnf{pretty{\_}table}@*)(*@\HLJLp{(}@*)(*@\HLJLn{df}@*)(*@\HLJLp{,}@*) (*@\HLJLn{show{\_}row{\_}number}@*)(*@\HLJLoB{=}@*)(*@\HLJLkc{true}@*)(*@\HLJLp{,}@*) (*@\HLJLn{header}@*)(*@\HLJLoB{=}@*)(*@\HLJLn{header}@*)(*@\HLJLp{,}@*) (*@\HLJLn{highlighters}@*)(*@\HLJLoB{=}@*)(*@\HLJLn{h1}@*)(*@\HLJLp{)}@*)
+\end{lstlisting}
+
+\begin{lstlisting}
+┌─────┬───────────┬─────────┬─────────┬────────────┬───────────┬─────────┐
+│ Row │  Instance │ Obj2014 │  ObjOur │ (*@{{\#}}@*)iteration │      time │    time │
+│     │           │         │         │            │    second │     min │
+├─────┼───────────┼─────────┼─────────┼────────────┼───────────┼─────────┤
+│   1 │   ins10-1 │   218.2 │   218.2 │          5 │      1.23 │    0.02 │
+│   2 │   ins10-2 │   248.1 │  246.63 │          5 │       6.8 │    0.11 │
+│   3 │   ins10-3 │   305.9 │  305.86 │          5 │     12.49 │    0.21 │
+│   4 │   ins10-4 │   186.9 │  223.55 │          5 │      0.65 │    0.01 │
+│   5 │   ins10-5 │   192.0 │  189.54 │          6 │     16.77 │    0.28 │
+│   6 │   ins10-6 │   200.1 │   200.1 │          5 │      6.18 │     0.1 │
+│   7 │   ins10-7 │   225.4 │  232.37 │          5 │      0.37 │    0.01 │
+│   8 │   ins10-8 │   232.0 │  232.05 │          6 │      0.29 │     0.0 │
+│   9 │   ins10-9 │   222.3 │   222.3 │          5 │     14.71 │    0.25 │
+│  10 │  ins10-10 │   225.0 │  225.01 │          5 │      0.34 │    0.01 │
+│  11 │   ins25-1 │   458.9 │  432.64 │          6 │     58.43 │    0.97 │
+│  12 │   ins25-2 │   544.2 │  480.66 │         11 │    256.41 │    4.27 │
+│  13 │   ins25-3 │   431.4 │  418.51 │          7 │     143.1 │    2.38 │
+│  14 │   ins25-4 │   577.5 │  423.41 │         11 │    134.83 │    2.25 │
+│  15 │   ins25-5 │   391.1 │  406.57 │          8 │    133.36 │    2.22 │
+│  16 │   ins25-6 │   534.7 │  478.61 │         10 │    280.52 │    4.68 │
+│  17 │   ins25-7 │   355.5 │  343.74 │          7 │    126.24 │     2.1 │
+│  18 │   ins25-8 │   410.9 │  369.75 │          8 │     136.9 │    2.28 │
+│  19 │   ins25-9 │   487.9 │  405.32 │          9 │    276.33 │    4.61 │
+│  20 │  ins25-10 │   500.4 │  468.32 │          8 │    309.72 │    5.16 │
+│  21 │   ins50-1 │  1123.6 │ 1243.28 │          7 │    183.03 │    3.05 │
+│  22 │   ins50-2 │   673.8 │   659.3 │          7 │    395.65 │    6.59 │
+│  23 │   ins50-3 │   642.4 │  637.37 │          8 │    456.13 │     7.6 │
+│  24 │   ins50-4 │   580.4 │  568.64 │          7 │    573.95 │    9.57 │
+│  25 │   ins50-5 │   754.6 │  782.17 │          9 │    563.04 │    9.38 │
+│  26 │   ins50-6 │   951.6 │  970.61 │          9 │    157.73 │    2.63 │
+│  27 │   ins50-7 │   577.4 │  626.95 │          8 │    913.01 │   15.22 │
+│  28 │   ins50-8 │   540.6 │  520.85 │          8 │    786.73 │   13.11 │
+│  29 │   ins50-9 │   608.7 │  599.44 │          9 │    303.48 │    5.06 │
+│  30 │  ins50-10 │   679.3 │  677.39 │          6 │    300.65 │    5.01 │
+│  31 │   ins75-1 │  1321.8 │ 1290.15 │         11 │   2139.19 │   35.65 │
+│  32 │   ins75-2 │   892.7 │  819.89 │         10 │   2104.62 │   35.08 │
+│  33 │   ins75-3 │   819.4 │  770.23 │          9 │   1640.37 │   27.34 │
+│  34 │   ins75-4 │   877.4 │  933.63 │          9 │   1321.33 │   22.02 │
+│  35 │   ins75-5 │   872.1 │  818.24 │          8 │    885.23 │   14.75 │
+│  36 │   ins75-6 │   835.2 │  789.18 │          9 │   2113.24 │   35.22 │
+│  37 │   ins75-7 │   706.3 │  693.67 │          8 │    947.55 │   15.79 │
+│  38 │   ins75-8 │   811.4 │  785.06 │          8 │   1384.58 │   23.08 │
+│  39 │   ins75-9 │   842.7 │  761.44 │         10 │    925.33 │   15.42 │
+│  40 │  ins75-10 │  1306.6 │ 1398.63 │          9 │   1206.29 │    20.1 │
+│  41 │  ins100-1 │  1604.9 │ 1664.05 │         10 │   4800.86 │   80.01 │
+│  42 │  ins100-2 │  1101.9 │ 1041.71 │         12 │   3492.86 │   58.21 │
+│  43 │  ins100-3 │   986.4 │  904.48 │          9 │   2850.67 │   47.51 │
+│  44 │  ins100-4 │   871.0 │  856.57 │         11 │   3642.43 │   60.71 │
+│  45 │  ins100-5 │  1018.0 │  976.24 │         10 │   3561.61 │   59.36 │
+│  46 │  ins100-6 │  1003.0 │  954.06 │          9 │   2909.75 │    48.5 │
+│  47 │  ins100-7 │   921.1 │ 2944.17 │          5 │     51.69 │    0.86 │
+│  48 │  ins100-8 │   884.6 │  900.12 │          8 │   3126.42 │   52.11 │
+│  49 │  ins100-9 │  1131.7 │ 1117.18 │          8 │   2004.21 │    33.4 │
+│  50 │ ins100-10 │  1053.6 │  1047.6 │         10 │    852.88 │   14.21 │
+│  51 │  ins200-1 │  1721.4 │ 1720.81 │         14 │   68582.4 │ 1143.04 │
+│  52 │  ins200-2 │  1763.8 │  1635.0 │         11 │   52590.0 │   876.5 │
+│  53 │  ins200-3 │  1549.6 │ 1494.37 │         12 │   59857.0 │  997.62 │
+│  54 │  ins200-4 │  1420.4 │ 1396.32 │         10 │   38677.8 │  644.63 │
+│  55 │  ins200-5 │  1701.9 │ 1577.81 │         11 │   65347.0 │ 1089.12 │
+│  56 │  ins200-6 │  1639.7 │ 15092.9 │          5 │    449.42 │    7.49 │
+│  57 │  ins200-7 │  1384.3 │ 1432.74 │         14 │   92263.4 │ 1537.72 │
+│  58 │  ins200-8 │  1544.6 │ 1387.63 │         12 │   46004.2 │  766.74 │
+│  59 │  ins200-9 │  1572.9 │ 1543.49 │         14 │   40420.0 │  673.67 │
+│  60 │ ins200-10 │  1581.0 │ 1637.83 │         12 │   45340.6 │  755.68 │
+│  61 │  ins300-1 │  2248.0 │ 2179.02 │         14 │ 3.73417e5 │ 6223.61 │
+│  62 │  ins300-2 │  2316.1 │ 2311.84 │         15 │ 5.53177e5 │ 9219.62 │
+│  63 │  ins300-3 │  1885.3 │ 1872.53 │         14 │  424102.0 │ 7068.37 │
+│  64 │  ins300-4 │  2023.2 │ 1898.69 │          5 │   1622.34 │   27.04 │
+│  65 │  ins300-5 │  2247.6 │     0.0 │          0 │       0.0 │     0.0 │
+│  66 │  ins300-6 │  2144.4 │ 2219.16 │          5 │   2096.04 │   34.93 │
+│  67 │  ins300-7 │  1971.5 │  1996.2 │         13 │ 2.01953e5 │ 3365.88 │
+│  68 │  ins300-8 │  1987.4 │ 1955.26 │         12 │ 2.56356e5 │  4272.6 │
+│  69 │  ins300-9 │  2415.5 │     0.0 │          0 │       0.0 │     0.0 │
+│  70 │ ins300-10 │  2373.4 │ 2252.51 │         15 │ 2.50664e5 │ 4177.74 │
+└─────┴───────────┴─────────┴─────────┴────────────┴───────────┴─────────┘
 \end{lstlisting}
 
 

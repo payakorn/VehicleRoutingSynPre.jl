@@ -122,9 +122,11 @@ objective_value(particle)
 
 
 ---
-# Test startting time
-```julia
-par = load_object(joinpath(@__DIR, "data", "test", "ins25-1-1.jld2"));
-st = initial_starttime(par.num_node, par.num_vehi, par.num_serv);
-stt = find_node_starttime(par, )
+# Conclusion
+```julia; results="markup", line_width=150
+df = df_conclusion_table()
+header = (["Instance", "Obj2014", "ObjOur", "#iteration", "time", "time"], 
+["", "", "", "", "second", "min"])
+h1 = Highlighter((df, i, j) -> (df[i, 6] > 0.5), foreground = :blue)
+pretty_table(df, show_row_number=true, header=header, highlighters=h1)
 ```

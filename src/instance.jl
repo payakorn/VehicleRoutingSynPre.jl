@@ -1092,3 +1092,17 @@ end
 function save_information_run(name, best_par, t, iter)
     nothing
 end
+
+
+function df_conclusion_table()
+    CSV.File(joinpath(@__DIR__, "..", "data", "table", "our.csv")) |> DataFrame
+end
+
+
+function df_pretty_table()
+    df = df_conclusion_table()
+    header = (["Instance", "Obj2014", "ObjOur", "#iteration", "time", "time"], 
+    ["", "", "", "", "second", "min"])
+    h1 = Highlighter((df, i, j) -> (df[i, 6] > 0.5), foreground = :blue)
+    pretty_table(df, show_row_number=true, header=header, highlighters=h1)
+end
