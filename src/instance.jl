@@ -760,7 +760,7 @@ function PSO(ins::Ins; num_par=15, max_iter=150)
     save_particle(best_par)
 
     tab = CSV.File(joinpath(@__DIR__, "..", "data", "simulations", ins.name, "$(ins.name)-$num.csv")) |> DataFrame
-    sent_email("$(ins.name)", "iter: $iter, $(@sprintf("%.2f", new_best)), PRE: $(check_PRE(best_par)), SYN: $(check_SYN(best_par)), Compat: $(compatibility(best_par))\n", df=tab)
+    sent_email_report("$(ins.name)", "iter: $iter, $(@sprintf("%.2f", new_best)), PRE: $(check_PRE(best_par)), SYN: $(check_SYN(best_par)), Compat: $(compatibility(best_par))\n", df=tab)
     ic = open(joinpath(@__DIR__, "..", "data", "simulations", ins.name, "$(ins.name)-$num.md"), "w")
     write(ic, "$(latexify(tab, env=:mdtable))\n")
     close(ic)
@@ -804,19 +804,21 @@ function create_csv_2014()
     end
     close(io)
     dg = CSV.File(joinpath(@__DIR__, "..", "data", "table", "our.csv")) |> DataFrame
-    sent_email("conclusion our and 2014", "# Table", df=dg)
+    # sent_email("conclusion our and 2014", "# Table", df=dg)
 end
 
 
 function sent_email_report(file_name::String; df=nothing)
-    attachments = [joinpath(@__DIR__, "..", "report", file_name)]
+    create_csv_2014()
+    weave(joinpath(@__DIR__, "..", "report", "$file_name.Jmd"), doctype="md2html")
+    attachments = [joinpath(@__DIR__, "..", "report", "$file_name.html")]
     subject = "report"
     massage = ""
     sent_email(subject, massage, df=df, attachments=attachments)
 end
 
 
-function sent_email(subject::String, massage; df=nothing, attachments=[])
+function sent_email(subject::String, massage; df=nothing, attachments=nothing)
     username = "payakorn.sak@gmail.com"
     opt = SendOptions(
     isSSL = true,
@@ -852,7 +854,11 @@ function sent_email(subject::String, massage; df=nothing, attachments=[])
     """
 
     msg = get_mime_msg(msg)
-    body = get_body(["<payakornn@gmail.com>"], "You <$username>", subject, msg; attachments)
+    if isnothing(attachments)
+        body = get_body(["<payakornn@gmail.com>"], "You <$username>", subject, msg)
+    else
+        body = get_body(["<payakornn@gmail.com>"], "You <$username>", subject, msg; attachments)
+    end
     # body = IOBuffer(
     # # "Date: Fri, 18 Oct 2013 21:44:29 +0100\r\n" *
     # "From: You <$username>\r\n" *

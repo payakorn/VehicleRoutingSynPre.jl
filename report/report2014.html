@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<HTML lang = "en">
+<HEAD>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Report</title>
+  
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      TeX: { equationNumbers: { autoNumber: "AMS" } }
+    });
+  </script>
+
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+
+  
+<style>
+pre.hljl {
+    border: 1px solid #ccc;
+    margin: 5px;
+    padding: 5px;
+    overflow-x: auto;
+    color: rgb(68,68,68); background-color: rgb(251,251,251); }
+pre.hljl > span.hljl-t { }
+pre.hljl > span.hljl-w { }
+pre.hljl > span.hljl-e { }
+pre.hljl > span.hljl-eB { }
+pre.hljl > span.hljl-o { }
+pre.hljl > span.hljl-k { color: rgb(148,91,176); font-weight: bold; }
+pre.hljl > span.hljl-kc { color: rgb(59,151,46); font-style: italic; }
+pre.hljl > span.hljl-kd { color: rgb(214,102,97); font-style: italic; }
+pre.hljl > span.hljl-kn { color: rgb(148,91,176); font-weight: bold; }
+pre.hljl > span.hljl-kp { color: rgb(148,91,176); font-weight: bold; }
+pre.hljl > span.hljl-kr { color: rgb(148,91,176); font-weight: bold; }
+pre.hljl > span.hljl-kt { color: rgb(148,91,176); font-weight: bold; }
+pre.hljl > span.hljl-n { }
+pre.hljl > span.hljl-na { }
+pre.hljl > span.hljl-nb { }
+pre.hljl > span.hljl-nbp { }
+pre.hljl > span.hljl-nc { }
+pre.hljl > span.hljl-ncB { }
+pre.hljl > span.hljl-nd { color: rgb(214,102,97); }
+pre.hljl > span.hljl-ne { }
+pre.hljl > span.hljl-neB { }
+pre.hljl > span.hljl-nf { color: rgb(66,102,213); }
+pre.hljl > span.hljl-nfm { color: rgb(66,102,213); }
+pre.hljl > span.hljl-np { }
+pre.hljl > span.hljl-nl { }
+pre.hljl > span.hljl-nn { }
+pre.hljl > span.hljl-no { }
+pre.hljl > span.hljl-nt { }
+pre.hljl > span.hljl-nv { }
+pre.hljl > span.hljl-nvc { }
+pre.hljl > span.hljl-nvg { }
+pre.hljl > span.hljl-nvi { }
+pre.hljl > span.hljl-nvm { }
+pre.hljl > span.hljl-l { }
+pre.hljl > span.hljl-ld { color: rgb(148,91,176); font-style: italic; }
+pre.hljl > span.hljl-s { color: rgb(201,61,57); }
+pre.hljl > span.hljl-sa { color: rgb(201,61,57); }
+pre.hljl > span.hljl-sb { color: rgb(201,61,57); }
+pre.hljl > span.hljl-sc { color: rgb(201,61,57); }
+pre.hljl > span.hljl-sd { color: rgb(201,61,57); }
+pre.hljl > span.hljl-sdB { color: rgb(201,61,57); }
+pre.hljl > span.hljl-sdC { color: rgb(201,61,57); }
+pre.hljl > span.hljl-se { color: rgb(59,151,46); }
+pre.hljl > span.hljl-sh { color: rgb(201,61,57); }
+pre.hljl > span.hljl-si { }
+pre.hljl > span.hljl-so { color: rgb(201,61,57); }
+pre.hljl > span.hljl-sr { color: rgb(201,61,57); }
+pre.hljl > span.hljl-ss { color: rgb(201,61,57); }
+pre.hljl > span.hljl-ssB { color: rgb(201,61,57); }
+pre.hljl > span.hljl-nB { color: rgb(59,151,46); }
+pre.hljl > span.hljl-nbB { color: rgb(59,151,46); }
+pre.hljl > span.hljl-nfB { color: rgb(59,151,46); }
+pre.hljl > span.hljl-nh { color: rgb(59,151,46); }
+pre.hljl > span.hljl-ni { color: rgb(59,151,46); }
+pre.hljl > span.hljl-nil { color: rgb(59,151,46); }
+pre.hljl > span.hljl-noB { color: rgb(59,151,46); }
+pre.hljl > span.hljl-oB { color: rgb(102,102,102); font-weight: bold; }
+pre.hljl > span.hljl-ow { color: rgb(102,102,102); font-weight: bold; }
+pre.hljl > span.hljl-p { }
+pre.hljl > span.hljl-c { color: rgb(153,153,119); font-style: italic; }
+pre.hljl > span.hljl-ch { color: rgb(153,153,119); font-style: italic; }
+pre.hljl > span.hljl-cm { color: rgb(153,153,119); font-style: italic; }
+pre.hljl > span.hljl-cp { color: rgb(153,153,119); font-style: italic; }
+pre.hljl > span.hljl-cpB { color: rgb(153,153,119); font-style: italic; }
+pre.hljl > span.hljl-cs { color: rgb(153,153,119); font-style: italic; }
+pre.hljl > span.hljl-csB { color: rgb(153,153,119); font-style: italic; }
+pre.hljl > span.hljl-g { }
+pre.hljl > span.hljl-gd { }
+pre.hljl > span.hljl-ge { }
+pre.hljl > span.hljl-geB { }
+pre.hljl > span.hljl-gh { }
+pre.hljl > span.hljl-gi { }
+pre.hljl > span.hljl-go { }
+pre.hljl > span.hljl-gp { }
+pre.hljl > span.hljl-gs { }
+pre.hljl > span.hljl-gsB { }
+pre.hljl > span.hljl-gt { }
+</style>
+
+
+
+  <style type="text/css">
+  @font-face {
+  font-style: normal;
+  font-weight: 300;
+}
+@font-face {
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-style: normal;
+  font-weight: 600;
+}
+html {
+  font-family: sans-serif; /* 1 */
+  -ms-text-size-adjust: 100%; /* 2 */
+  -webkit-text-size-adjust: 100%; /* 2 */
+}
+body {
+  margin: 0;
+}
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+menu,
+nav,
+section,
+summary {
+  display: block;
+}
+audio,
+canvas,
+progress,
+video {
+  display: inline-block; /* 1 */
+  vertical-align: baseline; /* 2 */
+}
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+[hidden],
+template {
+  display: none;
+}
+a:active,
+a:hover {
+  outline: 0;
+}
+abbr[title] {
+  border-bottom: 1px dotted;
+}
+b,
+strong {
+  font-weight: bold;
+}
+dfn {
+  font-style: italic;
+}
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+mark {
+  background: #ff0;
+  color: #000;
+}
+small {
+  font-size: 80%;
+}
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+sup {
+  top: -0.5em;
+}
+sub {
+  bottom: -0.25em;
+}
+img {
+  border: 0;
+}
+svg:not(:root) {
+  overflow: hidden;
+}
+figure {
+  margin: 1em 40px;
+}
+hr {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 0;
+}
+pre {
+  overflow: auto;
+}
+code,
+kbd,
+pre,
+samp {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+button,
+input,
+optgroup,
+select,
+textarea {
+  color: inherit; /* 1 */
+  font: inherit; /* 2 */
+  margin: 0; /* 3 */
+}
+button {
+  overflow: visible;
+}
+button,
+select {
+  text-transform: none;
+}
+button,
+html input[type="button"], /* 1 */
+input[type="reset"],
+input[type="submit"] {
+  -webkit-appearance: button; /* 2 */
+  cursor: pointer; /* 3 */
+}
+button[disabled],
+html input[disabled] {
+  cursor: default;
+}
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+input {
+  line-height: normal;
+}
+input[type="checkbox"],
+input[type="radio"] {
+  box-sizing: border-box; /* 1 */
+  padding: 0; /* 2 */
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+input[type="search"] {
+  -webkit-appearance: textfield; /* 1 */
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box; /* 2 */
+  box-sizing: content-box;
+}
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+fieldset {
+  border: 1px solid #c0c0c0;
+  margin: 0 2px;
+  padding: 0.35em 0.625em 0.75em;
+}
+legend {
+  border: 0; /* 1 */
+  padding: 0; /* 2 */
+}
+textarea {
+  overflow: auto;
+}
+optgroup {
+  font-weight: bold;
+}
+table {
+  font-family: monospace, monospace;
+  font-size : 0.8em;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+td,
+th {
+  padding: 0;
+}
+thead th {
+    border-bottom: 1px solid black;
+    background-color: white;
+}
+tr:nth-child(odd){
+  background-color: rgb(248,248,248);
+}
+
+
+/*
+* Skeleton V2.0.4
+* Copyright 2014, Dave Gamache
+* www.getskeleton.com
+* Free to use under the MIT license.
+* http://www.opensource.org/licenses/mit-license.php
+* 12/29/2014
+*/
+.container {
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box; }
+.column,
+.columns {
+  width: 100%;
+  float: left;
+  box-sizing: border-box; }
+@media (min-width: 400px) {
+  .container {
+    width: 85%;
+    padding: 0; }
+}
+@media (min-width: 550px) {
+  .container {
+    width: 80%; }
+  .column,
+  .columns {
+    margin-left: 4%; }
+  .column:first-child,
+  .columns:first-child {
+    margin-left: 0; }
+
+  .one.column,
+  .one.columns                    { width: 4.66666666667%; }
+  .two.columns                    { width: 13.3333333333%; }
+  .three.columns                  { width: 22%;            }
+  .four.columns                   { width: 30.6666666667%; }
+  .five.columns                   { width: 39.3333333333%; }
+  .six.columns                    { width: 48%;            }
+  .seven.columns                  { width: 56.6666666667%; }
+  .eight.columns                  { width: 65.3333333333%; }
+  .nine.columns                   { width: 74.0%;          }
+  .ten.columns                    { width: 82.6666666667%; }
+  .eleven.columns                 { width: 91.3333333333%; }
+  .twelve.columns                 { width: 100%; margin-left: 0; }
+
+  .one-third.column               { width: 30.6666666667%; }
+  .two-thirds.column              { width: 65.3333333333%; }
+
+  .one-half.column                { width: 48%; }
+
+  /* Offsets */
+  .offset-by-one.column,
+  .offset-by-one.columns          { margin-left: 8.66666666667%; }
+  .offset-by-two.column,
+  .offset-by-two.columns          { margin-left: 17.3333333333%; }
+  .offset-by-three.column,
+  .offset-by-three.columns        { margin-left: 26%;            }
+  .offset-by-four.column,
+  .offset-by-four.columns         { margin-left: 34.6666666667%; }
+  .offset-by-five.column,
+  .offset-by-five.columns         { margin-left: 43.3333333333%; }
+  .offset-by-six.column,
+  .offset-by-six.columns          { margin-left: 52%;            }
+  .offset-by-seven.column,
+  .offset-by-seven.columns        { margin-left: 60.6666666667%; }
+  .offset-by-eight.column,
+  .offset-by-eight.columns        { margin-left: 69.3333333333%; }
+  .offset-by-nine.column,
+  .offset-by-nine.columns         { margin-left: 78.0%;          }
+  .offset-by-ten.column,
+  .offset-by-ten.columns          { margin-left: 86.6666666667%; }
+  .offset-by-eleven.column,
+  .offset-by-eleven.columns       { margin-left: 95.3333333333%; }
+
+  .offset-by-one-third.column,
+  .offset-by-one-third.columns    { margin-left: 34.6666666667%; }
+  .offset-by-two-thirds.column,
+  .offset-by-two-thirds.columns   { margin-left: 69.3333333333%; }
+
+  .offset-by-one-half.column,
+  .offset-by-one-half.columns     { margin-left: 52%; }
+
+}
+html {
+  font-size: 62.5%; }
+body {
+  font-size: 1.5em; /* currently ems cause chrome bug misinterpreting rems on body element */
+  line-height: 1.6;
+  font-weight: 400;
+  font-family: "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #222; }
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+  margin-bottom: 2rem;
+  font-weight: 300; }
+h1 { font-size: 3.6rem; line-height: 1.2;  letter-spacing: -.1rem;}
+h2 { font-size: 3.4rem; line-height: 1.25; letter-spacing: -.1rem; }
+h3 { font-size: 3.2rem; line-height: 1.3;  letter-spacing: -.1rem; }
+h4 { font-size: 2.8rem; line-height: 1.35; letter-spacing: -.08rem; }
+h5 { font-size: 2.4rem; line-height: 1.5;  letter-spacing: -.05rem; }
+h6 { font-size: 1.5rem; line-height: 1.6;  letter-spacing: 0; }
+
+p {
+  margin-top: 0; }
+a {
+  color: #1EAEDB; }
+a:hover {
+  color: #0FA0CE; }
+.button,
+button,
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+  display: inline-block;
+  height: 38px;
+  padding: 0 30px;
+  color: #555;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 38px;
+  letter-spacing: .1rem;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: transparent;
+  border-radius: 4px;
+  border: 1px solid #bbb;
+  cursor: pointer;
+  box-sizing: border-box; }
+.button:hover,
+button:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+input[type="button"]:hover,
+.button:focus,
+button:focus,
+input[type="submit"]:focus,
+input[type="reset"]:focus,
+input[type="button"]:focus {
+  color: #333;
+  border-color: #888;
+  outline: 0; }
+.button.button-primary,
+button.button-primary,
+input[type="submit"].button-primary,
+input[type="reset"].button-primary,
+input[type="button"].button-primary {
+  color: #FFF;
+  background-color: #33C3F0;
+  border-color: #33C3F0; }
+.button.button-primary:hover,
+button.button-primary:hover,
+input[type="submit"].button-primary:hover,
+input[type="reset"].button-primary:hover,
+input[type="button"].button-primary:hover,
+.button.button-primary:focus,
+button.button-primary:focus,
+input[type="submit"].button-primary:focus,
+input[type="reset"].button-primary:focus,
+input[type="button"].button-primary:focus {
+  color: #FFF;
+  background-color: #1EAEDB;
+  border-color: #1EAEDB; }
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="text"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+textarea,
+select {
+  height: 38px;
+  padding: 6px 10px; /* The 6px vertically centers text on FF, ignored by Webkit */
+  background-color: #fff;
+  border: 1px solid #D1D1D1;
+  border-radius: 4px;
+  box-shadow: none;
+  box-sizing: border-box; }
+/* Removes awkward default styles on some inputs for iOS */
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="text"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+textarea {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none; }
+textarea {
+  min-height: 65px;
+  padding-top: 6px;
+  padding-bottom: 6px; }
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+input[type="text"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+input[type="password"]:focus,
+textarea:focus,
+select:focus {
+  border: 1px solid #33C3F0;
+  outline: 0; }
+label,
+legend {
+  display: block;
+  margin-bottom: .5rem;
+  font-weight: 600; }
+fieldset {
+  padding: 0;
+  border-width: 0; }
+input[type="checkbox"],
+input[type="radio"] {
+  display: inline; }
+label > .label-body {
+  display: inline-block;
+  margin-left: .5rem;
+  font-weight: normal; }
+ul {
+  list-style: circle; }
+ol {
+  list-style: decimal; }
+ul ul,
+ul ol,
+ol ol,
+ol ul {
+  margin: 1.5rem 0 1.5rem 3rem;
+  font-size: 90%; }
+li > p {margin : 0;}
+th,
+td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #E1E1E1; }
+th:first-child,
+td:first-child {
+  padding-left: 0; }
+th:last-child,
+td:last-child {
+  padding-right: 0; }
+button,
+.button {
+  margin-bottom: 1rem; }
+input,
+textarea,
+select,
+fieldset {
+  margin-bottom: 1.5rem; }
+pre,
+blockquote,
+dl,
+figure,
+table,
+p,
+ul,
+ol,
+form {
+  margin-bottom: 1.0rem; }
+.u-full-width {
+  width: 100%;
+  box-sizing: border-box; }
+.u-max-full-width {
+  max-width: 100%;
+  box-sizing: border-box; }
+.u-pull-right {
+  float: right; }
+.u-pull-left {
+  float: left; }
+hr {
+  margin-top: 3rem;
+  margin-bottom: 3.5rem;
+  border-width: 0;
+  border-top: 1px solid #E1E1E1; }
+.container:after,
+.row:after,
+.u-cf {
+  content: "";
+  display: table;
+  clear: both; }
+
+pre {
+  display: block;
+  padding: 9.5px;
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 1.42857143;
+  word-break: break-all;
+  word-wrap: break-word;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre.hljl {
+  margin: 0 0 10px;
+  display: block;
+  background: #f5f5f5;
+  border-radius: 4px;
+  padding : 5px;
+}
+
+pre.output {
+  background: #ffffff;
+}
+
+pre.code {
+  background: #ffffff;
+}
+
+pre.julia-error {
+  color : red
+}
+
+code,
+kbd,
+pre,
+samp {
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-size: 0.9em;
+}
+
+
+@media (min-width: 400px) {}
+@media (min-width: 550px) {}
+@media (min-width: 750px) {}
+@media (min-width: 1000px) {}
+@media (min-width: 1200px) {}
+
+h1.title {margin-top : 20px}
+img {max-width : 100%}
+div.title {text-align: center;}
+
+  </style>
+</HEAD>
+
+<BODY>
+  <div class ="container">
+    <div class = "row">
+      <div class = "col-md-12 twelve columns">
+        <div class="title">
+          <h1 class="title">Report</h1>
+          <h5>Payakorn Saksuriya</h5>
+          
+        </div>
+
+        <p>Import package</p>
+
+
+<pre class='hljl'>
+<span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>VehicleRoutingSynPre</span><span class='hljl-t'>
+</span><span class='hljl-k'>using</span><span class='hljl-t'> </span><span class='hljl-n'>PrettyTables</span>
+</pre>
+
+
+
+<hr />
+<h1>Conclusion</h1>
+
+
+<pre class='hljl'>
+<span class='hljl-n'>df</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>df_conclusion_table</span><span class='hljl-p'>()</span><span class='hljl-t'>
+</span><span class='hljl-n'>header</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-p'>([</span><span class='hljl-s'>&quot;Instance&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;Obj2014&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;ObjOur&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;#iteration&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;time&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;time&quot;</span><span class='hljl-p'>],</span><span class='hljl-t'> 
+</span><span class='hljl-p'>[</span><span class='hljl-s'>&quot;&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;second&quot;</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-s'>&quot;min&quot;</span><span class='hljl-p'>])</span><span class='hljl-t'>
+</span><span class='hljl-n'>h1</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>Highlighter</span><span class='hljl-p'>((</span><span class='hljl-n'>df</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>i</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>j</span><span class='hljl-p'>)</span><span class='hljl-t'> </span><span class='hljl-oB'>-&gt;</span><span class='hljl-t'> </span><span class='hljl-p'>(</span><span class='hljl-n'>df</span><span class='hljl-p'>[</span><span class='hljl-n'>i</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-ni'>6</span><span class='hljl-p'>]</span><span class='hljl-t'> </span><span class='hljl-oB'>&gt;</span><span class='hljl-t'> </span><span class='hljl-nfB'>0.5</span><span class='hljl-p'>),</span><span class='hljl-t'> </span><span class='hljl-n'>foreground</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-sc'>:blue</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-nf'>pretty_table</span><span class='hljl-p'>(</span><span class='hljl-n'>df</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>show_row_number</span><span class='hljl-oB'>=</span><span class='hljl-kc'>true</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>header</span><span class='hljl-oB'>=</span><span class='hljl-n'>header</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>highlighters</span><span class='hljl-oB'>=</span><span class='hljl-n'>h1</span><span class='hljl-p'>)</span>
+</pre>
+
+
+<pre class="output">
+┌─────┬───────────┬─────────┬─────────┬────────────┬───────────┬─────────┐
+│ Row │  Instance │ Obj2014 │  ObjOur │ #iteration │      time │    time │
+│     │           │         │         │            │    second │     min │
+├─────┼───────────┼─────────┼─────────┼────────────┼───────────┼─────────┤
+│   1 │   ins10-1 │   218.2 │   218.2 │          5 │      1.23 │    0.02 │
+│   2 │   ins10-2 │   248.1 │  246.63 │          5 │       6.8 │    0.11 │
+│   3 │   ins10-3 │   305.9 │  305.86 │          5 │     12.49 │    0.21 │
+│   4 │   ins10-4 │   186.9 │  223.55 │          5 │      0.65 │    0.01 │
+│   5 │   ins10-5 │   192.0 │  189.54 │          6 │     16.77 │    0.28 │
+│   6 │   ins10-6 │   200.1 │   200.1 │          5 │      6.18 │     0.1 │
+│   7 │   ins10-7 │   225.4 │  232.37 │          5 │      0.37 │    0.01 │
+│   8 │   ins10-8 │   232.0 │  232.05 │          6 │      0.29 │     0.0 │
+│   9 │   ins10-9 │   222.3 │   222.3 │          5 │     14.71 │    0.25 │
+│  10 │  ins10-10 │   225.0 │  225.01 │          5 │      0.34 │    0.01 │
+│  11 │   ins25-1 │   458.9 │  432.64 │          6 │     58.43 │    0.97 │
+│  12 │   ins25-2 │   544.2 │  480.66 │         11 │    256.41 │    4.27 │
+│  13 │   ins25-3 │   431.4 │  418.51 │          7 │     143.1 │    2.38 │
+│  14 │   ins25-4 │   577.5 │  423.41 │         11 │    134.83 │    2.25 │
+│  15 │   ins25-5 │   391.1 │  406.57 │          8 │    133.36 │    2.22 │
+│  16 │   ins25-6 │   534.7 │  478.61 │         10 │    280.52 │    4.68 │
+│  17 │   ins25-7 │   355.5 │  343.74 │          7 │    126.24 │     2.1 │
+│  18 │   ins25-8 │   410.9 │  369.75 │          8 │     136.9 │    2.28 │
+│  19 │   ins25-9 │   487.9 │  405.32 │          9 │    276.33 │    4.61 │
+│  20 │  ins25-10 │   500.4 │  468.32 │          8 │    309.72 │    5.16 │
+│  21 │   ins50-1 │  1123.6 │  1174.8 │          7 │    183.03 │    3.05 │
+│  22 │   ins50-2 │   673.8 │   659.3 │          7 │    395.65 │    6.59 │
+│  23 │   ins50-3 │   642.4 │  637.37 │          8 │    456.13 │     7.6 │
+│  24 │   ins50-4 │   580.4 │  568.64 │          7 │    573.95 │    9.57 │
+│  25 │   ins50-5 │   754.6 │  758.44 │          9 │    563.04 │    9.38 │
+│  26 │   ins50-6 │   951.6 │  897.28 │          9 │    157.73 │    2.63 │
+│  27 │   ins50-7 │   577.4 │  616.45 │          8 │    913.01 │   15.22 │
+│  28 │   ins50-8 │   540.6 │  520.85 │          8 │    786.73 │   13.11 │
+│  29 │   ins50-9 │   608.7 │  570.47 │          9 │    303.48 │    5.06 │
+│  30 │  ins50-10 │   679.3 │   634.4 │          6 │    300.65 │    5.01 │
+│  31 │   ins75-1 │  1321.8 │ 1290.15 │         11 │   2139.19 │   35.65 │
+│  32 │   ins75-2 │   892.7 │  819.89 │         10 │   2104.62 │   35.08 │
+│  33 │   ins75-3 │   819.4 │  770.23 │          9 │   1640.37 │   27.34 │
+│  34 │   ins75-4 │   877.4 │  933.63 │          9 │   1321.33 │   22.02 │
+│  35 │   ins75-5 │   872.1 │  818.24 │          8 │    885.23 │   14.75 │
+│  36 │   ins75-6 │   835.2 │  789.18 │          9 │   2113.24 │   35.22 │
+│  37 │   ins75-7 │   706.3 │  693.67 │          8 │    947.55 │   15.79 │
+│  38 │   ins75-8 │   811.4 │  785.06 │          8 │   1384.58 │   23.08 │
+│  39 │   ins75-9 │   842.7 │  761.44 │         10 │    925.33 │   15.42 │
+│  40 │  ins75-10 │  1306.6 │ 1398.63 │          7 │   1206.29 │    20.1 │
+│  41 │  ins100-1 │  1604.9 │ 1664.05 │         10 │   4800.86 │   80.01 │
+│  42 │  ins100-2 │  1101.9 │ 1041.71 │         12 │   3492.86 │   58.21 │
+│  43 │  ins100-3 │   986.4 │  904.48 │          9 │   2850.67 │   47.51 │
+│  44 │  ins100-4 │   871.0 │  856.57 │         11 │   3642.43 │   60.71 │
+│  45 │  ins100-5 │  1018.0 │  976.24 │         10 │   3561.61 │   59.36 │
+│  46 │  ins100-6 │  1003.0 │  954.06 │          9 │   2909.75 │    48.5 │
+│  47 │  ins100-7 │   921.1 │  882.62 │          5 │     51.69 │    0.86 │
+│  48 │  ins100-8 │   884.6 │  900.12 │          8 │   3126.42 │   52.11 │
+│  49 │  ins100-9 │  1131.7 │ 1117.18 │          8 │   2004.21 │    33.4 │
+│  50 │ ins100-10 │  1053.6 │  1047.6 │         10 │    852.88 │   14.21 │
+│  51 │  ins200-1 │  1721.4 │ 1720.81 │         14 │   68582.4 │ 1143.04 │
+│  52 │  ins200-2 │  1763.8 │  1635.0 │         11 │   52590.0 │   876.5 │
+│  53 │  ins200-3 │  1549.6 │ 1494.37 │         12 │   59857.0 │  997.62 │
+│  54 │  ins200-4 │  1420.4 │ 1396.32 │         10 │   38677.8 │  644.63 │
+│  55 │  ins200-5 │  1701.9 │ 1577.81 │         11 │   65347.0 │ 1089.12 │
+│  56 │  ins200-6 │  1639.7 │  1675.0 │          5 │    449.42 │    7.49 │
+│  57 │  ins200-7 │  1384.3 │ 1432.74 │         14 │   92263.4 │ 1537.72 │
+│  58 │  ins200-8 │  1544.6 │ 1387.63 │         12 │   46004.2 │  766.74 │
+│  59 │  ins200-9 │  1572.9 │ 1543.49 │         14 │   40420.0 │  673.67 │
+│  60 │ ins200-10 │  1581.0 │     0.0 │          0 │       0.0 │     0.0 │
+│  61 │  ins300-1 │  2248.0 │ 2179.02 │         14 │ 3.73417e5 │ 6223.61 │
+│  62 │  ins300-2 │  2316.1 │ 2311.84 │         15 │ 5.53177e5 │ 9219.62 │
+│  63 │  ins300-3 │  1885.3 │ 1872.53 │         14 │  424102.0 │ 7068.37 │
+│  64 │  ins300-4 │  2023.2 │ 1898.69 │          5 │   1622.34 │   27.04 │
+│  65 │  ins300-5 │  2247.6 │     0.0 │          0 │       0.0 │     0.0 │
+│  66 │  ins300-6 │  2144.4 │     0.0 │          0 │       0.0 │     0.0 │
+│  67 │  ins300-7 │  1971.5 │     0.0 │          0 │       0.0 │     0.0 │
+│  68 │  ins300-8 │  1987.4 │ 1955.26 │         12 │ 2.56356e5 │  4272.6 │
+│  69 │  ins300-9 │  2415.5 │     0.0 │          0 │       0.0 │     0.0 │
+│  70 │ ins300-10 │  2373.4 │ 2252.51 │         15 │ 2.50664e5 │ 4177.74 │
+└─────┴───────────┴─────────┴─────────┴────────────┴───────────┴─────────┘
+</pre>
+
+
+<hr />
+<h2>Instance Our <span class="math">$x^2+2x$</span> Ins2014</h2>
+<p>Instance Our <span class="math">$x^2+2x$</span> Ins2014</p>
+
+
+<pre class='hljl'>
+<span class='hljl-n'>dg</span><span class='hljl-t'> </span><span class='hljl-oB'>=</span><span class='hljl-t'> </span><span class='hljl-nf'>filter</span><span class='hljl-p'>(</span><span class='hljl-n'>row</span><span class='hljl-t'> </span><span class='hljl-oB'>-&gt;</span><span class='hljl-t'> </span><span class='hljl-n'>row</span><span class='hljl-oB'>.</span><span class='hljl-n'>Obj2014</span><span class='hljl-oB'>&gt;=</span><span class='hljl-n'>row</span><span class='hljl-oB'>.</span><span class='hljl-n'>obj</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>df</span><span class='hljl-p'>)</span><span class='hljl-t'>
+</span><span class='hljl-nf'>pretty_table</span><span class='hljl-p'>(</span><span class='hljl-n'>dg</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>show_row_number</span><span class='hljl-oB'>=</span><span class='hljl-kc'>true</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>header</span><span class='hljl-oB'>=</span><span class='hljl-n'>header</span><span class='hljl-p'>,</span><span class='hljl-t'> </span><span class='hljl-n'>highlighters</span><span class='hljl-oB'>=</span><span class='hljl-n'>h1</span><span class='hljl-p'>)</span>
+</pre>
+
+
+<pre class="output">
+┌─────┬───────────┬─────────┬─────────┬────────────┬───────────┬─────────┐
+│ Row │  Instance │ Obj2014 │  ObjOur │ #iteration │      time │    time │
+│     │           │         │         │            │    second │     min │
+├─────┼───────────┼─────────┼─────────┼────────────┼───────────┼─────────┤
+│   1 │   ins10-1 │   218.2 │   218.2 │          5 │      1.23 │    0.02 │
+│   2 │   ins10-2 │   248.1 │  246.63 │          5 │       6.8 │    0.11 │
+│   3 │   ins10-3 │   305.9 │  305.86 │          5 │     12.49 │    0.21 │
+│   4 │   ins10-5 │   192.0 │  189.54 │          6 │     16.77 │    0.28 │
+│   5 │   ins10-6 │   200.1 │   200.1 │          5 │      6.18 │     0.1 │
+│   6 │   ins10-9 │   222.3 │   222.3 │          5 │     14.71 │    0.25 │
+│   7 │   ins25-1 │   458.9 │  432.64 │          6 │     58.43 │    0.97 │
+│   8 │   ins25-2 │   544.2 │  480.66 │         11 │    256.41 │    4.27 │
+│   9 │   ins25-3 │   431.4 │  418.51 │          7 │     143.1 │    2.38 │
+│  10 │   ins25-4 │   577.5 │  423.41 │         11 │    134.83 │    2.25 │
+│  11 │   ins25-6 │   534.7 │  478.61 │         10 │    280.52 │    4.68 │
+│  12 │   ins25-7 │   355.5 │  343.74 │          7 │    126.24 │     2.1 │
+│  13 │   ins25-8 │   410.9 │  369.75 │          8 │     136.9 │    2.28 │
+│  14 │   ins25-9 │   487.9 │  405.32 │          9 │    276.33 │    4.61 │
+│  15 │  ins25-10 │   500.4 │  468.32 │          8 │    309.72 │    5.16 │
+│  16 │   ins50-2 │   673.8 │   659.3 │          7 │    395.65 │    6.59 │
+│  17 │   ins50-3 │   642.4 │  637.37 │          8 │    456.13 │     7.6 │
+│  18 │   ins50-4 │   580.4 │  568.64 │          7 │    573.95 │    9.57 │
+│  19 │   ins50-6 │   951.6 │  897.28 │          9 │    157.73 │    2.63 │
+│  20 │   ins50-8 │   540.6 │  520.85 │          8 │    786.73 │   13.11 │
+│  21 │   ins50-9 │   608.7 │  570.47 │          9 │    303.48 │    5.06 │
+│  22 │  ins50-10 │   679.3 │   634.4 │          6 │    300.65 │    5.01 │
+│  23 │   ins75-1 │  1321.8 │ 1290.15 │         11 │   2139.19 │   35.65 │
+│  24 │   ins75-2 │   892.7 │  819.89 │         10 │   2104.62 │   35.08 │
+│  25 │   ins75-3 │   819.4 │  770.23 │          9 │   1640.37 │   27.34 │
+│  26 │   ins75-5 │   872.1 │  818.24 │          8 │    885.23 │   14.75 │
+│  27 │   ins75-6 │   835.2 │  789.18 │          9 │   2113.24 │   35.22 │
+│  28 │   ins75-7 │   706.3 │  693.67 │          8 │    947.55 │   15.79 │
+│  29 │   ins75-8 │   811.4 │  785.06 │          8 │   1384.58 │   23.08 │
+│  30 │   ins75-9 │   842.7 │  761.44 │         10 │    925.33 │   15.42 │
+│  31 │  ins100-2 │  1101.9 │ 1041.71 │         12 │   3492.86 │   58.21 │
+│  32 │  ins100-3 │   986.4 │  904.48 │          9 │   2850.67 │   47.51 │
+│  33 │  ins100-4 │   871.0 │  856.57 │         11 │   3642.43 │   60.71 │
+│  34 │  ins100-5 │  1018.0 │  976.24 │         10 │   3561.61 │   59.36 │
+│  35 │  ins100-6 │  1003.0 │  954.06 │          9 │   2909.75 │    48.5 │
+│  36 │  ins100-7 │   921.1 │  882.62 │          5 │     51.69 │    0.86 │
+│  37 │  ins100-9 │  1131.7 │ 1117.18 │          8 │   2004.21 │    33.4 │
+│  38 │ ins100-10 │  1053.6 │  1047.6 │         10 │    852.88 │   14.21 │
+│  39 │  ins200-1 │  1721.4 │ 1720.81 │         14 │   68582.4 │ 1143.04 │
+│  40 │  ins200-2 │  1763.8 │  1635.0 │         11 │   52590.0 │   876.5 │
+│  41 │  ins200-3 │  1549.6 │ 1494.37 │         12 │   59857.0 │  997.62 │
+│  42 │  ins200-4 │  1420.4 │ 1396.32 │         10 │   38677.8 │  644.63 │
+│  43 │  ins200-5 │  1701.9 │ 1577.81 │         11 │   65347.0 │ 1089.12 │
+│  44 │  ins200-8 │  1544.6 │ 1387.63 │         12 │   46004.2 │  766.74 │
+│  45 │  ins200-9 │  1572.9 │ 1543.49 │         14 │   40420.0 │  673.67 │
+│  46 │ ins200-10 │  1581.0 │     0.0 │          0 │       0.0 │     0.0 │
+│  47 │  ins300-1 │  2248.0 │ 2179.02 │         14 │ 3.73417e5 │ 6223.61 │
+│  48 │  ins300-2 │  2316.1 │ 2311.84 │         15 │ 5.53177e5 │ 9219.62 │
+│  49 │  ins300-3 │  1885.3 │ 1872.53 │         14 │  424102.0 │ 7068.37 │
+│  50 │  ins300-4 │  2023.2 │ 1898.69 │          5 │   1622.34 │   27.04 │
+│  51 │  ins300-5 │  2247.6 │     0.0 │          0 │       0.0 │     0.0 │
+│  52 │  ins300-6 │  2144.4 │     0.0 │          0 │       0.0 │     0.0 │
+│  53 │  ins300-7 │  1971.5 │     0.0 │          0 │       0.0 │     0.0 │
+│  54 │  ins300-8 │  1987.4 │ 1955.26 │         12 │ 2.56356e5 │  4272.6 │
+│  55 │  ins300-9 │  2415.5 │     0.0 │          0 │       0.0 │     0.0 │
+│  56 │ ins300-10 │  2373.4 │ 2252.51 │         15 │ 2.50664e5 │ 4177.74 │
+└─────┴───────────┴─────────┴─────────┴────────────┴───────────┴─────────┘
+</pre>
+
+
+
+        <HR/>
+        <div class="footer">
+          <p>
+            Published from <a href="report2014.Jmd">report2014.Jmd</a>
+            using <a href="http://github.com/JunoLab/Weave.jl">Weave.jl</a> v0.10.9 on 2022-08-02.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</BODY>
+
+</HTML>
