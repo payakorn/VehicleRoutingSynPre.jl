@@ -808,12 +808,11 @@ function create_csv_2014()
 end
 
 
-function sent_email_report(file_name::String; df=nothing)
+function sent_email_report(file_name::String, massage; df=nothing)
     create_csv_2014()
     weave(joinpath(@__DIR__, "..", "report", "$file_name.Jmd"), doctype="md2html")
     attachments = [joinpath(@__DIR__, "..", "report", "$file_name.html")]
     subject = "report"
-    massage = ""
     sent_email(subject, massage, df=df, attachments=attachments)
 end
 
