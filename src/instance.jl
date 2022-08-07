@@ -1128,7 +1128,7 @@ end
 function report()
     stopper = Ref(false)
     task = @async while !stopper[]
-        create_csv_2014()
+        sent_email_report("report2014", "")
         sleep(21600)
     end
     return task, stopper

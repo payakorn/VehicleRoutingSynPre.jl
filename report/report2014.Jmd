@@ -22,10 +22,14 @@ h1 = Highlighter((df, i, j) -> (df[i, 6] > 0.5), foreground = :blue)
 pretty_table(df, show_row_number=true, header=header, highlighters=h1)
 ```
 ---
-## Instance Our ``x^2+2x`` Ins2014
-
-Instance Our ``x^2+2x`` Ins2014
+## Instance Our better than Ins2014
 ```julia
-dg = filter(row -> row.Obj2014>=row.obj, df)
+dg = filter(row -> row.Obj2014>row.obj, df)
+pretty_table(dg, show_row_number=true, header=header, highlighters=h1)
+```
+---
+## Instance Our equal to Ins2014
+```julia
+dg = filter(row -> row.Obj2014==row.obj, df)
 pretty_table(dg, show_row_number=true, header=header, highlighters=h1)
 ```
