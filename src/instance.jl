@@ -760,7 +760,7 @@ function PSO(ins::Ins; num_par=15, max_iter=150)
     save_particle(best_par)
 
     tab = CSV.File(joinpath(@__DIR__, "..", "data", "simulations", ins.name, "$(ins.name)-$num.csv")) |> DataFrame
-    sent_email_report("$(ins.name)", "iter: $iter, $(@sprintf("%.2f", new_best)), PRE: $(check_PRE(best_par)), SYN: $(check_SYN(best_par)), Compat: $(compatibility(best_par))\n", df=tab)
+    sent_email_report("report2014", "iter: $iter, $(@sprintf("%.2f", new_best)), PRE: $(check_PRE(best_par)), SYN: $(check_SYN(best_par)), Compat: $(compatibility(best_par))\n", df=tab)
     ic = open(joinpath(@__DIR__, "..", "data", "simulations", ins.name, "$(ins.name)-$num.md"), "w")
     write(ic, "$(latexify(tab, env=:mdtable))\n")
     close(ic)
@@ -800,7 +800,9 @@ function create_csv_2014()
     for (i, ins_name) in enumerate(df[!, 1])
         min_iter, min_obj, min_time, min_time60 = find_min_objective(ins_name)
         obj2014 = try minimum([df[i, 3], df[i, 6], df[i,7], df[i, 9], df[i, 11], df[i, 13]]) catch e; minimum([df[i, 6], df[i, 7], df[i, 9], df[i, 11], df[i, 13]]) end
-        write(io, "$ins_name,$(obj2014),$(min_obj),$(min_iter),$(@sprintf("%.2f", min_time)),$(@sprintf("%.2f", min_time60))\n")
+        mintime = try @sprintf("%.2f", min_time) catch e; 0.0 end
+        mintime60 = try @sprintf("%.2f", min_time60) catch e; 0.0 end
+        write(io, "$ins_name,$(obj2014),$(min_obj),$(min_iter),$(mintime),$(mintime60)\n")
     end
     close(io)
     dg = CSV.File(joinpath(@__DIR__, "..", "data", "table", "our.csv")) |> DataFrame
