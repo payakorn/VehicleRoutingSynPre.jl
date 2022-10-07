@@ -1156,6 +1156,7 @@ function PSO(Name::String; num_par=15, max_iter=150)
         # local search
         for i in 1:num_par
         # for i in Iterators.filter(x->x!=best_index, 1:num_par)
+            println("apply local search to particle $i !!!!")
             particles[i] = local_search(particles[i], best_par)
         end
         # particles = [local_search(particles[i]) for i in 1:num_par]
@@ -1196,13 +1197,6 @@ function location_simulation(instance_name::AbstractString; initial=false)
     else
         return mkpath("data/simulations/$instance_name")
     end
-end
-
-
-function save_particle(particle::Particle, instance_name::String; initial=false)
-    location = "$(location_simulation(instance_name, initial=initial))"
-    num = length(glob("$instance_name*.jld2", location))
-    save_object("$(location_simulation(instance_name, initial=initial))/$instance_name-$(num+1).jld2", particle)
 end
 
 

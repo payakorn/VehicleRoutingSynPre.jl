@@ -274,10 +274,11 @@ function find_before_after_serv(ins::Ins, node::Int64)
     elseif any(in.(node, [ins.SYN[i][1] for i in 1:length(ins.SYN)]))
         index_syn = findfirst(in.(node, [ins.SYN[i][1] for i in 1:length(ins.SYN)]))
         return ins.SYN[index_syn][2:3]
+    else
+        return findall(x->x==1.0, ins.r[node, :])
     end
     throw("find_before_after_serv => Not found node $node in PRE or SYN")
 end
-
 """
 ```julia
     insert_node_service(test_sol::Sol)
@@ -693,7 +694,7 @@ function starttime(sol::Sol)
 end
 
 
-function PSO(ins::Ins; num_par=15, max_iter=150)
+function PSO(ins::Ins; num_par=15, max_iter=50)
     particles = []
     obj = []
 
@@ -714,8 +715,9 @@ function PSO(ins::Ins; num_par=15, max_iter=150)
     # find current number of run
     location = "$(location_simulation(ins.name, initial=false))"
     num = length(glob("$(ins.name)*.jld2", location))+1
-    io = open(joinpath(@__DIR__, "..", "data", "simulations", ins.name, "$(ins.name)-$num.csv"), "w")
+    io = open(joinpath(@__DIR__, "..", "data", "simulations", ins.name, "$(ins.name)-$num.csv"), "a")
     write(io, "iter,obj,time\n")
+    close(io)
     # loop
     while iter < max_iter && not_improve < 5
         t = @elapsed begin
@@ -725,6 +727,7 @@ function PSO(ins::Ins; num_par=15, max_iter=150)
         # local search
         for i in 1:num_par
         # for i in Iterators.filter(x->x!=best_index, 1:num_par)
+            println("apply local search to particle $i")
             particles[i] = local_search(particles[i], best_par)
         end
         # particles = [local_search(particles[i]) for i in 1:num_par]
@@ -751,10 +754,11 @@ function PSO(ins::Ins; num_par=15, max_iter=150)
         end
 
         println("iter: $iter best[$best_index]: $(@sprintf("%.2f", new_best)), PRE: $(check_PRE(best_par)), SYN: $(check_SYN(best_par)), Compat: $(compatibility(best_par))")
+        io = open(joinpath(@__DIR__, "..", "data", "simulations", ins.name, "$(ins.name)-$num.csv"), "a")
         write(io, "$iter,$(@sprintf("%.2f", new_best)),$(@sprintf("%.2f", t))\n")
+        close(io)
         iter += 1
     end
-    close(io)
 
     # save solution
     save_particle(best_par)
@@ -794,8 +798,9 @@ end
 
 
 function create_csv_2014()
-    df = CSV.File(joinpath(@__DIR__, "..", "data", "table", "table.csv")) |> DataFrame
-    io = open(joinpath(@__DIR__, "..", "data", "table", "our.csv"), "w")
+    loca = joinpath(Base.find_package("VehicleRoutingSynPre"), "..")
+    df = CSV.File(joinpath(loca, "..", "data", "table", "table.csv")) |> DataFrame
+    io = open(joinpath(loca, "..", "data", "table", "our.csv"), "w")
     write(io, "Instance,Obj2014,obj,numiteration,time(second),time(min)\n")
     for (i, ins_name) in enumerate(df[!, 1])
         min_iter, min_obj, min_time, min_time60 = find_min_objective(ins_name)
@@ -805,15 +810,15 @@ function create_csv_2014()
         write(io, "$ins_name,$(obj2014),$(min_obj),$(min_iter),$(mintime),$(mintime60)\n")
     end
     close(io)
-    dg = CSV.File(joinpath(@__DIR__, "..", "data", "table", "our.csv")) |> DataFrame
-    # sent_email("conclusion our and 2014", "# Table", df=dg)
+    return CSV.File(joinpath(loca, "..", "data", "table", "our.csv")) |> DataFrame
 end
 
 
 function sent_email_report(file_name::String, massage; df=nothing)
     create_csv_2014()
-    weave(joinpath(@__DIR__, "..", "report", "$file_name.Jmd"), doctype="md2html")
-    attachments = [joinpath(@__DIR__, "..", "report", "$file_name.html")]
+    loca = joinpath(Base.find_package("VehicleRoutingSynPre"), "..")
+    weave(joinpath(loca, "..", "report", "$file_name.Jmd"), doctype="md2html")
+    attachments = [joinpath(loca, "..", "report", "$file_name.html")]
     subject = "report"
     sent_email(subject, massage, df=df, attachments=attachments)
 end
@@ -1114,7 +1119,8 @@ end
 
 
 function df_conclusion_table()
-    CSV.File(joinpath(@__DIR__, "..", "data", "table", "our.csv")) |> DataFrame
+    loca = joinpath(Base.find_package("VehicleRoutingSynPre"), "..")
+    CSV.File(joinpath(loca, "..", "data", "table", "our.csv")) |> DataFrame
 end
 
 
@@ -1134,4 +1140,18 @@ function report()
         sleep(21600)
     end
     return task, stopper
+end
+
+
+function save_particle(particle::Particle, instance_name::String; initial=false)
+    location = "$(location_simulation(instance_name, initial=initial))"
+    num = length(glob("$instance_name*.jld2", location))
+    save_object("$(location_simulation(instance_name, initial=initial))/$instance_name-$(num+1).jld2", particle)
+end
+
+
+function save_ins(ins::Ins)
+    opath = joinpath(@__DIR__, "..", "data", "simulations", ins.name)
+    mkpath(opath)
+    save_object(joinpath(opath, "$(ins.name).jld2"), ins)
 end
