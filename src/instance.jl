@@ -991,7 +991,7 @@ function load_ins_text100(num_node::Int64, num_ins::Int64)
 end
 
 
-function load_ins_text(num_node::Int64, num_ins::Int64)
+function load_ins_text(num_node::Int64, num_ins::Int64; locc=nothing)
 
     if num_node >= 100
         load_ins_text100(num_node, num_ins)
@@ -1095,7 +1095,11 @@ function load_ins_text(num_node::Int64, num_ins::Int64)
         serv_a = find_compat_vehicle_node(a, r)
         SYN = find_SYN(serv_r, mind, maxd)
         PRE = find_PRE(serv_r, mind, maxd)
-        return Ins("ins$(num_node-1)-$num_ins", num_node, num_vehi, num_serv, serv_a, serv_r, mind, maxd, a, r, d, p, e, l, PRE, SYN)
+        if isnothing(locc)
+            return Ins("ins$(num_node-1)-$num_ins", num_node, num_vehi, num_serv, serv_a, serv_r, mind, maxd, a, r, d, p, e, l, PRE, SYN)
+        else
+            return x, y
+        end
     end
 end
 
