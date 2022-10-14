@@ -1,10 +1,11 @@
 module VehicleRoutingSynPre
 
-using JLD2, Random, Glob, Printf, Combinatorics, SMTPClient, Markdown, PrettyTables, DataFrames, CSV, Latexify, Crayons, Weave
+using JLD2, Random, Glob, Printf, Combinatorics, SMTPClient, Markdown, PrettyTables, DataFrames, CSV, Latexify, Crayons, Weave, Random, Statistics, StatsBase
 # Write your package code here.
 include("ParticleSwarm.jl")
 include("Solution.jl")
 include("instance.jl")
+include("random_problem.jl")
 
 export Particle,
        IndexSolution,
@@ -80,5 +81,7 @@ export Particle,
        df_conclusion_table,
        df_pretty_table,
        report,
-       sent_email_report
+       sent_email_report,
+       generate_ins,
+       run_gen_ins
 end
