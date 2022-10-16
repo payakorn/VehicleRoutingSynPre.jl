@@ -185,7 +185,7 @@ function swap(sol::Sol, list)
             # st = starttime(route, slot, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN)
             # test_st = try starttime(sol, test_route) catch StackOverflowError; continue end
             # st = try starttime(sol, input_route) catch StackOverflowError; continue end 
-            test_st = try starttime(sol, test_route) catch StackOverflowError; continue end
+            test_st = try starttime(sol, test_route) catch StackOverflowError; println("StackOverflowError");continue end
             st = starttime(sol, input_route)
             if objective_value(test_route, test_st, sol.ins.p, sol.ins.l, sol.ins.d) < objective_value(input_route, st, sol.ins.p, sol.ins.l, sol.ins.d) && check_PRE(test_route, test_st, sol.ins.maxd, sol.ins.PRE) && check_SYN(test_route, sol.ins.SYN)
                 input_route = deepcopy(test_route)
@@ -216,7 +216,7 @@ function move(sol::Sol, list)
         
         if compatibility(test_route, sol.slot, sol.ins.a, sol.ins.r, sol.ins.serv_a, sol.ins.serv_r, sol.ins.PRE, sol.ins.SYN) && in_same_route(test_route)
             # find starttime
-            test_st = try starttime(sol, test_route) catch StackOverflowError; continue end
+            test_st = try starttime(sol, test_route) catch StackOverflowError; println("StackOverflowError");continue end
             st = starttime(sol, input_route)
 
             if objective_value(test_route, test_st, sol.ins.p, sol.ins.l, sol.ins.d) < objective_value(input_route, st, sol.ins.p, sol.ins.l, sol.ins.d) && check_PRE(test_route, test_st, sol.ins.maxd, sol.ins.PRE) && check_SYN(test_route, sol.ins.SYN)
