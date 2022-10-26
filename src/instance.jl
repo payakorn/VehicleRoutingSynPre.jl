@@ -1200,7 +1200,36 @@ end
 
 
 function save_ins(ins::Ins)
-    opath = joinpath(@__DIR__, "..", "data", "simulations", ins.name)
+    opath = joinpath(dir(), "data", "simulations", ins.name)
     mkpath(opath)
-    save_object(joinpath(opath, "$(ins.name).jld2"), ins)
+    try save_object(joinpath(opath, "$(ins.name).jld2"), ins) catch e; nothing end
+    save_ins_txt(ins)
+end
+
+
+function dir()
+    splitdir(splitdir(Base.find_package("VehicleRoutingSynPre"))[1])[1]
+end
+
+
+function save_ins_txt(ins::Ins)
+    opath = joinpath(dir(), "data", "simulations", ins.name)
+    mkpath(opath)
+    println("........Writing text file........")
+    io = open(joinpath(opath, "$(ins.name).txt"), "w")
+    write(io, "Name: $(ins.name)\n")
+    write(io, "#nodes: $(ins.num_node)\n")
+    write(io, "#vehicles: $(ins.num_vehi)\n")
+    write(io, "#services: $(ins.num_serv)\n")
+    write(io, "a: $(ins.a)\n")
+    write(io, "r: $(ins.r)\n")
+    write(io, "e: $(ins.e)\n")
+    write(io, "l: $(ins.l)\n")
+    write(io, "mind: $(ins.mind)\n")
+    write(io, "maxd: $(ins.maxd)\n")
+    write(io, "d: $(ins.d)\n")
+    write(io, "PRE: $(ins.PRE)\n")
+    write(io, "SYN: $(ins.SYN)\n")
+    close(io)
+    println("........Completed........")
 end
