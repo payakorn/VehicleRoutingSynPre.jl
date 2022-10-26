@@ -83,5 +83,7 @@ export Particle,
        report,
        sent_email_report,
        generate_ins,
-       run_gen_ins
+       run_gen_ins,
+       find_ins,
+       natural
 end

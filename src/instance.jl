@@ -185,7 +185,7 @@ function swap(sol::Sol, list)
             # st = starttime(route, slot, num_node, num_vehi, num_serv, mind, maxd, a, r, d, p, e, l, PRE, SYN)
             # test_st = try starttime(sol, test_route) catch StackOverflowError; continue end
             # st = try starttime(sol, input_route) catch StackOverflowError; continue end 
-            test_st = try starttime(sol, test_route) catch StackOverflowError; println("StackOverflowError");continue end
+            test_st = try starttime(sol, test_route) catch StackOverflowError;continue end
             st = starttime(sol, input_route)
             if objective_value(test_route, test_st, sol.ins.p, sol.ins.l, sol.ins.d) < objective_value(input_route, st, sol.ins.p, sol.ins.l, sol.ins.d) && check_PRE(test_route, test_st, sol.ins.maxd, sol.ins.PRE) && check_SYN(test_route, sol.ins.SYN)
                 input_route = deepcopy(test_route)
@@ -797,10 +797,49 @@ function find_min_objective(ins_name::AbstractString)
 end
 
 
+function natural(x, y)
+    k(x) = [occursin(r"\d+", s) ? parse(Int, s) : s 
+            for s in split(replace(x, r"\d+" => s->" $s "))]
+    A = k(x); B= k(y)    
+    for (a, b) in zip(A, B)
+        if !isequal(a, b)
+            return typeof(a) <: typeof(b) ? isless(a, b) :
+                   isa(a,Int) ? true : false
+        end
+    end
+    return length(A) < length(B)
+end
+
+
+"""
+    find_ins(ins_name::AbstractString)
+
+TBW
+"""
+function find_ins(ϵ::AbstractString)
+    dm = []
+    location = joinpath(splitdir(splitdir(Base.find_package("VehicleRoutingSynPre"))[1])[1], "data", "simulations")
+    println("pwd: $(pwd())")
+    println("location: $location")
+    for α in sort(glob("$ϵ*", location), lt=natural)
+        for β in glob("*.csv", α)
+            df = CSV.File(β) |> DataFrame
+            if size(df, 1) > 5
+                @show min_iter = size(df, 1)
+                @show min_obj = minimum(df[!, 2])
+                @show min_time = sum(df[!, 3])
+                push!(dm, (splitdir(α)[2], min_iter, min_obj, min_time))
+            end
+        end
+    end
+    return dm
+end
+
+
 function create_csv_2014()
-    loca = joinpath(Base.find_package("VehicleRoutingSynPre"), "..")
-    df = CSV.File(joinpath(loca, "..", "data", "table", "table.csv")) |> DataFrame
-    io = open(joinpath(loca, "..", "data", "table", "our.csv"), "w")
+    loca = joinpath(splitdir(splitdir(Base.find_package("VehicleRoutingSynPre"))[1])[1], "data", "table")
+    df = CSV.File(joinpath(loca, "table.csv")) |> DataFrame
+    io = open(joinpath(loca, "our.csv"), "w")
     write(io, "Instance,Obj2014,obj,numiteration,time(second),time(min)\n")
     for (i, ins_name) in enumerate(df[!, 1])
         min_iter, min_obj, min_time, min_time60 = find_min_objective(ins_name)
@@ -809,8 +848,14 @@ function create_csv_2014()
         mintime60 = try @sprintf("%.2f", min_time60) catch e; 0.0 end
         write(io, "$ins_name,$(obj2014),$(min_obj),$(min_iter),$(mintime),$(mintime60)\n")
     end
+    dm = find_ins("ins500")
+    for dd in dm
+        mintime = try @sprintf("%.2f", dd[4]) catch e; 0.0 end
+        mintime60 = try @sprintf("%.2f", dd[4]/60) catch e; 0.0 end
+        write(io, "$(dd[1]),$(Inf),$(dd[2]),$(dd[3]),$(mintime),$(mintime60)\n")
+    end
     close(io)
-    return CSV.File(joinpath(loca, "..", "data", "table", "our.csv")) |> DataFrame
+    return CSV.File(joinpath(loca, "our.csv")) |> DataFrame
 end
 
 
