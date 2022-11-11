@@ -1201,7 +1201,7 @@ end
 function save_ins(ins::Ins)
     opath = joinpath(dir(), "data", "simulations", ins.name)
     mkpath(opath)
-    try save_object(joinpath(opath, "$(ins.name).jld2"), ins) catch e; nothing end
+    try save_object(joinpath(opath, "$(ins.name).jld2"), ins) catch e; save_ins_txt(ins) end
     save_ins_txt(ins)
 end
 
