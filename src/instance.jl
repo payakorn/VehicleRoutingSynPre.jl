@@ -715,7 +715,7 @@ function PSO(ins::Ins; num_par=15, max_iter=50)
     # find current number of run
     location = "$(location_simulation(ins.name, initial=false))"
     num = length(glob("$(ins.name)*.jld2", location))+1
-    io = open(joinpath(@__DIR__, "..", "data", "simulations", ins.name, "$(ins.name)-$num.csv"), "a")
+    io = open(joinpath(dir(), "data", "simulations", ins.name, "$(ins.name)-$num.csv"), "a")
     write(io, "iter,obj,time\n")
     close(io)
     # loop
@@ -754,7 +754,7 @@ function PSO(ins::Ins; num_par=15, max_iter=50)
         end
 
         println("iter: $iter best[$best_index]: $(@sprintf("%.2f", new_best)), PRE: $(check_PRE(best_par)), SYN: $(check_SYN(best_par)), Compat: $(compatibility(best_par))")
-        io = open(joinpath(@__DIR__, "..", "data", "simulations", ins.name, "$(ins.name)-$num.csv"), "a")
+        io = open(joinpath(dir(), "data", "simulations", ins.name, "$(ins.name)-$num.csv"), "a")
         write(io, "$iter,$(@sprintf("%.2f", new_best)),$(@sprintf("%.2f", t))\n")
         close(io)
         iter += 1
@@ -763,9 +763,9 @@ function PSO(ins::Ins; num_par=15, max_iter=50)
     # save solution
     save_particle(best_par)
 
-    tab = CSV.File(joinpath(@__DIR__, "..", "data", "simulations", ins.name, "$(ins.name)-$num.csv")) |> DataFrame
+    tab = CSV.File(joinpath(dir(), "data", "simulations", ins.name, "$(ins.name)-$num.csv")) |> DataFrame
     sent_email_report("report2014", "iter: $iter, $(@sprintf("%.2f", new_best)), PRE: $(check_PRE(best_par)), SYN: $(check_SYN(best_par)), Compat: $(compatibility(best_par))\n", df=tab)
-    ic = open(joinpath(@__DIR__, "..", "data", "simulations", ins.name, "$(ins.name)-$num.md"), "w")
+    ic = open(joinpath(dir(), "data", "simulations", ins.name, "$(ins.name)-$num.md"), "w")
     write(ic, "$(latexify(tab, env=:mdtable))\n")
     close(ic)
 end
@@ -828,7 +828,7 @@ function find_ins(ϵ::AbstractString)
                 @show min_iter = size(df, 1)
                 @show min_obj = minimum(df[!, 2])
                 @show min_time = sum(df[!, 3])
-                push!(dm, (splitdir(α)[2], min_iter, min_obj, min_time))
+                push!(dm, (splitdir(α)[2], min_obj, min_iter, min_time))
             end
         end
     end
@@ -861,9 +861,9 @@ end
 
 function sent_email_report(file_name::String, massage; df=nothing)
     create_csv_2014()
-    loca = joinpath(Base.find_package("VehicleRoutingSynPre"), "..")
-    weave(joinpath(loca, "..", "report", "$file_name.Jmd"), doctype="md2html")
-    attachments = [joinpath(loca, "..", "report", "$file_name.html")]
+    loca = splitdir(splitdir(Base.find_package("VehicleRoutingSynPre"))[1])[1]
+    weave(joinpath(loca, "report", "$file_name.Jmd"), doctype="md2html")
+    attachments = [joinpath(loca, "report", "$file_name.html")]
     subject = "report"
     sent_email(subject, massage, df=df, attachments=attachments)
 end
@@ -1168,8 +1168,7 @@ end
 
 
 function df_conclusion_table()
-    loca = joinpath(Base.find_package("VehicleRoutingSynPre"), "..")
-    CSV.File(joinpath(loca, "..", "data", "table", "our.csv")) |> DataFrame
+    CSV.File(joinpath(dir(), "data", "table", "our.csv")) |> DataFrame
 end
 
 
