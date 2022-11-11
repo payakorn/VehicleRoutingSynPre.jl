@@ -85,5 +85,7 @@ export Particle,
        generate_ins,
        run_gen_ins,
        find_ins,
-       natural
+       natural,
+       dir,
+       save_ins_txt
 end
